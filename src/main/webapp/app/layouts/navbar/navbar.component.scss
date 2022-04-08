@@ -18,6 +18,13 @@ Navbar
 
 .navbar {
   padding: 0.2rem 1rem;
+  width: 100%;
+  position: fixed;
+  z-index: 100;
+  margin-top: -22px;
+  a.nav-link {
+    font-weight: 400;
+  }
   .dropdown-item.active,
   .dropdown-item.active:focus,
   .dropdown-item.active:hover {

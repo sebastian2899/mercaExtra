@@ -5,12 +5,15 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import dayjs from 'dayjs/esm';
 
 import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/auth/account.model';
 
 @Component({
   selector: 'jhi-main',
   templateUrl: './main.component.html',
 })
 export class MainComponent implements OnInit {
+  account?: Account | null;
+  accountVerify = false;
   private renderer: Renderer2;
 
   constructor(
@@ -38,6 +41,10 @@ export class MainComponent implements OnInit {
       dayjs.locale(langChangeEvent.lang);
       this.renderer.setAttribute(document.querySelector('html'), 'lang', langChangeEvent.lang);
     });
+
+    this.accountService.getAuthenticationState().subscribe(account => {
+      this.account = account;
+    });
   }
 
   private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {
@@ -54,5 +61,8 @@ export class MainComponent implements OnInit {
       pageTitle = 'global.title';
     }
     this.translateService.get(pageTitle).subscribe(title => this.titleService.setTitle(title));
+    if (this.account) {
+      this.accountVerify = true;
+    }
   }
 }

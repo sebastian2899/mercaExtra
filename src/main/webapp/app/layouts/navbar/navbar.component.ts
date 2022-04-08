@@ -50,6 +50,10 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  isAuthenticated(): boolean {
+    return this.accountService.isAuthenticated();
+  }
+
   changeLanguage(languageKey: string): void {
     this.sessionStorageService.store('locale', languageKey);
     this.translateService.use(languageKey);

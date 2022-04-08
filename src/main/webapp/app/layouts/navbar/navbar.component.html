@@ -1,5 +1,5 @@
 <nav data-cy="navbar" class="navbar navbar-dark navbar-expand-md bg-primary">
-  <div class="container-fluid">
+  <div class="container-fluid" [ngSwitch]="isAuthenticated()">
     <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
       <span class="logo-img"></span>
       <span jhiTranslate="global.title" class="navbar-title">MercaExtra</span>
@@ -17,7 +17,7 @@
     >
       <fa-icon icon="bars"></fa-icon>
     </a>
-    <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="account !== null">
+    <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
           <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
