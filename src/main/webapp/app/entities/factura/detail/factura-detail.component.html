@@ -1,0 +1,68 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="factura">
+      <h2 data-cy="facturaDetailsHeading"><span jhiTranslate="mercaExtraApp.factura.detail.title">Factura</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ factura.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.factura.fechaCreacion">Fecha Creacion</span></dt>
+        <dd>
+          <span>{{ factura.fechaCreacion | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.factura.infoCiente">Info Ciente</span></dt>
+        <dd>
+          <span>{{ factura.infoCiente }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.factura.numeroFactura">Numero Factura</span></dt>
+        <dd>
+          <span>{{ factura.numeroFactura }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.factura.tipoFactura">Tipo Factura</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'mercaExtraApp.TipoFactura.' + factura.tipoFactura }}">{{ factura.tipoFactura }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.factura.valorFactura">Valor Factura</span></dt>
+        <dd>
+          <span>{{ factura.valorFactura }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.factura.valorPagado">Valor Pagado</span></dt>
+        <dd>
+          <span>{{ factura.valorPagado }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.factura.valorDeuda">Valor Deuda</span></dt>
+        <dd>
+          <span>{{ factura.valorDeuda }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.factura.estadoFactura">Estado Factura</span></dt>
+        <dd>
+          <span>{{ factura.estadoFactura }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.factura.metodoPago">Metodo Pago</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'mercaExtraApp.MetodoPago.' + factura.metodoPago }}">{{ factura.metodoPago }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.factura.userName">User Name</span></dt>
+        <dd>
+          <span>{{ factura.userName }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/factura', factura.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

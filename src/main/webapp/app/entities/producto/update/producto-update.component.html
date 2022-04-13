@@ -1,0 +1,235 @@
+<div class="d-flex justify-content-center">
+  <div class="col-12">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-producto-heading" class="font-size-entidades" data-cy="ProductoCreateUpdateHeading">
+        {{ titulo }}
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <label class="form-label" jhiTranslate="mercaExtraApp.producto.nombre" for="field_nombre">Nombre</label>
+            <input
+              required
+              type="text"
+              class="form-control"
+              name="nombre"
+              id="field_nombre"
+              data-cy="nombre"
+              formControlName="nombre"
+              minlength="5"
+            />
+            <div *ngIf="editForm.get('nombre')!.invalid && (editForm.get('nombre')!.dirty || editForm.get('nombre')!.touched)">
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('nombre')?.errors?.required"
+                jhiTranslate="entity.validation.required"
+              >
+                This field is required.
+              </small>
+
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('nombre')?.errors?.maxlength"
+                jhiTranslate="entity.validation.maxlength"
+                [translateValues]="{ max: 100 }"
+              >
+                This field cannot be longer than 100 characters.
+              </small>
+
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('nombre')?.errors?.minlength"
+                jhiTranslate="entity.validation.minlength"
+                [translateValues]="{ min: 5 }"
+              >
+                This field is required to be at least 5 characters.
+              </small>
+
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('nombre')?.errors?.nombre"
+                jhiTranslate="global.messages.validate.email.invalid"
+              >
+                Your email is invalid.
+              </small>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="field_precio">precio</label>
+            <input
+              required
+              type="number"
+              min="0"
+              class="form-control"
+              name="cantidad"
+              id="field_precio"
+              data-cy="precio"
+              formControlName="precio"
+            />
+
+            <div
+              class="form-text text-danger"
+              *ngIf="editForm.get('cantidad')!.invalid && (editForm.get('precio')!.dirty || editForm.get('precio')!.touched)"
+            >
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('precio')?.errors?.required"
+                jhiTranslate="entity.validation.required"
+              >
+                This field is required.
+              </small>
+
+              <small class="form-text text-danger" *ngIf="editForm.get('cantidad')?.errors?.min">
+                No puede digitar una cantidad menor a 0.
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label" jhiTranslate="mercaExtraApp.producto.cantidad" for="field_cantidad">Cantidad</label>
+            <input
+              required
+              type="number"
+              min="0"
+              class="form-control"
+              name="cantidad"
+              id="field_cantidad"
+              data-cy="cantidad"
+              formControlName="cantidad"
+            />
+
+            <div
+              class="form-text text-danger"
+              *ngIf="editForm.get('cantidad')!.invalid && (editForm.get('cantidad')!.dirty || editForm.get('cantidad')!.touched)"
+            >
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('cantidad')?.errors?.required"
+                jhiTranslate="entity.validation.required"
+              >
+                This field is required.
+              </small>
+
+              <small class="form-text text-danger" *ngIf="editForm.get('cantidad')?.errors?.min">
+                No puede digitar una cantidad menor a 0.
+              </small>
+            </div>
+          </div>
+
+          <div class="col-md-6 mt-2">
+            <label jhiTranslate="mercaExtraApp.producto.categoria"></label>
+            <select class="form-select" name="categoria" formControlName="categoria" data-cy="categoria">
+              <option [ngValue]="categoria.nombreCategoria" *ngFor="let categoria of categorias">{{ categoria.nombreCategoria }}</option>
+            </select>
+            <div
+              class="form-text text-danger"
+              *ngIf="editForm.get('categoria')!.invalid && (editForm.get('categoria')!.dirty || editForm.get('categoria')!.touched)"
+            >
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('categoria')?.errors?.required"
+                jhiTranslate="entity.validation.required"
+              >
+                This field is required.
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <label class="form-label" jhiTranslate="mercaExtraApp.producto.descripcion" for="field_descripcion">Descripcion</label>
+            <textarea
+              type="text"
+              class="form-control"
+              name="descripcion"
+              id="field_descripcion"
+              data-cy="descripcion"
+              formControlName="descripcion"
+            >
+            </textarea>
+          </div>
+
+          <div class="col-md-6">
+            <label for="valorDescuento" class="form-label">Descuento del dia</label>
+            <input type="number" min="0" max="10" class="form-control" formControlName="valorDescuento" data-cy="field_valorDescuento" />
+            <div
+              *ngIf="
+                editForm.get(['valorDescuento'])!.invalid &&
+                (editForm.get('valorDescuento')!.dirty || editForm.get('valorDescuento')!.touched)
+              "
+            >
+              <small class="form-text text-danger" *ngIf="editForm.get('valorDescuento')?.errors?.min">
+                No puede digitar una cantidad menor a 0.
+              </small>
+              <small class="form-text text-danger" *ngIf="editForm.get('valorDescuento')?.errors?.max">
+                El porcentaje de descuento del producto no puede ser mayor a 10%
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-2 mb-3 d-flex justify-content-center">
+          <label class="form-label" jhiTranslate="mercaExtraApp.producto.imagen" for="field_imagen">Imagen</label>
+          <div>
+            <img
+              [src]="'data:' + editForm.get('imagenContentType')!.value + ';base64,' + editForm.get('imagen')!.value"
+              style="max-height: 100px"
+              *ngIf="editForm.get('imagen')!.value"
+              alt="producto image"
+            />
+            <div *ngIf="editForm.get('imagen')!.value" class="form-text text-danger clearfix">
+              <span class="pull-start">{{ editForm.get('imagenContentType')!.value }}, {{ byteSize(editForm.get('imagen')!.value) }}</span>
+              <button
+                type="button"
+                (click)="clearInputImage('imagen', 'imagenContentType', 'file_imagen')"
+                class="btn btn-secondary btn-xs pull-end"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input
+              required
+              type="file"
+              id="file_imagen"
+              data-cy="imagen"
+              (change)="setFileData($event, 'imagen', true)"
+              accept="image/*"
+              jhiTranslate="entity.action.addimage"
+            />
+          </div>
+          <input type="hidden" class="form-control" name="imagen" id="field_imagen" data-cy="imagen" formControlName="imagen" />
+          <input
+            type="hidden"
+            class="form-control"
+            name="imagenContentType"
+            id="field_imagenContentType"
+            formControlName="imagenContentType"
+          />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-outline-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

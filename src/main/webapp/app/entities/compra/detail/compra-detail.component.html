@@ -1,0 +1,64 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="compra">
+      <h2 data-cy="compraDetailsHeading"><span jhiTranslate="mercaExtraApp.compra.detail.title">Compra</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ compra.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.compra.fechaCreacion">Fecha Creacion</span></dt>
+        <dd>
+          <span>{{ compra.fechaCreacion }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.compra.numeroFactura">Numero Factura</span></dt>
+        <dd>
+          <span>{{ compra.numeroFactura }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.compra.tipoFactura">Tipo Factura</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'mercaExtraApp.TipoFactura.' + compra.tipoFactura }}">{{ compra.tipoFactura }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.compra.informacionProovedor">Informacion Proovedor</span></dt>
+        <dd>
+          <span>{{ compra.informacionProovedor }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.compra.idProveedor">Id Proveedor</span></dt>
+        <dd>
+          <span>{{ compra.idProveedor }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.compra.valorFactura">Valor Factura</span></dt>
+        <dd>
+          <span>{{ compra.valorFactura }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.compra.valorPagado">Valor Pagado</span></dt>
+        <dd>
+          <span>{{ compra.valorPagado }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.compra.valorDeuda">Valor Deuda</span></dt>
+        <dd>
+          <span>{{ compra.valorDeuda }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.compra.estado">Estado</span></dt>
+        <dd>
+          <span>{{ compra.estado }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/compra', compra.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

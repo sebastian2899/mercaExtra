@@ -1,0 +1,9 @@
+{
+  "mercaExtraApp": {
+    "TipoProveedor": {
+      "null": "",
+      "NATURAL": "NATURAL",
+      "JURIDICA": "JURIDICA"
+    }
+  }
+}

@@ -1,94 +1,120 @@
 <!-- <jhi-page-ribbon></jhi-page-ribbon> -->
 <div [ngSwitch]="account !== null && account !== undefined">
-  <div *ngSwitchCase="true" class="container-fluid" style="margin-top: 30px; width: 100%; position: fixed">
+  <div class="container-fluid" style="margin-top: 30px; width: 100%; position: fixed">
     <div class="row flex-nowrap">
-      <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark" style="width: 217px">
+      <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0" style="width: 217px; background-color: rgb(239, 239, 239)">
         <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
           <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            <span class="fs-5 d-none d-sm-inline">Menu</span>
+            <span class="mt-2 fs-5 d-none d-sm-inline font-size-black2">Menu</span>
           </a>
           <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-            <li class="nav-item">
-              <a href="#" class="nav-link align-middle px-0">
-                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
-              </a>
-            </li>
             <li>
-              <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span>
-              </a>
-              <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                <li class="w-100">
-                  <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1 </a>
-                </li>
-                <li>
-                  <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2 </a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a href="#" class="nav-link px-0 align-middle">
-                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Orders</span></a
+              <a href="#" class="nav-link link-home px-0 align-middle">
+                <span class="ms-1 d-none d-sm-inline font-size-black2"
+                  >Info Domicilio
+                  <mat-icon class="icon-config-black">contact_support</mat-icon>
+                </span></a
               >
             </li>
             <li>
-              <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Bootstrap</span></a
-              >
+              <a href="#submenu2" data-bs-toggle="collapse" class="nav-link link-home px-0 align-middle">
+                <span class="ms-1 d-none d-sm-inline font-size-black2">Idioma</span>
+                <mat-icon class="icon-config-black">g_translate</mat-icon>
+              </a>
               <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
-                <li class="w-100">
-                  <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1</a>
-                </li>
-                <li>
-                  <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2</a>
+                <li *ngFor="let language of languages">
+                  <a class="dropdown-item" [jhiActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language)">{{
+                    language | findLanguageFromKey
+                  }}</a>
                 </li>
               </ul>
             </li>
             <li>
-              <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Products</span>
+              <a href="#submenu3" data-bs-toggle="collapse" class="nav-link link-home px-0 align-middle">
+                <span class="ms-1 d-none d-sm-inline font-size-black2">Productos</span>
+                <mat-icon class="icon-config-black">restaurant</mat-icon>
               </a>
               <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
                 <li class="w-100">
-                  <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 1</a>
+                  <a (click)="categoriaProductos()" class="nav-link link-home px-0">
+                    <span style="font-size: 13px" class="d-none d-sm-inline font-size-black2">-Ver categorias</span>
+                    <mat-icon class="icon-config-black">category</mat-icon></a
+                  >
                 </li>
                 <li>
-                  <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 2</a>
+                  <a href="#" class="nav-link link-home px-0">
+                    <span style="font-size: 13px" class="d-none d-sm-inline font-size-black2">-Repetir pedido</span>
+                    <mat-icon class="icon-config-black">discount</mat-icon></a
+                  >
                 </li>
                 <li>
-                  <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 3</a>
-                </li>
-                <li>
-                  <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 4</a>
+                  <a href="#" class="nav-link link-home px-0">
+                    <span style="font-size: 13px" class="d-none d-sm-inline font-size-black2">-Mis pedidos</span>
+                    <mat-icon class="icon-config-black">local_grocery_store</mat-icon></a
+                  >
                 </li>
               </ul>
             </li>
             <li>
-              <a href="#" class="nav-link px-0 align-middle">
-                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customers</span>
+              <a [routerLink]="['/factura/new']" class="nav-link link-home px-0 align-middle">
+                <span class="ms-1 d-none d-sm-inline font-size-black2">Realizar Compra</span>
+                <mat-icon class="icon-config-black">storefront</mat-icon>
               </a>
             </li>
           </ul>
           <hr />
+          <div *ngSwitchCase="false" class="mb-3">
+            <p style="color: black">
+              En esta seccion de inicio podra ver todo lo relacionado a los productos, categorias, descuentos diarios y mercados.
+            </p>
+            <span style="color: black">Inicia sesion para realizar tu compra.</span>
+          </div>
+
           <div class="dropdown" style="margin-bottom: 118px">
             <a
               href="#"
-              class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+              class="d-flex link-home align-items-center text-black text-decoration-none dropdown-toggle"
               id="dropdownUser1"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle" />
-              <span class="d-none d-sm-inline mx-1">loser</span>
+              <span *ngSwitchCase="false" style="color: black" class="d-none d-sm-inline mx-1 font-size-home">Iniciar Sesion</span>
+              <span *ngSwitchCase="true" style="color: black" class="d-none font-size-white d-sm-inline mx-1 font-size-home">Cuenta</span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-              <li><a class="dropdown-item" href="#">New project...</a></li>
-              <li><a class="dropdown-item" href="#">Settings</a></li>
-              <li><a class="dropdown-item" href="#">Profile</a></li>
+            <ul class="dropdown-menu dropdown-menu-light text-small shadow">
+              <li>
+                <a *ngSwitchCase="true" [routerLink]="['account/password']" class="dropdown-item" href="#"
+                  >Contraseña
+                  <mat-icon class="icon-config-black">lock</mat-icon>
+                </a>
+              </li>
+              <li>
+                <a *ngSwitchCase="true" [routerLink]="['account/settings']" class="dropdown-item" href="#"
+                  >Cuenta
+                  <mat-icon class="icon-config-black">admin_panel_settings</mat-icon>
+                </a>
+              </li>
               <li>
                 <hr class="dropdown-divider" />
               </li>
-              <li><a class="dropdown-item" href="#">Sign out</a></li>
+              <li>
+                <a *ngSwitchCase="true" (click)="(logout)" class="dropdown-item" href="#"
+                  ><span>Cerrar sesion</span>
+                  <mat-icon class="icon-config-black">logout</mat-icon>
+                </a>
+              </li>
+              <li>
+                <a *ngSwitchCase="false" class="dropdown-item" [routerLink]="['account/register']"
+                  ><span>Crear cuenta</span>
+                  <mat-icon class="icon-config-black">person_add_alt</mat-icon>
+                </a>
+              </li>
+              <li>
+                <a *ngSwitchCase="false" (click)="login()" class="dropdown-item"
+                  ><span>Ingresar</span>
+                  <mat-icon class="icon-config-black">logout</mat-icon>
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -96,14 +122,12 @@
     </div>
   </div>
   <div></div>
-  <router-outlet name="navbar"></router-outlet>
 </div>
+<router-outlet name="navbar"></router-outlet>
 
-<div class="container" [ngStyle]="{ 'margin-left': accountVerify === true ? '194px' : '90px' }">
-  <div class="container-fluid">
-    <div class="card jh-card">
-      <router-outlet style="margin-top: 40px"></router-outlet>
-    </div>
-    <jhi-footer></jhi-footer>
+<div class="container" style="margin-left: 205px">
+  <div class="card jh-card">
+    <router-outlet style="margin-top: 40px"></router-outlet>
+    <jhi-footer style="background-color: white"></jhi-footer>
   </div>
 </div>

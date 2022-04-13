@@ -1,0 +1,73 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-egreso-heading" data-cy="EgresoCreateUpdateHeading" jhiTranslate="mercaExtraApp.egreso.home.createOrEditLabel">
+        Create or edit a Egreso
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.egreso.fechaCreacion" for="field_fechaCreacion">Fecha Creacion</label>
+          <div class="d-flex">
+            <input
+              id="field_fechaCreacion"
+              data-cy="fechaCreacion"
+              type="datetime-local"
+              class="form-control"
+              name="fechaCreacion"
+              formControlName="fechaCreacion"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.egreso.descripcion" for="field_descripcion">Descripcion</label>
+          <input
+            type="text"
+            class="form-control"
+            name="descripcion"
+            id="field_descripcion"
+            data-cy="descripcion"
+            formControlName="descripcion"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.egreso.valorEgreso" for="field_valorEgreso">Valor Egreso</label>
+          <input
+            type="number"
+            class="form-control"
+            name="valorEgreso"
+            id="field_valorEgreso"
+            data-cy="valorEgreso"
+            formControlName="valorEgreso"
+          />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+{
+  "applications": "*",
+  "changelogDate": "20220408221432",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "proveedor",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "apellido",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "tipoCC",
+      "fieldType": "TipoDoc",
+      "fieldValues": "CC,NIT,CE,ROOT"
+    },
+    {
+      "fieldName": "numeroCC",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "numCelular",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "tipoProovedor",
+      "fieldType": "TipoProveedor",
+      "fieldValues": "NATURAL,JURIDICA"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Proveedor",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

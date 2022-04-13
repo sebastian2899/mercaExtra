@@ -1,0 +1,100 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-pedido-heading" data-cy="PedidoCreateUpdateHeading" jhiTranslate="mercaExtraApp.pedido.home.createOrEditLabel">
+        Create or edit a Pedido
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.pedido.fechaPedido" for="field_fechaPedido">Fecha Pedido</label>
+          <div class="d-flex">
+            <input
+              id="field_fechaPedido"
+              data-cy="fechaPedido"
+              type="datetime-local"
+              class="form-control"
+              name="fechaPedido"
+              formControlName="fechaPedido"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.pedido.direccion" for="field_direccion">Direccion</label>
+          <input type="text" class="form-control" name="direccion" id="field_direccion" data-cy="direccion" formControlName="direccion" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.pedido.estado" for="field_estado">Estado</label>
+          <input type="text" class="form-control" name="estado" id="field_estado" data-cy="estado" formControlName="estado" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.pedido.infoDomicilio" for="field_infoDomicilio">Info Domicilio</label>
+          <input
+            type="text"
+            class="form-control"
+            name="infoDomicilio"
+            id="field_infoDomicilio"
+            data-cy="infoDomicilio"
+            formControlName="infoDomicilio"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.pedido.idDomiciliario" for="field_idDomiciliario">Id Domiciliario</label>
+          <input
+            type="number"
+            class="form-control"
+            name="idDomiciliario"
+            id="field_idDomiciliario"
+            data-cy="idDomiciliario"
+            formControlName="idDomiciliario"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.pedido.idNotificacion" for="field_idNotificacion">Id Notificacion</label>
+          <input
+            type="number"
+            class="form-control"
+            name="idNotificacion"
+            id="field_idNotificacion"
+            data-cy="idNotificacion"
+            formControlName="idNotificacion"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.pedido.idFactura" for="field_idFactura">Id Factura</label>
+          <input type="number" class="form-control" name="idFactura" id="field_idFactura" data-cy="idFactura" formControlName="idFactura" />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

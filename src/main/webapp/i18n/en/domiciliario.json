@@ -1,0 +1,30 @@
+{
+  "mercaExtraApp": {
+    "domiciliario": {
+      "home": {
+        "title": "Domiciliarios",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Domiciliario",
+        "createOrEditLabel": "Create or edit a Domiciliario",
+        "notFound": "No Domiciliarios found"
+      },
+      "created": "A new Domiciliario is created with identifier {{ param }}",
+      "updated": "A Domiciliario is updated with identifier {{ param }}",
+      "deleted": "A Domiciliario is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Domiciliario {{ id }}?"
+      },
+      "detail": {
+        "title": "Domiciliario"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "apellido": "Apellido",
+      "salario": "Salario",
+      "telefono": "Telefono",
+      "horario": "Horario",
+      "sueldo": "Sueldo",
+      "estado": "Estado"
+    }
+  }
+}

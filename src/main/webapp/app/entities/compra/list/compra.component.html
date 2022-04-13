@@ -1,0 +1,84 @@
+<div>
+  <h2 id="page-heading" data-cy="CompraHeading">
+    <span jhiTranslate="mercaExtraApp.compra.home.title">Compras</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="mercaExtraApp.compra.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-compra"
+        [routerLink]="['/compra/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="mercaExtraApp.compra.home.createLabel"> Create a new Compra </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="compras?.length === 0">
+    <span jhiTranslate="mercaExtraApp.compra.home.notFound">No compras found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="compras && compras.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.compra.fechaCreacion">Fecha Creacion</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.compra.numeroFactura">Numero Factura</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.compra.tipoFactura">Tipo Factura</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.compra.informacionProovedor">Informacion Proovedor</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.compra.idProveedor">Id Proveedor</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.compra.valorFactura">Valor Factura</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.compra.valorPagado">Valor Pagado</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.compra.valorDeuda">Valor Deuda</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.compra.estado">Estado</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let compra of compras; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/compra', compra.id, 'view']">{{ compra.id }}</a>
+          </td>
+          <td>{{ compra.fechaCreacion }}</td>
+          <td>{{ compra.numeroFactura }}</td>
+          <td jhiTranslate="{{ 'mercaExtraApp.TipoFactura.' + compra.tipoFactura }}">{{ compra.tipoFactura }}</td>
+          <td>{{ compra.informacionProovedor }}</td>
+          <td>{{ compra.idProveedor }}</td>
+          <td>{{ compra.valorFactura }}</td>
+          <td>{{ compra.valorPagado }}</td>
+          <td>{{ compra.valorDeuda }}</td>
+          <td>{{ compra.estado }}</td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['/compra', compra.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button type="submit" [routerLink]="['/compra', compra.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(compra)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

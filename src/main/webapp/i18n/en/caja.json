@@ -1,0 +1,28 @@
+{
+  "mercaExtraApp": {
+    "caja": {
+      "home": {
+        "title": "Cajas",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Caja",
+        "createOrEditLabel": "Create or edit a Caja",
+        "notFound": "No Cajas found"
+      },
+      "created": "A new Caja is created with identifier {{ param }}",
+      "updated": "A Caja is updated with identifier {{ param }}",
+      "deleted": "A Caja is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Caja {{ id }}?"
+      },
+      "detail": {
+        "title": "Caja"
+      },
+      "id": "ID",
+      "fechaCreacion": "Fecha Creacion",
+      "valorTotalDia": "Valor Total Dia",
+      "valorRegistradoDia": "Valor Registrado Dia",
+      "diferencia": "Diferencia",
+      "estado": "Estado"
+    }
+  }
+}

@@ -1,0 +1,174 @@
+<div>
+  <h2 class="font-size-entidades" id="page-heading" data-cy="ProductoHeading">
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-outline-info me-2" (click)="loadAll()">
+        <span jhiTranslate="mercaExtraApp.producto.home.refreshListLabel">Refresh List</span>
+      </button>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-3">
+        <label class="text-pattern mb-1" for="categoria">Filtra Por Categoria</label>
+        <select [(ngModel)]="categoria" (click)="productosPorCategoria()" name="categoria" class="form-select" id="categoria">
+          <option></option>
+          <option *ngFor="let categoria of categorias">{{ categoria.nombreCategoria }}</option>
+        </select>
+      </div>
+    </div>
+  </h2>
+
+  <div class="row justify-content-around">
+    <div class="col-md-3 me-5">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input type="text" (keyup)="productosFiltro()" placeholder="Busca por nombre" class="form-control" [(ngModel)]="nombre" />
+    </div>
+
+    <div class="col-md-3 ms-5">
+      <div class="dropdown">
+        <button
+          class="btn-producto-order dropdown-toggle"
+          style="margin-top: 21px"
+          type="button"
+          id="dropdownMenuButton1"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <mat-icon class="icon-config" style="color: black; font-size: 50px">filter_list</mat-icon>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li>
+            <button (click)="productosPorCategoriaYFiltro(1)" class="dropdown-item btn-producto-order" href="#">
+              <span
+                >Ordenar Por precio
+                <mat-icon class="icon-config">price_check</mat-icon>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item btn-producto-order" (click)="productosPorCategoriaYFiltro(2)">
+              <span
+                >Ordenar Alfabeticamente
+                <mat-icon class="icon-config">sort_by_alpha</mat-icon>
+              </span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <label for="nombre" class="form-label">Descripcion</label>
+      <input type="text" (keyup)="productosFiltro()" placeholder="Busca por descripción" class="form-control" [(ngModel)]="descripcion" />
+    </div>
+  </div>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="productos?.length === 0">
+    <span jhiTranslate="mercaExtraApp.producto.home.notFound">No productos found</span>
+  </div>
+
+  <div class="alert mt-3" style="background-color: rgba(135, 46, 199, 0.226)" role="alert">
+    <h4 class="alert-heading" style="text-align: center">No has iniciado Sesion</h4>
+    <p style="text-align: end">
+      Podras ver nuestros productos disponibles,categorias y demas informacion. Si deseas adqurir algun producto
+      <button class="raise">Inicia sesion</button>
+    </p>
+    <p class="mb-0" style="text-align: end">Si no tienes cuenta registrate gratis <button class="raise">crear cuenta</button></p>
+  </div>
+
+  <!-- 
+    <div class="table-responsive" id="entities" *ngIf="productos && productos.length > 0">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr>
+            <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+            <th scope="col"><span jhiTranslate="mercaExtraApp.producto.nombre">Nombre</span></th>
+            <th scope="col"><span jhiTranslate="mercaExtraApp.producto.cantidad">Cantidad</span></th>
+            <th scope="col"><span jhiTranslate="mercaExtraApp.producto.descripcion">Descripcion</span></th>
+            <th scope="col"><span jhiTranslate="mercaExtraApp.producto.categoria">Categoria</span></th>
+            <th scope="col"><span jhiTranslate="mercaExtraApp.producto.imagen">Imagen</span></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let producto of productos; trackBy: trackId" data-cy="entityTable">
+            <td>
+              <a [routerLink]="['/producto', producto.id, 'view']">{{ producto.id }}</a>
+            </td>
+            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.cantidad }}</td>
+            <td>{{ producto.descripcion }}</td>
+            <td>{{ producto.categoria }}</td>
+            <td>
+              <a *ngIf="producto.imagen" (click)="openFile(producto.imagen, producto.imagenContentType)">
+                <img
+                  [src]="'data:' + producto.imagenContentType + ';base64,' + producto.imagen"
+                  style="max-height: 30px"
+                  alt="producto image"
+                />
+              </a>
+              <span *ngIf="producto.imagen">{{ producto.imagenContentType }}, {{ byteSize(producto.imagen) }}</span>
+            </td>
+            <td class="text-end">
+              <div class="btn-group">
+                <button
+                  type="submit"
+                  [routerLink]="['/producto', producto.id, 'view']"
+                  class="btn btn-info btn-sm"
+                  data-cy="entityDetailsButton"
+                >
+                  <fa-icon icon="eye"></fa-icon>
+                  <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                </button>
+  
+                <button
+                  type="submit"
+                  [routerLink]="['/producto', producto.id, 'edit']"
+                  class="btn btn-primary btn-sm"
+                  data-cy="entityEditButton"
+                >
+                  <fa-icon icon="pencil-alt"></fa-icon>
+                  <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                </button>
+  
+                <button type="submit" (click)="delete(producto)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                  <fa-icon icon="times"></fa-icon>
+                  <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div> -->
+
+  <div class="row text-center mt-5">
+    <div
+      style="box-shadow: 10px 10px 10px rgb(240, 200, 1)"
+      class="col-lg-3 col-md-6 mb-4"
+      *ngFor="let producto of productos! | paginate: { itemsPerPage: 12, currentPage: pA }"
+    >
+      <div class="card" style="width: 16 rem">
+        <a *ngIf="producto.imagen" (click)="openFile(producto.imagen, producto.imagenContentType)">
+          <img [src]="'data:' + producto.imagenContentType + ';base64,' + producto.imagen" style="max-height: 200px" alt="producto image" />
+        </a>
+        <div class="card-body">
+          <h5 class="card-title titulo-entidades">{{ producto.nombre }}</h5>
+          <p class="card-text titulo-entidades">{{ producto.descripcion }}</p>
+          <p class="card-text titulo-entidades">Categoria: {{ producto.categoria }}</p>
+          <p class="card-text titulo-entidades">Cantidad: {{ producto.cantidad }}</p>
+          <p class="card-text titulo-entidades">Precio: {{ producto.precio | currency }}</p>
+          <div class="d-flex justify-content-end mt-2" style="background-color: rgba(0, 187, 255, 0.241); border-radius: 10px">
+            <button class="menu-config2" [routerLink]="['/factura/new']">
+              <mat-icon class="icon-config">add</mat-icon><span>Adquirir</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <pagination-controls style="text-align: center" (pageChange)="pA = $event"></pagination-controls>
+  </div>
+</div>

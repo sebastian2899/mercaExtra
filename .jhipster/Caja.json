@@ -1,0 +1,36 @@
+{
+  "applications": "*",
+  "changelogDate": "20220408221429",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "caja",
+  "fields": [
+    {
+      "fieldName": "fechaCreacion",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "valorTotalDia",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "valorRegistradoDia",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "diferencia",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Caja",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

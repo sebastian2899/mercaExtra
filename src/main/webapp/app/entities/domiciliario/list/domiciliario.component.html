@@ -1,0 +1,90 @@
+<div>
+  <h2 id="page-heading" data-cy="DomiciliarioHeading">
+    <span jhiTranslate="mercaExtraApp.domiciliario.home.title">Domiciliarios</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="mercaExtraApp.domiciliario.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-domiciliario"
+        [routerLink]="['/domiciliario/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="mercaExtraApp.domiciliario.home.createLabel"> Create a new Domiciliario </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="domiciliarios?.length === 0">
+    <span jhiTranslate="mercaExtraApp.domiciliario.home.notFound">No domiciliarios found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="domiciliarios && domiciliarios.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.domiciliario.nombre">Nombre</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.domiciliario.apellido">Apellido</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.domiciliario.salario">Salario</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.domiciliario.telefono">Telefono</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.domiciliario.horario">Horario</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.domiciliario.sueldo">Sueldo</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.domiciliario.estado">Estado</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let domiciliario of domiciliarios; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/domiciliario', domiciliario.id, 'view']">{{ domiciliario.id }}</a>
+          </td>
+          <td>{{ domiciliario.nombre }}</td>
+          <td>{{ domiciliario.apellido }}</td>
+          <td jhiTranslate="{{ 'mercaExtraApp.TipoSalario.' + domiciliario.salario }}">{{ domiciliario.salario }}</td>
+          <td>{{ domiciliario.telefono }}</td>
+          <td>{{ domiciliario.horario }}</td>
+          <td>{{ domiciliario.sueldo }}</td>
+          <td jhiTranslate="{{ 'mercaExtraApp.EstadoDomiciliario.' + domiciliario.estado }}">{{ domiciliario.estado }}</td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/domiciliario', domiciliario.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/domiciliario', domiciliario.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(domiciliario)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

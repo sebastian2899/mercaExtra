@@ -1,0 +1,44 @@
+{
+  "applications": "*",
+  "changelogDate": "20220408221427",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "empleado",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "apellido",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "numCelular",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "direccion",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "salario",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "horario",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Empleado",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

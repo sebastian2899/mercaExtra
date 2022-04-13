@@ -1,0 +1,32 @@
+{
+  "mercaExtraApp": {
+    "compra": {
+      "home": {
+        "title": "Compras",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Compra",
+        "createOrEditLabel": "Create or edit a Compra",
+        "notFound": "No Compras found"
+      },
+      "created": "A new Compra is created with identifier {{ param }}",
+      "updated": "A Compra is updated with identifier {{ param }}",
+      "deleted": "A Compra is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Compra {{ id }}?"
+      },
+      "detail": {
+        "title": "Compra"
+      },
+      "id": "ID",
+      "fechaCreacion": "Fecha Creacion",
+      "numeroFactura": "Numero Factura",
+      "tipoFactura": "Tipo Factura",
+      "informacionProovedor": "Informacion Proovedor",
+      "idProveedor": "Id Proveedor",
+      "valorFactura": "Valor Factura",
+      "valorPagado": "Valor Pagado",
+      "valorDeuda": "Valor Deuda",
+      "estado": "Estado"
+    }
+  }
+}

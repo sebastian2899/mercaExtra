@@ -1,0 +1,30 @@
+{
+  "mercaExtraApp": {
+    "pedido": {
+      "home": {
+        "title": "Pedidos",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Pedido",
+        "createOrEditLabel": "Crear o editar Pedido",
+        "notFound": "Ningún Pedidos encontrado"
+      },
+      "created": "Un nuevo Pedido ha sido creado con el identificador {{ param }}",
+      "updated": "Un Pedido ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Pedido ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Pedido {{ id }}?"
+      },
+      "detail": {
+        "title": "Pedido"
+      },
+      "id": "ID",
+      "fechaPedido": "Fecha Pedido",
+      "direccion": "Direccion",
+      "estado": "Estado",
+      "infoDomicilio": "Info Domicilio",
+      "idDomiciliario": "Id Domiciliario",
+      "idNotificacion": "Id Notificacion",
+      "idFactura": "Id Factura"
+    }
+  }
+}

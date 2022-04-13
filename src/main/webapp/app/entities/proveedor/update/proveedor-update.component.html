@@ -1,0 +1,90 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-proveedor-heading" data-cy="ProveedorCreateUpdateHeading" jhiTranslate="mercaExtraApp.proveedor.home.createOrEditLabel">
+        Create or edit a Proveedor
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.proveedor.nombre" for="field_nombre">Nombre</label>
+          <input type="text" class="form-control" name="nombre" id="field_nombre" data-cy="nombre" formControlName="nombre" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.proveedor.apellido" for="field_apellido">Apellido</label>
+          <input type="text" class="form-control" name="apellido" id="field_apellido" data-cy="apellido" formControlName="apellido" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.proveedor.tipoCC" for="field_tipoCC">Tipo CC</label>
+          <select class="form-control" name="tipoCC" formControlName="tipoCC" id="field_tipoCC" data-cy="tipoCC">
+            <option [ngValue]="null">{{ 'mercaExtraApp.TipoDoc.null' | translate }}</option>
+            <option *ngFor="let tipoDoc of tipoDocValues" [value]="tipoDoc">{{ 'mercaExtraApp.TipoDoc.' + tipoDoc | translate }}</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.proveedor.numeroCC" for="field_numeroCC">Numero CC</label>
+          <input type="text" class="form-control" name="numeroCC" id="field_numeroCC" data-cy="numeroCC" formControlName="numeroCC" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.proveedor.numCelular" for="field_numCelular">Num Celular</label>
+          <input
+            type="text"
+            class="form-control"
+            name="numCelular"
+            id="field_numCelular"
+            data-cy="numCelular"
+            formControlName="numCelular"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.proveedor.email" for="field_email">Email</label>
+          <input type="text" class="form-control" name="email" id="field_email" data-cy="email" formControlName="email" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.proveedor.tipoProovedor" for="field_tipoProovedor">Tipo Proovedor</label>
+          <select
+            class="form-control"
+            name="tipoProovedor"
+            formControlName="tipoProovedor"
+            id="field_tipoProovedor"
+            data-cy="tipoProovedor"
+          >
+            <option [ngValue]="null">{{ 'mercaExtraApp.TipoProveedor.null' | translate }}</option>
+            <option *ngFor="let tipoProveedor of tipoProveedorValues" [value]="tipoProveedor">
+              {{ 'mercaExtraApp.TipoProveedor.' + tipoProveedor | translate }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

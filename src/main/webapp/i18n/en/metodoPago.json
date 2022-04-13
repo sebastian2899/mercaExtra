@@ -1,0 +1,10 @@
+{
+  "mercaExtraApp": {
+    "MetodoPago": {
+      "null": "",
+      "CONTRA_ENTREGA": "CONTRA_ENTREGA",
+      "TARJETA_CREDITO": "TARJETA_CREDITO",
+      "TRANSACCION_BANCARIA": "TRANSACCION_BANCARIA"
+    }
+  }
+}

@@ -1,0 +1,80 @@
+<div>
+  <h2 id="page-heading" data-cy="CategoriaProductoHeading">
+    <span jhiTranslate="mercaExtraApp.categoriaProducto.home.title">Categoria Productos</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="mercaExtraApp.categoriaProducto.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-categoria-producto"
+        [routerLink]="['/categoria-producto/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="mercaExtraApp.categoriaProducto.home.createLabel"> Create a new Categoria Producto </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="categoriaProductos?.length === 0">
+    <span jhiTranslate="mercaExtraApp.categoriaProducto.home.notFound">No categoriaProductos found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="categoriaProductos && categoriaProductos.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.categoriaProducto.nombreCategoria">Nombre Categoria</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.categoriaProducto.descripcion">Descripcion</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let categoriaProducto of categoriaProductos; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/categoria-producto', categoriaProducto.id, 'view']">{{ categoriaProducto.id }}</a>
+          </td>
+          <td>{{ categoriaProducto.nombreCategoria }}</td>
+          <td>{{ categoriaProducto.descripcion }}</td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/categoria-producto', categoriaProducto.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/categoria-producto', categoriaProducto.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(categoriaProducto)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

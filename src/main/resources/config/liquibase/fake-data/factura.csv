@@ -1,0 +1,11 @@
+id;fecha_creacion;info_ciente;numero_factura;tipo_factura;valor_factura;valor_pagado;valor_deuda;estado_factura;metodo_pago;user_name
+1;2022-04-08T20:29:57;SAS red Partida;compressing transition;CREDITO;23235;82912;19803;11237;TARJETA_CREDITO;Uganda Estratega Plástico
+2;2022-04-08T15:09:02;Avon;óptima Genérico Cambridgeshire;DEBITO;75976;79712;14006;5274;TARJETA_CREDITO;Account Borders Orgánico
+3;2022-04-07T22:55:17;Lithuanian Calle program;Zapatos Estratega;CREDITO;31826;43873;18793;7776;CONTRA_ENTREGA;Ladrillo monitorizar
+4;2022-04-08T08:16:20;web;parse;CREDITO;23147;29233;34310;65060;TARJETA_CREDITO;direccional
+5;2022-04-08T13:04:56;transparent;Market synthesize mano;CREDITO;56474;84640;79678;99405;TRANSACCION_BANCARIA;invoice Pantalones
+6;2022-04-08T04:01:03;virtual Berkshire Bebes;override;CREDITO;27116;42534;30022;5437;TARJETA_CREDITO;methodologies
+7;2022-04-08T13:34:26;value-added;Gris;DEBITO;70289;98494;6286;96368;TRANSACCION_BANCARIA;International habilidad Joyería
+8;2022-04-08T08:11:39;multiestado;dedicada Madera Andalucía;CREDITO;89500;38871;79067;38002;CONTRA_ENTREGA;Marketing generate back-end
+9;2022-04-08T10:05:38;enterprise;Reactivo bandwidth;CREDITO;23281;90320;55054;58954;TARJETA_CREDITO;Ladrillo Etiopía
+10;2022-04-08T21:01:50;Silver;world-class;DEBITO;12938;47060;26434;80599;CONTRA_ENTREGA;Acero Técnico codificar

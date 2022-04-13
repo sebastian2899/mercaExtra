@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="domiciliario">
+      <h2 data-cy="domiciliarioDetailsHeading"><span jhiTranslate="mercaExtraApp.domiciliario.detail.title">Domiciliario</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ domiciliario.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.domiciliario.nombre">Nombre</span></dt>
+        <dd>
+          <span>{{ domiciliario.nombre }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.domiciliario.apellido">Apellido</span></dt>
+        <dd>
+          <span>{{ domiciliario.apellido }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.domiciliario.salario">Salario</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'mercaExtraApp.TipoSalario.' + domiciliario.salario }}">{{ domiciliario.salario }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.domiciliario.telefono">Telefono</span></dt>
+        <dd>
+          <span>{{ domiciliario.telefono }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.domiciliario.horario">Horario</span></dt>
+        <dd>
+          <span>{{ domiciliario.horario }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.domiciliario.sueldo">Sueldo</span></dt>
+        <dd>
+          <span>{{ domiciliario.sueldo }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.domiciliario.estado">Estado</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'mercaExtraApp.EstadoDomiciliario.' + domiciliario.estado }}">{{ domiciliario.estado }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/domiciliario', domiciliario.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

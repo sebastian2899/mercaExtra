@@ -6,6 +6,9 @@ import dayjs from 'dayjs/esm';
 
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
+import { LANGUAGES } from 'app/config/language.constants';
+import { SessionStorageService } from 'ngx-webstorage';
+import { LoginService } from 'app/login/login.service';
 
 @Component({
   selector: 'jhi-main',
@@ -14,6 +17,7 @@ import { Account } from 'app/core/auth/account.model';
 export class MainComponent implements OnInit {
   account?: Account | null;
   accountVerify = false;
+  languages = LANGUAGES;
   private renderer: Renderer2;
 
   constructor(
@@ -21,6 +25,8 @@ export class MainComponent implements OnInit {
     private titleService: Title,
     private router: Router,
     private translateService: TranslateService,
+    private sessionStorageService: SessionStorageService,
+    private loginService: LoginService,
     rootRenderer: RendererFactory2
   ) {
     this.renderer = rootRenderer.createRenderer(document.querySelector('html'), null);
@@ -44,7 +50,32 @@ export class MainComponent implements OnInit {
 
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
+      if (this.account) {
+        this.accountVerify = true;
+      }
     });
+  }
+
+  changeLanguage(languageKey: string): void {
+    this.sessionStorageService.store('locale', languageKey);
+    this.translateService.use(languageKey);
+  }
+
+  categoriaProductos(): void {
+    if (this.account) {
+      this.router.navigate(['/producto']);
+    } else {
+      this.router.navigate(['/product-home']);
+    }
+  }
+
+  login(): void {
+    this.router.navigate(['/login']);
+  }
+
+  logout(): void {
+    this.loginService.logout();
+    this.router.navigate(['']);
   }
 
   private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {

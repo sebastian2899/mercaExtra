@@ -1,0 +1,26 @@
+{
+  "mercaExtraApp": {
+    "egreso": {
+      "home": {
+        "title": "Egresos",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Egreso",
+        "createOrEditLabel": "Create or edit a Egreso",
+        "notFound": "No Egresos found"
+      },
+      "created": "A new Egreso is created with identifier {{ param }}",
+      "updated": "A Egreso is updated with identifier {{ param }}",
+      "deleted": "A Egreso is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Egreso {{ id }}?"
+      },
+      "detail": {
+        "title": "Egreso"
+      },
+      "id": "ID",
+      "fechaCreacion": "Fecha Creacion",
+      "descripcion": "Descripcion",
+      "valorEgreso": "Valor Egreso"
+    }
+  }
+}

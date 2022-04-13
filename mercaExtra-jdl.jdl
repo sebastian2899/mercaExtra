@@ -1,0 +1,136 @@
+enum MetodoPago{
+	CONTRA_ENTREGA, TARJETA_CREDITO, TRANSACCION_BANCARIA
+}
+
+enum TipoFactura {
+	CREDITO, DEBITO
+}
+
+enum TipoDoc {
+	CC, NIT, CE, ROOT
+}
+
+enum EstadoDomiciliario {
+	EN_ENTREGA, DISPONIBLE
+}
+
+enum TipoSalario{
+	SALARIO_NORMAL, SALARIO_POR_DOMICILIO
+}
+
+enum TipoProveedor {
+	NATURAL, JURIDICA
+}
+
+entity Pedido {
+	fechaPedido Instant
+    direccion String
+    estado String 
+    infoDomicilio String
+    idDomiciliario Long
+    idNotificacion Long
+    idFactura Long
+}
+
+entity Factura {
+	fechaCreacion Instant
+    infoCiente String
+    numeroFactura String
+    tipoFactura TipoFactura
+    valorFactura BigDecimal
+    valorPagado BigDecimal
+    valorDeuda BigDecimal
+    estadoFactura BigDecimal
+    metodoPago MetodoPago
+    userName String
+}
+
+entity Producto {
+	nombre String
+	cantidad String
+	descripcion String
+	categoria String
+}
+
+entity Notificacion {
+	descripcion String
+	fecha Instant
+}
+
+entity Empleado {
+	nombre String
+	apellido String
+	email String
+	numCelular String
+	direccion Instant
+	salario BigDecimal
+    horario String
+}
+
+entity Domiciliario {
+	nombre String
+	apellido String
+    salario TipoSalario
+    telefono String
+    horario String
+    sueldo BigDecimal
+	estado EstadoDomiciliario
+}
+
+entity Caja{
+	fechaCreacion Instant
+    valorTotalDia BigDecimal
+    valorRegistradoDia BigDecimal
+    diferencia BigDecimal
+    estado String
+}
+
+entity CategoriaProducto {
+	nombreCategoria String
+	descripcion String
+}
+
+entity Compra {
+	fechaCreacion BigDecimal
+    numeroFactura String
+    tipoFactura TipoFactura
+    informacionProovedor String
+    idProveedor Long
+    valorFactura BigDecimal
+    valorPagado BigDecimal
+    valorDeuda BigDecimal
+    estado String
+}
+
+entity Proveedor{
+	nombre String
+    apellido String
+    tipoCC TipoDoc
+    numeroCC String
+    numCelular String
+    email String
+    tipoProovedor TipoProveedor
+   
+}
+
+entity Egreso{
+    fechaCreacion Instant
+	descripcion String
+    valorEgreso BigDecimal
+}
+
+
+// defining multiple oneToOne relationships
+
+// Set pagination options
+//paginate JobHistory, Employee with infinite-scroll
+//paginate Job with pagination
+
+// Use Data Transfer Objects (DTO)
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl
+
+// Set an angular suffix
+// angularSuffix * with mySuffix

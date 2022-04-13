@@ -27,7 +27,7 @@ module.exports = async (config, options, targetOptions) => {
       }),
       new WebpackNotifierPlugin({
         title: 'Merca Extra',
-        contentImage: path.join(__dirname, 'logo-jhipster.png'),
+        contentImage: path.join(__dirname, 'mercaextralogo.jpg'),
       })
     );
   }

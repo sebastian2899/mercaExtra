@@ -1,0 +1,24 @@
+{
+  "applications": "*",
+  "changelogDate": "20220408221426",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "notificacion",
+  "fields": [
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fecha",
+      "fieldType": "Instant"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Notificacion",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

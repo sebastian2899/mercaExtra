@@ -1,6 +1,5 @@
 @import 'bootstrap-variables';
 @import '~bootstrap/scss/functions';
-@import '~bootswatch/dist/pulse/variables';
 @import '~bootstrap/scss/variables';
 
 /* ==============================================================
@@ -13,6 +12,285 @@ h2,
 h3,
 h4 {
   font-weight: 300;
+}
+
+.dropdown-item:hover {
+  span {
+    color: white;
+  }
+  .icon-config-black {
+    color: white;
+  }
+}
+
+.v-line {
+  border-left: thick solid #000;
+  height: 100%;
+  left: 50%;
+  position: absolute;
+}
+
+.text {
+  font-size: 28px;
+  font-family: helvetica;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  text-transform: uppercase;
+}
+.parpadea {
+  animation-name: parpadeo;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  -webkit-animation-name: parpadeo;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+}
+
+@-moz-keyframes parpadeo {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes parpadeo {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes parpadeo {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.pulse:hover,
+.pulse:focus {
+  -webkit-animation: pulse 2s;
+  animation: pulse 2s;
+  box-shadow: 0 0 0 2em rgba(255, 255, 255, 0);
+}
+
+@-webkit-keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--hover);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--hover);
+  }
+}
+
+.pulse {
+  --color: #0000de;
+  --hover: #0016e0;
+}
+
+.menu-config2 {
+  background: none;
+  border: none;
+}
+
+.font-size-white {
+  color: rgb(255, 255, 255);
+  font-style: normal;
+  font-weight: bold;
+}
+
+.icon-config {
+  position: relative;
+  top: 5px;
+}
+
+.icon-config2 {
+  position: relative;
+  top: 10px;
+}
+
+.btn-producto-order {
+  border: none;
+  background-color: #3498db;
+  background: none;
+}
+
+.btn-producto-order:hover {
+  background-color: blueviolet;
+  font-size: 22px;
+  span {
+    color: white;
+  }
+}
+
+.icon-config-eliminar2 {
+  position: relative;
+  top: 5px;
+}
+
+.icon-config-eliminar2:hover {
+  background-color: rgb(255, 134, 134);
+  color: #000;
+}
+
+.menu-config-eliminar {
+  background: none;
+  border: none;
+  color: red;
+}
+
+.icon-config-white {
+  position: relative;
+  top: 5px;
+  color: white;
+}
+
+.icon-config-black {
+  position: relative;
+  top: 5px;
+  color: rgb(0, 0, 0);
+}
+
+.link-home:hover {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  font-size: 16px;
+  .font-size-black {
+    color: rgb(0, 0, 0);
+    font-style: normal;
+    font-weight: bold;
+  }
+  .icon-config-black {
+    position: relative;
+    top: 5px;
+    color: rgb(95, 0, 191);
+  }
+}
+
+.style-a-footer {
+  text-decoration: none;
+  color: #000;
+}
+
+.style-a-footer:hover {
+  background-color: rgb(177, 127, 224);
+  color: white;
+  font-size: 22px;
+}
+
+.font-size-black {
+  color: rgb(164, 89, 234);
+  font-style: normal;
+  font-weight: bold;
+}
+
+.alert-gray {
+  background-color: rgb(212, 212, 212);
+}
+
+.list {
+  list-style: none;
+  margin: 5px;
+}
+
+.list-bg {
+  background-color: rgba(186, 160, 197, 0.816);
+}
+
+.list-text {
+  font-weight: bold;
+  font-size: 14px;
+  color: #000;
+}
+
+.font-size-black2 {
+  color: rgb(0, 0, 0);
+  font-style: normal;
+  font-weight: bold;
+}
+
+.font-size-entidades {
+  color: blueviolet;
+  font-style: normal;
+  font-weight: bold;
+}
+
+.font-size-home {
+  color: rgb(255, 255, 255);
+  font-style: normal;
+  font-weight: bold;
+}
+
+.font-size-home-white {
+  color: rgb(255, 255, 255);
+  font-style: normal;
+  font-weight: bold;
+}
+
+.imagen-fondo {
+  background: url('../../content/images/imagenfonfo.jpg');
+  background-repeat: no-repeat;
+}
+
+.text-pattern {
+  color: transparent;
+  background-image: linear-gradient(to left, #000000, #dadada, #9900ff, #d094f8, #000000);
+  background-clip: text;
+  animation: color 5s linear infinite;
+  background-size: 500%;
+
+  @keyframes color {
+    from {
+      background-position: 0% 50%;
+    }
+
+    to {
+      background-position: 100% 50%;
+    }
+  }
+}
+
+.raise:hover,
+.raise:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
+  -webkit-transform: translateY(-0.25em);
+  transform: translateY(-0.25em);
+  color: rgb(255, 255, 255);
+  border-color: white;
+}
+
+.raise {
+  --color: #ffa260;
+  --hover: #e5ff60;
+  background-color: rgb(107, 140, 250);
+  color: rgb(255, 255, 255);
+  border-color: #1702ff;
+}
+
+.imagen-fondo2 {
+  background: url('../../content/images/imagenfonfo.jpg');
+  //background-repeat: no-repeat;
 }
 
 a:hover {

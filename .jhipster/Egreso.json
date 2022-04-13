@@ -1,0 +1,28 @@
+{
+  "applications": "*",
+  "changelogDate": "20220408221433",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "egreso",
+  "fields": [
+    {
+      "fieldName": "fechaCreacion",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "valorEgreso",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Egreso",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

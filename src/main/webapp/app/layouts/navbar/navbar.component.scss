@@ -1,5 +1,5 @@
 @import '~bootstrap/scss/functions';
-@import '~bootswatch/dist/pulse/variables';
+// @import '~bootswatch/dist/pulse/variables';
 @import '~bootstrap/scss/variables';
 
 /* ==========================================================================
@@ -22,6 +22,7 @@ Navbar
   position: fixed;
   z-index: 100;
   margin-top: -22px;
+  background-color: #875892;
   a.nav-link {
     font-weight: 400;
   }
@@ -50,6 +51,6 @@ Logo styles
   width: 45px;
   display: inline-block;
   vertical-align: middle;
-  background: url('../../../content/images/logo-jhipster.png') no-repeat center center;
+  background: url('../../../content/images/mercaextralogo.jpg') no-repeat center center;
   background-size: contain;
 }

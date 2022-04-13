@@ -1,14 +1,15 @@
-<div>
+<div class="imagen-fondo p-4">
   <div class="d-flex justify-content-center">
-    <div class="col-lg-6 col-md-8 col-sm-10">
-      <h1 jhiTranslate="login.title" data-cy="loginTitle">Sign in</h1>
+    <div class="col-lg-6 col-md-8 col-sm-10" style="background-color: rgba(128, 128, 128, 0.712)">
+      <h1 jhiTranslate="login.title" class="font-size-black2 py-3" data-cy="loginTitle" style="text-align: center">Sign in</h1>
       <div class="alert alert-danger" *ngIf="authenticationError" jhiTranslate="login.messages.error.authentication" data-cy="loginError">
         <strong>Failed to sign in!</strong> Please check your credentials and try again.
       </div>
       <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
-        <div class="mb-3">
+        <div class="mb-3 font-size-black2 p-3" style="text-align: center">
           <label class="username-label" for="username" jhiTranslate="global.form.username.label">Login</label>
           <input
+            style="text-align: center"
             type="text"
             class="form-control"
             name="username"
@@ -20,9 +21,10 @@
           />
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 mt-5 font-size-black2 p-3" style="text-align: center">
           <label for="password" jhiTranslate="login.form.password">Password</label>
           <input
+            style="text-align: center"
             type="password"
             class="form-control"
             name="password"
@@ -33,22 +35,24 @@
           />
         </div>
 
-        <div class="form-check">
+        <div class="form-check font-size-black2 mb-3" style="text-align: center">
           <label class="form-check-label" for="rememberMe">
             <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe" />
             <span jhiTranslate="login.form.rememberme">Remember me</span>
           </label>
         </div>
 
-        <button type="submit" class="btn btn-primary" jhiTranslate="login.form.button" data-cy="submit">Sign in</button>
+        <div style="text-align: center">
+          <button type="submit" class="btn btn-dark" jhiTranslate="login.form.button" data-cy="submit">Sign in</button>
+        </div>
       </form>
-      <div class="mt-3 alert alert-warning">
+      <div class="mt-3 alert alert-gray">
         <a class="alert-link" routerLink="/account/reset/request" jhiTranslate="login.password.forgot" data-cy="forgetYourPasswordSelector"
           >Did you forget your password?</a
         >
       </div>
 
-      <div class="alert alert-warning">
+      <div class="alert alert-gray" style="text-align: center">
         <span jhiTranslate="global.messages.info.register.noaccount">You don't have an account yet?</span>
         <a class="alert-link" routerLink="/account/register" jhiTranslate="global.messages.info.register.link">Register a new account</a>
       </div>

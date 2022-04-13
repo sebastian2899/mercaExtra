@@ -1,0 +1,46 @@
+{
+  "applications": "*",
+  "changelogDate": "20220408221428",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "domiciliario",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "apellido",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "salario",
+      "fieldType": "TipoSalario",
+      "fieldValues": "SALARIO_NORMAL,SALARIO_POR_DOMICILIO"
+    },
+    {
+      "fieldName": "telefono",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "horario",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "sueldo",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "EstadoDomiciliario",
+      "fieldValues": "EN_ENTREGA,DISPONIBLE"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Domiciliario",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

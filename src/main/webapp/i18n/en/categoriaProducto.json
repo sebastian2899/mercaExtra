@@ -1,0 +1,25 @@
+{
+  "mercaExtraApp": {
+    "categoriaProducto": {
+      "home": {
+        "title": "Categoria Productos",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Categoria Producto",
+        "createOrEditLabel": "Create or edit a Categoria Producto",
+        "notFound": "No Categoria Productos found"
+      },
+      "created": "A new Categoria Producto is created with identifier {{ param }}",
+      "updated": "A Categoria Producto is updated with identifier {{ param }}",
+      "deleted": "A Categoria Producto is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Categoria Producto {{ id }}?"
+      },
+      "detail": {
+        "title": "Categoria Producto"
+      },
+      "id": "ID",
+      "nombreCategoria": "Nombre Categoria",
+      "descripcion": "Descripcion"
+    }
+  }
+}

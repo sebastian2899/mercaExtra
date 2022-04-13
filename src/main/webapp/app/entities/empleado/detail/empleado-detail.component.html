@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="empleado">
+      <h2 data-cy="empleadoDetailsHeading"><span jhiTranslate="mercaExtraApp.empleado.detail.title">Empleado</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ empleado.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.empleado.nombre">Nombre</span></dt>
+        <dd>
+          <span>{{ empleado.nombre }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.empleado.apellido">Apellido</span></dt>
+        <dd>
+          <span>{{ empleado.apellido }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.empleado.email">Email</span></dt>
+        <dd>
+          <span>{{ empleado.email }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.empleado.numCelular">Num Celular</span></dt>
+        <dd>
+          <span>{{ empleado.numCelular }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.empleado.direccion">Direccion</span></dt>
+        <dd>
+          <span>{{ empleado.direccion | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.empleado.salario">Salario</span></dt>
+        <dd>
+          <span>{{ empleado.salario }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.empleado.horario">Horario</span></dt>
+        <dd>
+          <span>{{ empleado.horario }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/empleado', empleado.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

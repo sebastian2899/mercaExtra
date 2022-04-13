@@ -1,0 +1,26 @@
+{
+  "mercaExtraApp": {
+    "egreso": {
+      "home": {
+        "title": "Egresos",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Egreso",
+        "createOrEditLabel": "Crear o editar Egreso",
+        "notFound": "Ningún Egresos encontrado"
+      },
+      "created": "Un nuevo Egreso ha sido creado con el identificador {{ param }}",
+      "updated": "Un Egreso ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Egreso ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Egreso {{ id }}?"
+      },
+      "detail": {
+        "title": "Egreso"
+      },
+      "id": "ID",
+      "fechaCreacion": "Fecha Creacion",
+      "descripcion": "Descripcion",
+      "valorEgreso": "Valor Egreso"
+    }
+  }
+}

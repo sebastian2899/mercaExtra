@@ -1,0 +1,58 @@
+{
+  "applications": "*",
+  "changelogDate": "20220408221424",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "factura",
+  "fields": [
+    {
+      "fieldName": "fechaCreacion",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "infoCiente",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "numeroFactura",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "tipoFactura",
+      "fieldType": "TipoFactura",
+      "fieldValues": "CREDITO,DEBITO"
+    },
+    {
+      "fieldName": "valorFactura",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "valorPagado",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "valorDeuda",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "estadoFactura",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "metodoPago",
+      "fieldType": "MetodoPago",
+      "fieldValues": "CONTRA_ENTREGA,TARJETA_CREDITO,TRANSACCION_BANCARIA"
+    },
+    {
+      "fieldName": "userName",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Factura",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

@@ -1,0 +1,44 @@
+{
+  "applications": "*",
+  "changelogDate": "20220408221423",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "pedido",
+  "fields": [
+    {
+      "fieldName": "fechaPedido",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "direccion",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "infoDomicilio",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "idDomiciliario",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "idNotificacion",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "idFactura",
+      "fieldType": "Long"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Pedido",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

@@ -1,0 +1,9 @@
+{
+  "mercaExtraApp": {
+    "EstadoDomiciliario": {
+      "null": "",
+      "EN_ENTREGA": "EN_ENTREGA",
+      "DISPONIBLE": "DISPONIBLE"
+    }
+  }
+}
