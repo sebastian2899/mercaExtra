@@ -3,6 +3,7 @@ package com.mercaextra.app.web.rest;
 import com.mercaextra.app.repository.FacturaRepository;
 import com.mercaextra.app.service.FacturaService;
 import com.mercaextra.app.service.dto.FacturaDTO;
+import com.mercaextra.app.service.dto.ProductoDTO;
 import com.mercaextra.app.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -12,8 +13,17 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -141,6 +151,17 @@ public class FacturaResource {
         return facturaService.findAll();
     }
 
+    @GetMapping("/facturas-productos-disponibles")
+    public List<ProductoDTO> productosDisponibles() {
+        return facturaService.productosDisponibles();
+    }
+
+    @GetMapping("/factura-productos-categoria/{categoria}")
+    public List<ProductoDTO> productosCategoria(@PathVariable String categoria) {
+        log.debug("REST request to get all productos per categoria", categoria);
+        return facturaService.productosCategoria(categoria);
+    }
+
     /**
      * {@code GET  /facturas/:id} : get the "id" factura.
      *
@@ -150,8 +171,8 @@ public class FacturaResource {
     @GetMapping("/facturas/{id}")
     public ResponseEntity<FacturaDTO> getFactura(@PathVariable Long id) {
         log.debug("REST request to get Factura : {}", id);
-        Optional<FacturaDTO> facturaDTO = facturaService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(facturaDTO);
+        FacturaDTO facturaDTO = facturaService.findOne(id);
+        return new ResponseEntity<FacturaDTO>(facturaDTO, HttpStatus.OK);
     }
 
     /**

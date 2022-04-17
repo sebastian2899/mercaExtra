@@ -10,12 +10,12 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "cantidad",
-      "fieldType": "String"
+      "fieldName": "precio",
+      "fieldType": "BigDecimal"
     },
     {
-      "fieldName": "descripcion",
-      "fieldType": "String"
+      "fieldName": "cantidad",
+      "fieldType": "Long"
     },
     {
       "fieldName": "categoria",
@@ -25,6 +25,14 @@
       "fieldName": "imagen",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "image"
+    },
+    {
+      "fieldName": "precioDescuento",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String"
     }
   ],
   "fluentMethods": true,

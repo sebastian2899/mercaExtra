@@ -5,6 +5,7 @@ import com.mercaextra.app.domain.enumeration.TipoFactura;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -46,8 +47,8 @@ public class Factura implements Serializable {
     @Column(name = "valor_deuda", precision = 21, scale = 2)
     private BigDecimal valorDeuda;
 
-    @Column(name = "estado_factura", precision = 21, scale = 2)
-    private BigDecimal estadoFactura;
+    @Column(name = "estado_factura")
+    private String estadoFactura;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "metodo_pago")
@@ -55,6 +56,19 @@ public class Factura implements Serializable {
 
     @Column(name = "user_name")
     private String userName;
+
+    @Transient
+    private List<ItemFacturaVenta> itemsPorFactura;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public List<ItemFacturaVenta> getItemsPorFactura() {
+        return itemsPorFactura;
+    }
+
+    public void setItemsPorFactura(List<ItemFacturaVenta> itemsPorFactura) {
+        this.itemsPorFactura = itemsPorFactura;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -162,16 +176,11 @@ public class Factura implements Serializable {
         this.valorDeuda = valorDeuda;
     }
 
-    public BigDecimal getEstadoFactura() {
-        return this.estadoFactura;
+    public String getEstadoFactura() {
+        return estadoFactura;
     }
 
-    public Factura estadoFactura(BigDecimal estadoFactura) {
-        this.setEstadoFactura(estadoFactura);
-        return this;
-    }
-
-    public void setEstadoFactura(BigDecimal estadoFactura) {
+    public void setEstadoFactura(String estadoFactura) {
         this.estadoFactura = estadoFactura;
     }
 
@@ -236,5 +245,10 @@ public class Factura implements Serializable {
             ", metodoPago='" + getMetodoPago() + "'" +
             ", userName='" + getUserName() + "'" +
             "}";
+    }
+
+    public Factura estadoFactura(String defaultEstadoFactura) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

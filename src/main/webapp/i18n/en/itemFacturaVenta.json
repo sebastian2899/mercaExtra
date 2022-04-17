@@ -1,0 +1,27 @@
+{
+  "mercaExtraApp": {
+    "itemFacturaVenta": {
+      "home": {
+        "title": "Item Factura Ventas",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Item Factura Venta",
+        "createOrEditLabel": "Create or edit a Item Factura Venta",
+        "notFound": "No Item Factura Ventas found"
+      },
+      "created": "A new Item Factura Venta is created with identifier {{ param }}",
+      "updated": "A Item Factura Venta is updated with identifier {{ param }}",
+      "deleted": "A Item Factura Venta is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Item Factura Venta {{ id }}?"
+      },
+      "detail": {
+        "title": "Item Factura Venta"
+      },
+      "id": "ID",
+      "idFactura": "Id Factura",
+      "idProducto": "Id Producto",
+      "cantidad": "Cantidad",
+      "precio": "Precio"
+    }
+  }
+}

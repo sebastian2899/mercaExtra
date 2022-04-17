@@ -28,8 +28,8 @@ export class ProductoDetailComponent implements OnInit {
   }
 
   calcularDescuentoProducto(): void {
-    if (this.producto?.valorDescuento) {
-      const descuento = (this.producto.valorDescuento * this.producto.precio!) / 100;
+    if (this.producto?.precioDescuento) {
+      const descuento = (this.producto.precioDescuento * this.producto.precio!) / 100;
       this.valorConDescuento = this.producto.precio! - Number(descuento);
     }
   }

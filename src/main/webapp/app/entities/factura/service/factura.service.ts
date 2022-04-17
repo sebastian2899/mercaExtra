@@ -8,13 +8,17 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IFactura, getFacturaIdentifier } from '../factura.model';
+import { IProducto } from 'app/entities/producto/producto.model';
 
 export type EntityResponseType = HttpResponse<IFactura>;
 export type EntityArrayResponseType = HttpResponse<IFactura[]>;
+export type ProductoArrayResponseType = HttpResponse<IProducto[]>;
 
 @Injectable({ providedIn: 'root' })
 export class FacturaService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/facturas');
+  protected productosDisponiblesUrl = this.applicationConfigService.getEndpointFor('api/facturas-productos-disponibles');
+  protected productosCategoriaUrl = this.applicationConfigService.getEndpointFor('api/factura-productos-categoria');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -23,6 +27,14 @@ export class FacturaService {
     return this.http
       .post<IFactura>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  productosDisponibles(): Observable<ProductoArrayResponseType> {
+    return this.http.get<IProducto[]>(this.productosDisponiblesUrl, { observe: 'response' });
+  }
+
+  productosCategoria(categoria: string): Observable<ProductoArrayResponseType> {
+    return this.http.get<IProducto[]>(`${this.productosCategoriaUrl}/${categoria}`, { observe: 'response' });
   }
 
   update(factura: IFactura): Observable<EntityResponseType> {

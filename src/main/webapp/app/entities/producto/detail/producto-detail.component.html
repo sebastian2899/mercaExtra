@@ -26,9 +26,9 @@
           <dd>
             <span>{{ producto.precio }}</span>
           </dd>
-          <dt *ngIf="producto.valorDescuento"><span class="font-size-entidades">Descuento del dia</span></dt>
-          <dd *ngIf="producto.valorDescuento">
-            <span>{{ producto.valorDescuento }} %</span><br />
+          <dt *ngIf="producto.precioDescuento"><span class="font-size-entidades">Descuento del dia</span></dt>
+          <dd *ngIf="producto.precioDescuento">
+            <span>{{ producto.precioDescuento }} %</span><br />
             <b
               ><span
                 >Valor Antes: <del>{{ producto.precio }}</del> Ahora: {{ valorConDescuento }}</span
@@ -54,7 +54,7 @@
           </p>
         </div>
 
-        <div *ngIf="producto.valorDescuento === null" class="alert alert-info ms-5" role="alert">
+        <div *ngIf="producto.precioDescuento === null" class="alert alert-info ms-5" role="alert">
           <p class="mb-0">Sin Descuento</p>
           <p class="mb-0">Hasta el momento el producto no cuenta con un descuento.</p>
         </div>

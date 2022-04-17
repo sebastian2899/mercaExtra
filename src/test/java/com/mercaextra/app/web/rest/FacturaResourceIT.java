@@ -58,8 +58,8 @@ class FacturaResourceIT {
     private static final BigDecimal DEFAULT_VALOR_DEUDA = new BigDecimal(1);
     private static final BigDecimal UPDATED_VALOR_DEUDA = new BigDecimal(2);
 
-    private static final BigDecimal DEFAULT_ESTADO_FACTURA = new BigDecimal(1);
-    private static final BigDecimal UPDATED_ESTADO_FACTURA = new BigDecimal(2);
+    private static final String DEFAULT_ESTADO_FACTURA = "AAAAAAAAAAA";
+    private static final String UPDATED_ESTADO_FACTURA = "BBBBBBBBBBB";
 
     private static final MetodoPago DEFAULT_METODO_PAGO = MetodoPago.CONTRA_ENTREGA;
     private static final MetodoPago UPDATED_METODO_PAGO = MetodoPago.TARJETA_CREDITO;
@@ -155,7 +155,7 @@ class FacturaResourceIT {
         assertThat(testFactura.getValorFactura()).isEqualByComparingTo(DEFAULT_VALOR_FACTURA);
         assertThat(testFactura.getValorPagado()).isEqualByComparingTo(DEFAULT_VALOR_PAGADO);
         assertThat(testFactura.getValorDeuda()).isEqualByComparingTo(DEFAULT_VALOR_DEUDA);
-        assertThat(testFactura.getEstadoFactura()).isEqualByComparingTo(DEFAULT_ESTADO_FACTURA);
+        assertThat(testFactura.getEstadoFactura()).isEqualTo(DEFAULT_ESTADO_FACTURA);
         assertThat(testFactura.getMetodoPago()).isEqualTo(DEFAULT_METODO_PAGO);
         assertThat(testFactura.getUserName()).isEqualTo(DEFAULT_USER_NAME);
     }
@@ -198,7 +198,7 @@ class FacturaResourceIT {
             .andExpect(jsonPath("$.[*].valorFactura").value(hasItem(sameNumber(DEFAULT_VALOR_FACTURA))))
             .andExpect(jsonPath("$.[*].valorPagado").value(hasItem(sameNumber(DEFAULT_VALOR_PAGADO))))
             .andExpect(jsonPath("$.[*].valorDeuda").value(hasItem(sameNumber(DEFAULT_VALOR_DEUDA))))
-            .andExpect(jsonPath("$.[*].estadoFactura").value(hasItem(sameNumber(DEFAULT_ESTADO_FACTURA))))
+            .andExpect(jsonPath("$.[*].estadoFactura").value(hasItem(DEFAULT_ESTADO_FACTURA)))
             .andExpect(jsonPath("$.[*].metodoPago").value(hasItem(DEFAULT_METODO_PAGO.toString())))
             .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME)));
     }
@@ -222,7 +222,7 @@ class FacturaResourceIT {
             .andExpect(jsonPath("$.valorFactura").value(sameNumber(DEFAULT_VALOR_FACTURA)))
             .andExpect(jsonPath("$.valorPagado").value(sameNumber(DEFAULT_VALOR_PAGADO)))
             .andExpect(jsonPath("$.valorDeuda").value(sameNumber(DEFAULT_VALOR_DEUDA)))
-            .andExpect(jsonPath("$.estadoFactura").value(sameNumber(DEFAULT_ESTADO_FACTURA)))
+            .andExpect(jsonPath("$.estadoFactura").value(DEFAULT_ESTADO_FACTURA))
             .andExpect(jsonPath("$.metodoPago").value(DEFAULT_METODO_PAGO.toString()))
             .andExpect(jsonPath("$.userName").value(DEFAULT_USER_NAME));
     }
@@ -278,7 +278,7 @@ class FacturaResourceIT {
         assertThat(testFactura.getValorFactura()).isEqualByComparingTo(UPDATED_VALOR_FACTURA);
         assertThat(testFactura.getValorPagado()).isEqualByComparingTo(UPDATED_VALOR_PAGADO);
         assertThat(testFactura.getValorDeuda()).isEqualByComparingTo(UPDATED_VALOR_DEUDA);
-        assertThat(testFactura.getEstadoFactura()).isEqualByComparingTo(UPDATED_ESTADO_FACTURA);
+        assertThat(testFactura.getEstadoFactura()).isEqualTo(UPDATED_ESTADO_FACTURA);
         assertThat(testFactura.getMetodoPago()).isEqualTo(UPDATED_METODO_PAGO);
         assertThat(testFactura.getUserName()).isEqualTo(UPDATED_USER_NAME);
     }
@@ -386,7 +386,7 @@ class FacturaResourceIT {
         assertThat(testFactura.getValorFactura()).isEqualByComparingTo(UPDATED_VALOR_FACTURA);
         assertThat(testFactura.getValorPagado()).isEqualByComparingTo(UPDATED_VALOR_PAGADO);
         assertThat(testFactura.getValorDeuda()).isEqualByComparingTo(DEFAULT_VALOR_DEUDA);
-        assertThat(testFactura.getEstadoFactura()).isEqualByComparingTo(DEFAULT_ESTADO_FACTURA);
+        assertThat(testFactura.getEstadoFactura()).isEqualTo(DEFAULT_ESTADO_FACTURA);
         assertThat(testFactura.getMetodoPago()).isEqualTo(UPDATED_METODO_PAGO);
         assertThat(testFactura.getUserName()).isEqualTo(DEFAULT_USER_NAME);
     }
@@ -434,7 +434,7 @@ class FacturaResourceIT {
         assertThat(testFactura.getValorFactura()).isEqualByComparingTo(UPDATED_VALOR_FACTURA);
         assertThat(testFactura.getValorPagado()).isEqualByComparingTo(UPDATED_VALOR_PAGADO);
         assertThat(testFactura.getValorDeuda()).isEqualByComparingTo(UPDATED_VALOR_DEUDA);
-        assertThat(testFactura.getEstadoFactura()).isEqualByComparingTo(UPDATED_ESTADO_FACTURA);
+        assertThat(testFactura.getEstadoFactura()).isEqualTo(UPDATED_ESTADO_FACTURA);
         assertThat(testFactura.getMetodoPago()).isEqualTo(UPDATED_METODO_PAGO);
         assertThat(testFactura.getUserName()).isEqualTo(UPDATED_USER_NAME);
     }

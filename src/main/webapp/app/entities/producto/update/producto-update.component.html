@@ -157,18 +157,18 @@
           </div>
 
           <div class="col-md-6">
-            <label for="valorDescuento" class="form-label">Descuento del dia</label>
-            <input type="number" min="0" max="10" class="form-control" formControlName="valorDescuento" data-cy="field_valorDescuento" />
+            <label for="precioDescuento" class="form-label">Descuento del dia</label>
+            <input type="number" min="0" max="10" class="form-control" formControlName="precioDescuento" data-cy="field_precioDescuento" />
             <div
               *ngIf="
-                editForm.get(['valorDescuento'])!.invalid &&
-                (editForm.get('valorDescuento')!.dirty || editForm.get('valorDescuento')!.touched)
+                editForm.get(['precioDescuento'])!.invalid &&
+                (editForm.get('precioDescuento')!.dirty || editForm.get('precioDescuento')!.touched)
               "
             >
-              <small class="form-text text-danger" *ngIf="editForm.get('valorDescuento')?.errors?.min">
+              <small class="form-text text-danger" *ngIf="editForm.get('precioDescuento')?.errors?.min">
                 No puede digitar una cantidad menor a 0.
               </small>
-              <small class="form-text text-danger" *ngIf="editForm.get('valorDescuento')?.errors?.max">
+              <small class="form-text text-danger" *ngIf="editForm.get('precioDescuento')?.errors?.max">
                 El porcentaje de descuento del producto no puede ser mayor a 10%
               </small>
             </div>

@@ -19,10 +19,12 @@
       },
       "id": "ID",
       "nombre": "Nombre",
+      "precio": "Precio",
       "cantidad": "Cantidad",
-      "descripcion": "Descripcion",
       "categoria": "Categoria",
-      "imagen": "Imagen"
+      "imagen": "Imagen",
+      "precioDescuento": "Precio Descuento",
+      "descripcion": "Descripcion"
     }
   }
 }

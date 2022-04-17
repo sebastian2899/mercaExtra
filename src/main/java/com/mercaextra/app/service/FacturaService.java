@@ -1,6 +1,7 @@
 package com.mercaextra.app.service;
 
 import com.mercaextra.app.service.dto.FacturaDTO;
+import com.mercaextra.app.service.dto.ProductoDTO;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +38,7 @@ public interface FacturaService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<FacturaDTO> findOne(Long id);
+    FacturaDTO findOne(Long id);
 
     /**
      * Delete the "id" factura.
@@ -45,4 +46,8 @@ public interface FacturaService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    List<ProductoDTO> productosDisponibles();
+
+    List<ProductoDTO> productosCategoria(String categoria);
 }

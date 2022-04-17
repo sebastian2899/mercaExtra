@@ -22,11 +22,13 @@ describe('Producto Service', () => {
     elemDefault = {
       id: 0,
       nombre: 'AAAAAAA',
-      cantidad: 'AAAAAAA',
-      descripcion: 'AAAAAAA',
+      precio: 0,
+      cantidad: 0,
       categoria: 'AAAAAAA',
       imagenContentType: 'image/png',
       imagen: 'AAAAAAA',
+      precioDescuento: 0,
+      descripcion: 'AAAAAAA',
     };
   });
 
@@ -63,10 +65,12 @@ describe('Producto Service', () => {
         {
           id: 1,
           nombre: 'BBBBBB',
-          cantidad: 'BBBBBB',
-          descripcion: 'BBBBBB',
+          precio: 1,
+          cantidad: 1,
           categoria: 'BBBBBB',
           imagen: 'BBBBBB',
+          precioDescuento: 1,
+          descripcion: 'BBBBBB',
         },
         elemDefault
       );
@@ -84,7 +88,9 @@ describe('Producto Service', () => {
       const patchObject = Object.assign(
         {
           nombre: 'BBBBBB',
-          cantidad: 'BBBBBB',
+          precio: 1,
+          cantidad: 1,
+          precioDescuento: 1,
           descripcion: 'BBBBBB',
         },
         new Producto()
@@ -106,10 +112,12 @@ describe('Producto Service', () => {
         {
           id: 1,
           nombre: 'BBBBBB',
-          cantidad: 'BBBBBB',
-          descripcion: 'BBBBBB',
+          precio: 1,
+          cantidad: 1,
           categoria: 'BBBBBB',
           imagen: 'BBBBBB',
+          precioDescuento: 1,
+          descripcion: 'BBBBBB',
         },
         elemDefault
       );
@@ -161,7 +169,7 @@ describe('Producto Service', () => {
       });
 
       it('should add only unique Producto to an array', () => {
-        const productoArray: IProducto[] = [{ id: 123 }, { id: 456 }, { id: 61028 }];
+        const productoArray: IProducto[] = [{ id: 123 }, { id: 456 }, { id: 87431 }];
         const productoCollection: IProducto[] = [{ id: 123 }];
         expectedResult = service.addProductoToCollectionIfMissing(productoCollection, ...productoArray);
         expect(expectedResult).toHaveLength(3);

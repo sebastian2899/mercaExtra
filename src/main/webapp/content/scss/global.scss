@@ -248,6 +248,20 @@ h4 {
   font-weight: bold;
 }
 
+.a-delete {
+  color: black;
+}
+.a-delete:hover {
+  border-radius: 60px;
+  background-color: rgb(255, 114, 114);
+}
+
+.icon-config-delete {
+  position: relative;
+  top: 5px;
+  color: red;
+}
+
 .imagen-fondo {
   background: url('../../content/images/imagenfonfo.jpg');
   background-repeat: no-repeat;

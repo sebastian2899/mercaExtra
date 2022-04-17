@@ -56,6 +56,23 @@
         </dd>
       </dl>
 
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">cantidad</th>
+            <th scope="col">precio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let producto of factura.itemsPorFactura">
+            <td>{{ producto.nombreProducto }}</td>
+            <td>{{ producto.cantidad }}</td>
+            <td>{{ producto.precio }}</td>
+          </tr>
+        </tbody>
+      </table>
+
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
       </button>

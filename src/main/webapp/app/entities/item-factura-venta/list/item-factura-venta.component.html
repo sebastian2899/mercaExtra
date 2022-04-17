@@ -1,0 +1,84 @@
+<div>
+  <h2 id="page-heading" data-cy="ItemFacturaVentaHeading">
+    <span jhiTranslate="mercaExtraApp.itemFacturaVenta.home.title">Item Factura Ventas</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="mercaExtraApp.itemFacturaVenta.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-item-factura-venta"
+        [routerLink]="['/item-factura-venta/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="mercaExtraApp.itemFacturaVenta.home.createLabel"> Create a new Item Factura Venta </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="itemFacturaVentas?.length === 0">
+    <span jhiTranslate="mercaExtraApp.itemFacturaVenta.home.notFound">No itemFacturaVentas found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="itemFacturaVentas && itemFacturaVentas.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.itemFacturaVenta.idFactura">Id Factura</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.itemFacturaVenta.idProducto">Id Producto</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.itemFacturaVenta.cantidad">Cantidad</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.itemFacturaVenta.precio">Precio</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let itemFacturaVenta of itemFacturaVentas; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/item-factura-venta', itemFacturaVenta.id, 'view']">{{ itemFacturaVenta.id }}</a>
+          </td>
+          <td>{{ itemFacturaVenta.idFactura }}</td>
+          <td>{{ itemFacturaVenta.idProducto }}</td>
+          <td>{{ itemFacturaVenta.cantidad }}</td>
+          <td>{{ itemFacturaVenta.precio }}</td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/item-factura-venta', itemFacturaVenta.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/item-factura-venta', itemFacturaVenta.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(itemFacturaVenta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

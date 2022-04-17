@@ -1,11 +1,11 @@
-id;nombre;cantidad;descripcion;categoria;imagen;imagen_content_type
-1;actitud;Dinánmico;complejidad Buckinghamshire Morado;online;../fake-data/blob/hipster.png;image/png
-2;GB Rústico SDD;deposit;sensor Dinánmico;Gorro Canada;../fake-data/blob/hipster.png;image/png
-3;Datos arquitectura repurpose;capacidad synthesize;portals Sum;Ladrillo;../fake-data/blob/hipster.png;image/png
-4;ROI payment transition;Canarias bluetooth;Plástico innovative Seguro;Inversor metódica;../fake-data/blob/hipster.png;image/png
-5;Ucrania de;circuito;Guapa;neural Bélgica Analista;../fake-data/blob/hipster.png;image/png
-6;synergies vertical world-class;Kenia;Franc;Navarra terciaria generating;../fake-data/blob/hipster.png;image/png
-7;Amarillo plug-and-play;Madera;previsión Personal;red withdrawal;../fake-data/blob/hipster.png;image/png
-8;matrix;mindshare;Finlandia Account;Gerente;../fake-data/blob/hipster.png;image/png
-9;Masía data-warehouse circuito;architect Corporativo;Equilibrado;invoice Informática;../fake-data/blob/hipster.png;image/png
-10;Andalucía Colonia;radical bandwidth;bluetooth;Auto orchestrate payment;../fake-data/blob/hipster.png;image/png
+id;nombre;precio;cantidad;categoria;imagen;imagen_content_type;precio_descuento;descripcion
+1;actitud;22191;90204;transmit;../fake-data/blob/hipster.png;image/png;20622;Buckinghamshire Morado
+2;online;98594;85865;Checking;../fake-data/blob/hipster.png;image/png;84585;estable Caserio Gris
+3;Buckinghamshire a Gorro;53599;16639;XSS virtual;../fake-data/blob/hipster.png;image/png;374;Rupee capacidad
+4;Camerún portals;67494;84731;Azul Profundo didactica;../fake-data/blob/hipster.png;image/png;53477;transition
+5;Canarias bluetooth;78616;6887;scalable innovative;../fake-data/blob/hipster.png;image/png;95544;holística withdrawal Navarra
+6;Implementación connect;30693;18297;Deportes quantifying state;../fake-data/blob/hipster.png;image/png;9277;Analista Distrito cross-platform
+7;world-class Gorro optimize;68489;70562;Navarra terciaria generating;../fake-data/blob/hipster.png;image/png;59275;deposit
+8;leverage Algodón previsión;59323;87841;Cantabria;../fake-data/blob/hipster.png;image/png;16454;focus matrix
+9;mindshare;42494;52792;generating;../fake-data/blob/hipster.png;image/png;90102;Gerente
+10;Masía data-warehouse circuito;41677;40288;experiences;../fake-data/blob/hipster.png;image/png;90137;Equilibrado

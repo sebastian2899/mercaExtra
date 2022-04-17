@@ -1,0 +1,65 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-item-factura-venta-heading"
+        data-cy="ItemFacturaVentaCreateUpdateHeading"
+        jhiTranslate="mercaExtraApp.itemFacturaVenta.home.createOrEditLabel"
+      >
+        Create or edit a Item Factura Venta
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.itemFacturaVenta.idFactura" for="field_idFactura">Id Factura</label>
+          <input type="number" class="form-control" name="idFactura" id="field_idFactura" data-cy="idFactura" formControlName="idFactura" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.itemFacturaVenta.idProducto" for="field_idProducto">Id Producto</label>
+          <input
+            type="number"
+            class="form-control"
+            name="idProducto"
+            id="field_idProducto"
+            data-cy="idProducto"
+            formControlName="idProducto"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.itemFacturaVenta.cantidad" for="field_cantidad">Cantidad</label>
+          <input type="number" class="form-control" name="cantidad" id="field_cantidad" data-cy="cantidad" formControlName="cantidad" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.itemFacturaVenta.precio" for="field_precio">Precio</label>
+          <input type="number" class="form-control" name="precio" id="field_precio" data-cy="precio" formControlName="precio" />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

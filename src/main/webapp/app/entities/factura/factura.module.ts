@@ -5,9 +5,11 @@ import { FacturaDetailComponent } from './detail/factura-detail.component';
 import { FacturaUpdateComponent } from './update/factura-update.component';
 import { FacturaDeleteDialogComponent } from './delete/factura-delete-dialog.component';
 import { FacturaRoutingModule } from './route/factura-routing.module';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
-  imports: [SharedModule, FacturaRoutingModule],
+  imports: [SharedModule, FacturaRoutingModule, NgxPaginationModule, MatIconModule],
   declarations: [FacturaComponent, FacturaDetailComponent, FacturaUpdateComponent, FacturaDeleteDialogComponent],
   entryComponents: [FacturaDeleteDialogComponent],
 })

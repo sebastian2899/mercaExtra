@@ -17,10 +17,10 @@
             <column name="nombre" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="cantidad" type="bigint">
+            <column name="precio" type="decimal(21,2)">
                 <constraints nullable="true" />
             </column>
-            <column name="descripcion" type="varchar(255)">
+            <column name="cantidad" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="categoria" type="varchar(255)">
@@ -32,10 +32,10 @@
             <column name="imagen_content_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-             <column name="precio" type="decimal(21,2)">
+            <column name="precio_descuento" type="decimal(21,2)">
                 <constraints nullable="true" />
             </column>
-            <column name="valor_descuento" type="decimal(21,2)">
+            <column name="descripcion" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -60,11 +60,13 @@
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="nombre" type="string"/>
-            <column name="cantidad" type="string"/>
-            <column name="descripcion" type="string"/>
+            <column name="precio" type="numeric"/>
+            <column name="cantidad" type="numeric"/>
             <column name="categoria" type="string"/>
             <column name="imagen" type="blob"/>
             <column name="imagen_content_type" type="string"/>
+            <column name="precio_descuento" type="numeric"/>
+            <column name="descripcion" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

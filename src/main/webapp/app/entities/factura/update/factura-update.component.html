@@ -1,146 +1,291 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
-    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-factura-heading" data-cy="FacturaCreateUpdateHeading" jhiTranslate="mercaExtraApp.factura.home.createOrEditLabel">
-        Create or edit a Factura
-      </h2>
+<div class="d-flex justify-content-end">
+  <button class="btn-primary" (click)="verCarroCompras()">
+    <mat-icon class="icon-config">shopping_cart</mat-icon><span>Ver carrito</span>
+  </button>
+</div>
+<jhi-alert></jhi-alert>
+<div class="d-flex">
+  <div class="d-flex flex-column form-check col-md-2">
+    <input
+      class="form-check-input"
+      type="radio"
+      [(ngModel)]="tipoCategoria"
+      value="carnes"
+      name="tipoCategoria"
+      id="tipoCategoria"
+      (change)="tipoCategoriaMethod()"
+    />
+    <label class="form-check-label" style="position: relative; top: -19px" for="tipoCategoria"> Carnes </label>
+    <input
+      value="quesos"
+      class="form-check-input"
+      type="radio"
+      (change)="tipoCategoriaMethod()"
+      [(ngModel)]="tipoCategoria"
+      name="tipo1"
+      id="tipo1"
+    />
+    <label class="form-check-label" style="position: relative; top: -19px" for="tipo1"> Quesos </label>
+    <input
+      value="granos"
+      class="form-check-input"
+      type="radio"
+      (change)="tipoCategoriaMethod()"
+      [(ngModel)]="tipoCategoria"
+      name="tipo2"
+      id="tipo2"
+    />
+    <label class="form-check-label" style="position: relative; top: -19px" for="tipo2"> Granos </label>
+    <input
+      value="aseo"
+      class="form-check-input"
+      type="radio"
+      (change)="tipoCategoriaMethod()"
+      [(ngModel)]="tipoCategoria"
+      name="tipo3"
+      id="tipo3"
+    />
+    <label class="form-check-label" style="position: relative; top: -19px" for="tipo3"> Aseo </label>
+    <input
+      value="verduruasFrutas"
+      class="form-check-input"
+      (change)="tipoCategoriaMethod()"
+      [(ngModel)]="tipoCategoria"
+      type="radio"
+      name="tipo4"
+      id="tipo4"
+    />
+    <label class="form-check-label" style="position: relative; top: -19px" for="tipo4"> Verduras- Frutas </label>
+    <input
+      value="pasabocas"
+      class="form-check-input"
+      type="radio"
+      (change)="tipoCategoriaMethod()"
+      [(ngModel)]="tipoCategoria"
+      name="tipo5"
+      id="tipo5"
+    />
+    <label class="form-check-label" style="position: relative; top: -19px" for="tipo5"> Pasabocas </label>
+    <input
+      value="otros"
+      class="form-check-input"
+      type="radio"
+      (change)="tipoCategoriaMethod()"
+      [(ngModel)]="tipoCategoria"
+      name="tipo6"
+      id="tipo6"
+    />
+    <label class="form-check-label" style="position: relative; top: -19px" for="tipo6"> Otros </label>
+  </div>
 
-      <div>
-        <jhi-alert-error></jhi-alert-error>
-
-        <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-        </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="mercaExtraApp.factura.fechaCreacion" for="field_fechaCreacion">Fecha Creacion</label>
-          <div class="d-flex">
-            <input
-              id="field_fechaCreacion"
-              data-cy="fechaCreacion"
-              type="datetime-local"
-              class="form-control"
-              name="fechaCreacion"
-              formControlName="fechaCreacion"
-              placeholder="YYYY-MM-DD HH:mm"
+  <div class="col-md-9">
+    <div class="row text-center mt-5">
+      <div
+        style="box-shadow: 10px 10px 10px rgb(240, 200, 1)"
+        class="col-lg-3 col-md-6 mb-4"
+        *ngFor="let producto of productos! | paginate: { itemsPerPage: 12, currentPage: pA }"
+      >
+        <div class="card" style="width: 16 rem">
+          <a *ngIf="producto.imagen" (click)="openFile(producto.imagen, producto.imagenContentType)">
+            <img
+              [src]="'data:' + producto.imagenContentType + ';base64,' + producto.imagen"
+              style="max-height: 100px"
+              alt="producto image"
             />
+          </a>
+          <div class="card-body">
+            <h5 class="card-title titulo-entidades">{{ producto.nombre }}</h5>
+            <p class="card-text titulo-entidades">{{ producto.descripcion }}</p>
+            <p class="card-text titulo-entidades">Categoria: {{ producto.categoria }}</p>
+            <p class="card-text titulo-entidades">Cantidad: {{ producto.cantidad }}</p>
+            <p class="card-text titulo-entidades">Precio: {{ producto.precio | currency }}</p>
+            <button class="btn btn-info btn-sm" (click)="llenarCarroCompra(producto)">Comprar</button>
+          </div>
+        </div>
+      </div>
+      <pagination-controls style="text-align: center" (pageChange)="pA = $event"></pagination-controls>
+    </div>
+  </div>
+</div>
+<ng-template #validarCompra>
+  <div class="modal-header">
+    <h4 class="modal-title" style="color: red">Carro de Compras</h4>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+        <div>
+          <jhi-alert-error></jhi-alert-error>
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <label class="form-label" jhiTranslate="mercaExtraApp.factura.infoCiente" for="field_infoCiente">Info Ciente</label>
+              <input
+                type="text"
+                class="form-control"
+                name="infoCiente"
+                id="field_infoCiente"
+                data-cy="infoCiente"
+                formControlName="infoCiente"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label" jhiTranslate="mercaExtraApp.factura.numeroFactura" for="field_numeroFactura">Numero Factura</label>
+              <input
+                type="text"
+                class="form-control"
+                name="numeroFactura"
+                id="field_numeroFactura"
+                data-cy="numeroFactura"
+                formControlName="numeroFactura"
+              />
+            </div>
+          </div>
+
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <label class="form-label" jhiTranslate="mercaExtraApp.factura.tipoFactura" for="field_tipoFactura">Tipo Factura</label>
+              <select class="form-control" name="tipoFactura" formControlName="tipoFactura" id="field_tipoFactura" data-cy="tipoFactura">
+                <option [ngValue]="null">{{ 'mercaExtraApp.TipoFactura.null' | translate }}</option>
+                <option *ngFor="let tipoFactura of tipoFacturaValues" [value]="tipoFactura">
+                  {{ 'mercaExtraApp.TipoFactura.' + tipoFactura | translate }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label" jhiTranslate="mercaExtraApp.factura.valorFactura" for="field_valorFactura">Valor Factura</label>
+              <input
+                type="number"
+                class="form-control"
+                name="valorFactura"
+                id="field_valorFactura"
+                data-cy="valorFactura"
+                formControlName="valorFactura"
+              />
+            </div>
+          </div>
+
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <label class="form-label" jhiTranslate="mercaExtraApp.factura.valorPagado" for="field_valorPagado">Valor Pagado</label>
+              <input
+                type="number"
+                class="form-control"
+                name="valorPagado"
+                id="field_valorPagado"
+                data-cy="valorPagado"
+                formControlName="valorPagado"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label" jhiTranslate="mercaExtraApp.factura.valorDeuda" for="field_valorDeuda">Valor Deuda</label>
+              <input
+                type="number"
+                class="form-control"
+                name="valorDeuda"
+                id="field_valorDeuda"
+                data-cy="valorDeuda"
+                formControlName="valorDeuda"
+              />
+            </div>
+          </div>
+
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <label class="form-label" jhiTranslate="mercaExtraApp.factura.estadoFactura" for="field_estadoFactura">Estado Factura</label>
+              <input
+                type="number"
+                class="form-control"
+                name="estadoFactura"
+                id="field_estadoFactura"
+                data-cy="estadoFactura"
+                formControlName="estadoFactura"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label" jhiTranslate="mercaExtraApp.factura.metodoPago" for="field_metodoPago">Metodo Pago</label>
+              <select class="form-control" name="metodoPago" formControlName="metodoPago" id="field_metodoPago" data-cy="metodoPago">
+                <option [ngValue]="null">{{ 'mercaExtraApp.MetodoPago.null' | translate }}</option>
+                <option *ngFor="let metodoPago of metodoPagoValues" [value]="metodoPago">
+                  {{ 'mercaExtraApp.MetodoPago.' + metodoPago | translate }}
+                </option>
+              </select>
+            </div>
           </div>
         </div>
 
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="mercaExtraApp.factura.infoCiente" for="field_infoCiente">Info Ciente</label>
-          <input
-            type="text"
-            class="form-control"
-            name="infoCiente"
-            id="field_infoCiente"
-            data-cy="infoCiente"
-            formControlName="infoCiente"
-          />
+        <div>
+          <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+            <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+          </button>
+
+          <button
+            type="submit"
+            id="save-entity"
+            data-cy="entityCreateSaveButton"
+            [disabled]="editForm.invalid || isSaving"
+            class="btn btn-primary"
+          >
+            <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+          </button>
         </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="mercaExtraApp.factura.numeroFactura" for="field_numeroFactura">Numero Factura</label>
-          <input
-            type="text"
-            class="form-control"
-            name="numeroFactura"
-            id="field_numeroFactura"
-            data-cy="numeroFactura"
-            formControlName="numeroFactura"
-          />
-        </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="mercaExtraApp.factura.tipoFactura" for="field_tipoFactura">Tipo Factura</label>
-          <select class="form-control" name="tipoFactura" formControlName="tipoFactura" id="field_tipoFactura" data-cy="tipoFactura">
-            <option [ngValue]="null">{{ 'mercaExtraApp.TipoFactura.null' | translate }}</option>
-            <option *ngFor="let tipoFactura of tipoFacturaValues" [value]="tipoFactura">
-              {{ 'mercaExtraApp.TipoFactura.' + tipoFactura | translate }}
-            </option>
-          </select>
-        </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="mercaExtraApp.factura.valorFactura" for="field_valorFactura">Valor Factura</label>
-          <input
-            type="number"
-            class="form-control"
-            name="valorFactura"
-            id="field_valorFactura"
-            data-cy="valorFactura"
-            formControlName="valorFactura"
-          />
-        </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="mercaExtraApp.factura.valorPagado" for="field_valorPagado">Valor Pagado</label>
-          <input
-            type="number"
-            class="form-control"
-            name="valorPagado"
-            id="field_valorPagado"
-            data-cy="valorPagado"
-            formControlName="valorPagado"
-          />
-        </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="mercaExtraApp.factura.valorDeuda" for="field_valorDeuda">Valor Deuda</label>
-          <input
-            type="number"
-            class="form-control"
-            name="valorDeuda"
-            id="field_valorDeuda"
-            data-cy="valorDeuda"
-            formControlName="valorDeuda"
-          />
-        </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="mercaExtraApp.factura.estadoFactura" for="field_estadoFactura">Estado Factura</label>
-          <input
-            type="number"
-            class="form-control"
-            name="estadoFactura"
-            id="field_estadoFactura"
-            data-cy="estadoFactura"
-            formControlName="estadoFactura"
-          />
-        </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="mercaExtraApp.factura.metodoPago" for="field_metodoPago">Metodo Pago</label>
-          <select class="form-control" name="metodoPago" formControlName="metodoPago" id="field_metodoPago" data-cy="metodoPago">
-            <option [ngValue]="null">{{ 'mercaExtraApp.MetodoPago.null' | translate }}</option>
-            <option *ngFor="let metodoPago of metodoPagoValues" [value]="metodoPago">
-              {{ 'mercaExtraApp.MetodoPago.' + metodoPago | translate }}
-            </option>
-          </select>
-        </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="mercaExtraApp.factura.userName" for="field_userName">User Name</label>
-          <input type="text" class="form-control" name="userName" id="field_userName" data-cy="userName" formControlName="userName" />
-        </div>
-      </div>
-
-      <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-        </button>
-
-        <button
-          type="submit"
-          id="save-entity"
-          data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
-        >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-        </button>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-</div>
+  <div class="modal-footer color-toggle text-black">
+    <h4>Equipo Merca Extra.</h4>
+  </div>
+</ng-template>
+
+<ng-template #llenarCarro>
+  <div class="modal-header">
+    <h4 class="modal-title">Validar Compra</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-5">
+        <label for="producto" class="form-label">Producto</label>
+        <input type="text" readonly [(ngModel)]="productoNom" class="form-control" />
+      </div>
+      <div class="col-md-5">
+        <label for="cantidad" class="form-label">Cantidad</label>
+        <input type="number" min="0" max="20" placeholder="Cantidad que deseas adquirir" class="form-control" [(ngModel)]="cantidad" />
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary btn-sm" (click)="agregarProducto()" style="margin-top: 30px">Agregar</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #verCarroCompra>
+  <div class="modal-header">
+    <h4 class="text-pattern">Tu carrito de Compras hasta el momento</h4>
+  </div>
+  <div class="modal-body">
+    <h4>Productos:</h4>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Producto</th>
+          <th scope="col">Cantidad</th>
+          <th scope="col">Precio</th>
+          <th scope="col">Subtotal</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of productosSeleccionados">
+          <td>{{ item.nombreProducto }}</td>
+          <td>{{ item.cantidad }}</td>
+          <td>{{ item.precioOriginal }}</td>
+          <td>{{ item.precio }}</td>
+          <a class="a-delete" (click)="eliminarProducto(item)"><mat-icon class="icon-config-delete">remove_circle_outline</mat-icon></a>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template>

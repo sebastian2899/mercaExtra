@@ -1,16 +1,23 @@
 package com.mercaextra.app.service.dto;
 
+import com.mercaextra.app.domain.ItemFacturaVenta;
 import com.mercaextra.app.domain.enumeration.MetodoPago;
 import com.mercaextra.app.domain.enumeration.TipoFactura;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 /**
  * A DTO for the {@link com.mercaextra.app.domain.Factura} entity.
  */
 public class FacturaDTO implements Serializable {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
     private Long id;
 
@@ -28,11 +35,23 @@ public class FacturaDTO implements Serializable {
 
     private BigDecimal valorDeuda;
 
-    private BigDecimal estadoFactura;
+    private String estadoFactura;
 
     private MetodoPago metodoPago;
 
     private String userName;
+
+    private List<ItemFacturaVentaDTO> itemsPorFactura;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public List<ItemFacturaVentaDTO> getItemsPorFactura() {
+        return itemsPorFactura;
+    }
+
+    public void setItemsPorFactura(List<ItemFacturaVentaDTO> itemsPorFactura) {
+        this.itemsPorFactura = itemsPorFactura;
+    }
 
     public Long getId() {
         return id;
@@ -98,11 +117,11 @@ public class FacturaDTO implements Serializable {
         this.valorDeuda = valorDeuda;
     }
 
-    public BigDecimal getEstadoFactura() {
+    public String getEstadoFactura() {
         return estadoFactura;
     }
 
-    public void setEstadoFactura(BigDecimal estadoFactura) {
+    public void setEstadoFactura(String estadoFactura) {
         this.estadoFactura = estadoFactura;
     }
 

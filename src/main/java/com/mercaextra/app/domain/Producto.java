@@ -30,20 +30,14 @@ public class Producto implements Serializable {
     @Column(name = "nombre")
     private String nombre;
 
+    @Column(name = "precio", precision = 21, scale = 2)
+    private BigDecimal precio;
+
     @Column(name = "cantidad")
     private Long cantidad;
 
-    @Column(name = "descripcion")
-    private String descripcion;
-
     @Column(name = "categoria")
     private String categoria;
-
-    @Column(name = "precio")
-    private BigDecimal precio;
-
-    @Column(name = "valor_descuento")
-    private BigDecimal valorDescuento;
 
     @Lob
     @Column(name = "imagen")
@@ -52,26 +46,16 @@ public class Producto implements Serializable {
     @Column(name = "imagen_content_type")
     private String imagenContentType;
 
+    @Column(name = "precio_descuento", precision = 21, scale = 2)
+    private BigDecimal precioDescuento;
+
+    @Column(name = "descripcion")
+    private String descripcion;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
         return this.id;
-    }
-
-    public BigDecimal getValorDescuento() {
-        return valorDescuento;
-    }
-
-    public void setValorDescuento(BigDecimal valorDescuento) {
-        this.valorDescuento = valorDescuento;
-    }
-
-    public BigDecimal getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(BigDecimal precio) {
-        this.precio = precio;
     }
 
     public Producto id(Long id) {
@@ -96,25 +80,30 @@ public class Producto implements Serializable {
         this.nombre = nombre;
     }
 
+    public BigDecimal getPrecio() {
+        return this.precio;
+    }
+
+    public Producto precio(BigDecimal precio) {
+        this.setPrecio(precio);
+        return this;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
+    }
+
     public Long getCantidad() {
-        return cantidad;
+        return this.cantidad;
+    }
+
+    public Producto cantidad(Long cantidad) {
+        this.setCantidad(cantidad);
+        return this;
     }
 
     public void setCantidad(Long cantidad) {
         this.cantidad = cantidad;
-    }
-
-    public String getDescripcion() {
-        return this.descripcion;
-    }
-
-    public Producto descripcion(String descripcion) {
-        this.setDescripcion(descripcion);
-        return this;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
     }
 
     public String getCategoria() {
@@ -156,6 +145,32 @@ public class Producto implements Serializable {
         this.imagenContentType = imagenContentType;
     }
 
+    public BigDecimal getPrecioDescuento() {
+        return this.precioDescuento;
+    }
+
+    public Producto precioDescuento(BigDecimal precioDescuento) {
+        this.setPrecioDescuento(precioDescuento);
+        return this;
+    }
+
+    public void setPrecioDescuento(BigDecimal precioDescuento) {
+        this.precioDescuento = precioDescuento;
+    }
+
+    public String getDescripcion() {
+        return this.descripcion;
+    }
+
+    public Producto descripcion(String descripcion) {
+        this.setDescripcion(descripcion);
+        return this;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -181,16 +196,13 @@ public class Producto implements Serializable {
         return "Producto{" +
             "id=" + getId() +
             ", nombre='" + getNombre() + "'" +
-            ", cantidad='" + getCantidad() + "'" +
-            ", descripcion='" + getDescripcion() + "'" +
+            ", precio=" + getPrecio() +
+            ", cantidad=" + getCantidad() +
             ", categoria='" + getCategoria() + "'" +
             ", imagen='" + getImagen() + "'" +
             ", imagenContentType='" + getImagenContentType() + "'" +
+            ", precioDescuento=" + getPrecioDescuento() +
+            ", descripcion='" + getDescripcion() + "'" +
             "}";
-    }
-
-    public Producto cantidad(Long updatedCantidad) {
-        // TODO Auto-generated method stub
-        return null;
     }
 }

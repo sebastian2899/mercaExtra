@@ -1,26 +1,28 @@
 export interface IProducto {
   id?: number;
   nombre?: string | null;
-  cantidad?: number | null;
   precio?: number | null;
-  descripcion?: string | null;
+  cantidad?: number | null;
   categoria?: string | null;
   imagenContentType?: string | null;
   imagen?: string | null;
-  valorDescuento?: number | null;
+  precioDescuento?: number | null;
+  descripcion?: string | null;
+  cantidadSeleccionada?: number | null;
 }
 
 export class Producto implements IProducto {
   constructor(
     public id?: number,
     public nombre?: string | null,
-    public cantidad?: number | null,
     public precio?: number | null,
-    public descripcion?: string | null,
+    public cantidad?: number | null,
     public categoria?: string | null,
     public imagenContentType?: string | null,
     public imagen?: string | null,
-    public valorDescuento?: number | null
+    public precioDescuento?: number | null,
+    public descripcion?: string | null,
+    public cantidadSeleccionada?: number | null
   ) {}
 }
 

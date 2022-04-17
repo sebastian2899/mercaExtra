@@ -1,0 +1,28 @@
+{
+  "changelogDate": "20220413210416",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idFactura",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "idProducto",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "cantidad",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "precio",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "jpaMetamodelFiltering": false,
+  "name": "ItemFacturaVenta",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

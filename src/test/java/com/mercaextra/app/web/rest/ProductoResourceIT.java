@@ -1,5 +1,6 @@
 package com.mercaextra.app.web.rest;
 
+import static com.mercaextra.app.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -10,6 +11,7 @@ import com.mercaextra.app.domain.Producto;
 import com.mercaextra.app.repository.ProductoRepository;
 import com.mercaextra.app.service.dto.ProductoDTO;
 import com.mercaextra.app.service.mapper.ProductoMapper;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -35,11 +37,11 @@ class ProductoResourceIT {
     private static final String DEFAULT_NOMBRE = "AAAAAAAAAA";
     private static final String UPDATED_NOMBRE = "BBBBBBBBBB";
 
+    private static final BigDecimal DEFAULT_PRECIO = new BigDecimal(1);
+    private static final BigDecimal UPDATED_PRECIO = new BigDecimal(2);
+
     private static final Long DEFAULT_CANTIDAD = 1L;
     private static final Long UPDATED_CANTIDAD = 2L;
-
-    private static final String DEFAULT_DESCRIPCION = "AAAAAAAAAA";
-    private static final String UPDATED_DESCRIPCION = "BBBBBBBBBB";
 
     private static final String DEFAULT_CATEGORIA = "AAAAAAAAAA";
     private static final String UPDATED_CATEGORIA = "BBBBBBBBBB";
@@ -48,6 +50,12 @@ class ProductoResourceIT {
     private static final byte[] UPDATED_IMAGEN = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_IMAGEN_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_IMAGEN_CONTENT_TYPE = "image/png";
+
+    private static final BigDecimal DEFAULT_PRECIO_DESCUENTO = new BigDecimal(1);
+    private static final BigDecimal UPDATED_PRECIO_DESCUENTO = new BigDecimal(2);
+
+    private static final String DEFAULT_DESCRIPCION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPCION = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/productos";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -78,11 +86,13 @@ class ProductoResourceIT {
     public static Producto createEntity(EntityManager em) {
         Producto producto = new Producto()
             .nombre(DEFAULT_NOMBRE)
+            .precio(DEFAULT_PRECIO)
             .cantidad(DEFAULT_CANTIDAD)
-            .descripcion(DEFAULT_DESCRIPCION)
             .categoria(DEFAULT_CATEGORIA)
             .imagen(DEFAULT_IMAGEN)
-            .imagenContentType(DEFAULT_IMAGEN_CONTENT_TYPE);
+            .imagenContentType(DEFAULT_IMAGEN_CONTENT_TYPE)
+            .precioDescuento(DEFAULT_PRECIO_DESCUENTO)
+            .descripcion(DEFAULT_DESCRIPCION);
         return producto;
     }
 
@@ -95,11 +105,13 @@ class ProductoResourceIT {
     public static Producto createUpdatedEntity(EntityManager em) {
         Producto producto = new Producto()
             .nombre(UPDATED_NOMBRE)
+            .precio(UPDATED_PRECIO)
             .cantidad(UPDATED_CANTIDAD)
-            .descripcion(UPDATED_DESCRIPCION)
             .categoria(UPDATED_CATEGORIA)
             .imagen(UPDATED_IMAGEN)
-            .imagenContentType(UPDATED_IMAGEN_CONTENT_TYPE);
+            .imagenContentType(UPDATED_IMAGEN_CONTENT_TYPE)
+            .precioDescuento(UPDATED_PRECIO_DESCUENTO)
+            .descripcion(UPDATED_DESCRIPCION);
         return producto;
     }
 
@@ -123,11 +135,13 @@ class ProductoResourceIT {
         assertThat(productoList).hasSize(databaseSizeBeforeCreate + 1);
         Producto testProducto = productoList.get(productoList.size() - 1);
         assertThat(testProducto.getNombre()).isEqualTo(DEFAULT_NOMBRE);
+        assertThat(testProducto.getPrecio()).isEqualByComparingTo(DEFAULT_PRECIO);
         assertThat(testProducto.getCantidad()).isEqualTo(DEFAULT_CANTIDAD);
-        assertThat(testProducto.getDescripcion()).isEqualTo(DEFAULT_DESCRIPCION);
         assertThat(testProducto.getCategoria()).isEqualTo(DEFAULT_CATEGORIA);
         assertThat(testProducto.getImagen()).isEqualTo(DEFAULT_IMAGEN);
         assertThat(testProducto.getImagenContentType()).isEqualTo(DEFAULT_IMAGEN_CONTENT_TYPE);
+        assertThat(testProducto.getPrecioDescuento()).isEqualByComparingTo(DEFAULT_PRECIO_DESCUENTO);
+        assertThat(testProducto.getDescripcion()).isEqualTo(DEFAULT_DESCRIPCION);
     }
 
     @Test
@@ -162,11 +176,13 @@ class ProductoResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(producto.getId().intValue())))
             .andExpect(jsonPath("$.[*].nombre").value(hasItem(DEFAULT_NOMBRE)))
-            .andExpect(jsonPath("$.[*].cantidad").value(hasItem(DEFAULT_CANTIDAD)))
-            .andExpect(jsonPath("$.[*].descripcion").value(hasItem(DEFAULT_DESCRIPCION)))
+            .andExpect(jsonPath("$.[*].precio").value(hasItem(sameNumber(DEFAULT_PRECIO))))
+            .andExpect(jsonPath("$.[*].cantidad").value(hasItem(DEFAULT_CANTIDAD.intValue())))
             .andExpect(jsonPath("$.[*].categoria").value(hasItem(DEFAULT_CATEGORIA)))
             .andExpect(jsonPath("$.[*].imagenContentType").value(hasItem(DEFAULT_IMAGEN_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].imagen").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGEN))));
+            .andExpect(jsonPath("$.[*].imagen").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGEN))))
+            .andExpect(jsonPath("$.[*].precioDescuento").value(hasItem(sameNumber(DEFAULT_PRECIO_DESCUENTO))))
+            .andExpect(jsonPath("$.[*].descripcion").value(hasItem(DEFAULT_DESCRIPCION)));
     }
 
     @Test
@@ -182,11 +198,13 @@ class ProductoResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(producto.getId().intValue()))
             .andExpect(jsonPath("$.nombre").value(DEFAULT_NOMBRE))
-            .andExpect(jsonPath("$.cantidad").value(DEFAULT_CANTIDAD))
-            .andExpect(jsonPath("$.descripcion").value(DEFAULT_DESCRIPCION))
+            .andExpect(jsonPath("$.precio").value(sameNumber(DEFAULT_PRECIO)))
+            .andExpect(jsonPath("$.cantidad").value(DEFAULT_CANTIDAD.intValue()))
             .andExpect(jsonPath("$.categoria").value(DEFAULT_CATEGORIA))
             .andExpect(jsonPath("$.imagenContentType").value(DEFAULT_IMAGEN_CONTENT_TYPE))
-            .andExpect(jsonPath("$.imagen").value(Base64Utils.encodeToString(DEFAULT_IMAGEN)));
+            .andExpect(jsonPath("$.imagen").value(Base64Utils.encodeToString(DEFAULT_IMAGEN)))
+            .andExpect(jsonPath("$.precioDescuento").value(sameNumber(DEFAULT_PRECIO_DESCUENTO)))
+            .andExpect(jsonPath("$.descripcion").value(DEFAULT_DESCRIPCION));
     }
 
     @Test
@@ -210,11 +228,13 @@ class ProductoResourceIT {
         em.detach(updatedProducto);
         updatedProducto
             .nombre(UPDATED_NOMBRE)
+            .precio(UPDATED_PRECIO)
             .cantidad(UPDATED_CANTIDAD)
-            .descripcion(UPDATED_DESCRIPCION)
             .categoria(UPDATED_CATEGORIA)
             .imagen(UPDATED_IMAGEN)
-            .imagenContentType(UPDATED_IMAGEN_CONTENT_TYPE);
+            .imagenContentType(UPDATED_IMAGEN_CONTENT_TYPE)
+            .precioDescuento(UPDATED_PRECIO_DESCUENTO)
+            .descripcion(UPDATED_DESCRIPCION);
         ProductoDTO productoDTO = productoMapper.toDto(updatedProducto);
 
         restProductoMockMvc
@@ -230,11 +250,13 @@ class ProductoResourceIT {
         assertThat(productoList).hasSize(databaseSizeBeforeUpdate);
         Producto testProducto = productoList.get(productoList.size() - 1);
         assertThat(testProducto.getNombre()).isEqualTo(UPDATED_NOMBRE);
+        assertThat(testProducto.getPrecio()).isEqualByComparingTo(UPDATED_PRECIO);
         assertThat(testProducto.getCantidad()).isEqualTo(UPDATED_CANTIDAD);
-        assertThat(testProducto.getDescripcion()).isEqualTo(UPDATED_DESCRIPCION);
         assertThat(testProducto.getCategoria()).isEqualTo(UPDATED_CATEGORIA);
         assertThat(testProducto.getImagen()).isEqualTo(UPDATED_IMAGEN);
         assertThat(testProducto.getImagenContentType()).isEqualTo(UPDATED_IMAGEN_CONTENT_TYPE);
+        assertThat(testProducto.getPrecioDescuento()).isEqualByComparingTo(UPDATED_PRECIO_DESCUENTO);
+        assertThat(testProducto.getDescripcion()).isEqualTo(UPDATED_DESCRIPCION);
     }
 
     @Test
@@ -316,9 +338,10 @@ class ProductoResourceIT {
 
         partialUpdatedProducto
             .nombre(UPDATED_NOMBRE)
-            .cantidad(UPDATED_CANTIDAD)
+            .precio(UPDATED_PRECIO)
             .imagen(UPDATED_IMAGEN)
-            .imagenContentType(UPDATED_IMAGEN_CONTENT_TYPE);
+            .imagenContentType(UPDATED_IMAGEN_CONTENT_TYPE)
+            .descripcion(UPDATED_DESCRIPCION);
 
         restProductoMockMvc
             .perform(
@@ -333,11 +356,13 @@ class ProductoResourceIT {
         assertThat(productoList).hasSize(databaseSizeBeforeUpdate);
         Producto testProducto = productoList.get(productoList.size() - 1);
         assertThat(testProducto.getNombre()).isEqualTo(UPDATED_NOMBRE);
-        assertThat(testProducto.getCantidad()).isEqualTo(UPDATED_CANTIDAD);
-        assertThat(testProducto.getDescripcion()).isEqualTo(DEFAULT_DESCRIPCION);
+        assertThat(testProducto.getPrecio()).isEqualByComparingTo(UPDATED_PRECIO);
+        assertThat(testProducto.getCantidad()).isEqualTo(DEFAULT_CANTIDAD);
         assertThat(testProducto.getCategoria()).isEqualTo(DEFAULT_CATEGORIA);
         assertThat(testProducto.getImagen()).isEqualTo(UPDATED_IMAGEN);
         assertThat(testProducto.getImagenContentType()).isEqualTo(UPDATED_IMAGEN_CONTENT_TYPE);
+        assertThat(testProducto.getPrecioDescuento()).isEqualByComparingTo(DEFAULT_PRECIO_DESCUENTO);
+        assertThat(testProducto.getDescripcion()).isEqualTo(UPDATED_DESCRIPCION);
     }
 
     @Test
@@ -354,11 +379,13 @@ class ProductoResourceIT {
 
         partialUpdatedProducto
             .nombre(UPDATED_NOMBRE)
+            .precio(UPDATED_PRECIO)
             .cantidad(UPDATED_CANTIDAD)
-            .descripcion(UPDATED_DESCRIPCION)
             .categoria(UPDATED_CATEGORIA)
             .imagen(UPDATED_IMAGEN)
-            .imagenContentType(UPDATED_IMAGEN_CONTENT_TYPE);
+            .imagenContentType(UPDATED_IMAGEN_CONTENT_TYPE)
+            .precioDescuento(UPDATED_PRECIO_DESCUENTO)
+            .descripcion(UPDATED_DESCRIPCION);
 
         restProductoMockMvc
             .perform(
@@ -373,11 +400,13 @@ class ProductoResourceIT {
         assertThat(productoList).hasSize(databaseSizeBeforeUpdate);
         Producto testProducto = productoList.get(productoList.size() - 1);
         assertThat(testProducto.getNombre()).isEqualTo(UPDATED_NOMBRE);
+        assertThat(testProducto.getPrecio()).isEqualByComparingTo(UPDATED_PRECIO);
         assertThat(testProducto.getCantidad()).isEqualTo(UPDATED_CANTIDAD);
-        assertThat(testProducto.getDescripcion()).isEqualTo(UPDATED_DESCRIPCION);
         assertThat(testProducto.getCategoria()).isEqualTo(UPDATED_CATEGORIA);
         assertThat(testProducto.getImagen()).isEqualTo(UPDATED_IMAGEN);
         assertThat(testProducto.getImagenContentType()).isEqualTo(UPDATED_IMAGEN_CONTENT_TYPE);
+        assertThat(testProducto.getPrecioDescuento()).isEqualByComparingTo(UPDATED_PRECIO_DESCUENTO);
+        assertThat(testProducto.getDescripcion()).isEqualTo(UPDATED_DESCRIPCION);
     }
 
     @Test

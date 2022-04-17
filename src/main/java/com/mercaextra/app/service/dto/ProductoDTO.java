@@ -10,45 +10,23 @@ import javax.persistence.Lob;
  */
 public class ProductoDTO implements Serializable {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
-
     private Long id;
 
     private String nombre;
 
-    private Long cantidad;
-
-    private String descripcion;
-
-    private String categoria;
-
     private BigDecimal precio;
 
-    private BigDecimal valorDescuento;
+    private Long cantidad;
+
+    private String categoria;
 
     @Lob
     private byte[] imagen;
 
     private String imagenContentType;
+    private BigDecimal precioDescuento;
 
-    public BigDecimal getPrecio() {
-        return precio;
-    }
-
-    public BigDecimal getValorDescuento() {
-        return valorDescuento;
-    }
-
-    public void setValorDescuento(BigDecimal valorDescuento) {
-        this.valorDescuento = valorDescuento;
-    }
-
-    public void setPrecio(BigDecimal precio) {
-        this.precio = precio;
-    }
+    private String descripcion;
 
     public Long getId() {
         return id;
@@ -66,20 +44,20 @@ public class ProductoDTO implements Serializable {
         this.nombre = nombre;
     }
 
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
+    }
+
     public Long getCantidad() {
         return cantidad;
     }
 
     public void setCantidad(Long cantidad) {
         this.cantidad = cantidad;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
     }
 
     public String getCategoria() {
@@ -104,6 +82,22 @@ public class ProductoDTO implements Serializable {
 
     public void setImagenContentType(String imagenContentType) {
         this.imagenContentType = imagenContentType;
+    }
+
+    public BigDecimal getPrecioDescuento() {
+        return precioDescuento;
+    }
+
+    public void setPrecioDescuento(BigDecimal precioDescuento) {
+        this.precioDescuento = precioDescuento;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     @Override
@@ -133,10 +127,12 @@ public class ProductoDTO implements Serializable {
         return "ProductoDTO{" +
             "id=" + getId() +
             ", nombre='" + getNombre() + "'" +
-            ", cantidad='" + getCantidad() + "'" +
-            ", descripcion='" + getDescripcion() + "'" +
+            ", precio=" + getPrecio() +
+            ", cantidad=" + getCantidad() +
             ", categoria='" + getCategoria() + "'" +
             ", imagen='" + getImagen() + "'" +
+            ", precioDescuento=" + getPrecioDescuento() +
+            ", descripcion='" + getDescripcion() + "'" +
             "}";
     }
 }

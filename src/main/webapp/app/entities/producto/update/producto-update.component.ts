@@ -10,8 +10,8 @@ import { ProductoService } from '../service/producto.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { CategoriaProductoService } from 'app/entities/categoria-producto/service/categoria-producto.service';
 import { ICategoriaProducto } from 'app/entities/categoria-producto/categoria-producto.model';
+import { CategoriaProductoService } from 'app/entities/categoria-producto/service/categoria-producto.service';
 
 @Component({
   selector: 'jhi-producto-update',
@@ -19,20 +19,19 @@ import { ICategoriaProducto } from 'app/entities/categoria-producto/categoria-pr
 })
 export class ProductoUpdateComponent implements OnInit {
   isSaving = false;
-  categorias?: ICategoriaProducto[] | null;
   titulo?: string | null;
-  nomCategoria?: string | null;
+  categorias?: ICategoriaProducto[] | null;
 
   editForm = this.fb.group({
     id: [],
     nombre: [],
-    cantidad: [],
-    descripcion: [],
-    categoria: [],
     precio: [],
-    valorDescuento: [],
+    cantidad: [],
+    categoria: [],
     imagen: [],
     imagenContentType: [],
+    precioDescuento: [],
+    descripcion: [],
   });
 
   constructor(
@@ -48,9 +47,8 @@ export class ProductoUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ producto }) => {
       this.updateForm(producto);
-      producto.id === null ? (this.titulo = 'Actualizar Producto') : (this.titulo = 'Crear Producto');
+      producto.id === undefined ? (this.titulo = 'Crear Producto') : (this.titulo = 'Actualizar Producto');
     });
-
     this.cosultarCategoriaProductos();
   }
 
@@ -97,7 +95,6 @@ export class ProductoUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const producto = this.createFromForm();
-
     if (producto.id !== undefined) {
       this.subscribeToSaveResponse(this.productoService.update(producto));
     } else {
@@ -128,13 +125,13 @@ export class ProductoUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: producto.id,
       nombre: producto.nombre,
-      cantidad: producto.cantidad,
-      descripcion: producto.descripcion,
-      categoria: producto.categoria,
       precio: producto.precio,
+      cantidad: producto.cantidad,
+      categoria: producto.categoria,
       imagen: producto.imagen,
       imagenContentType: producto.imagenContentType,
-      valorDescuento: producto.valorDescuento,
+      precioDescuento: producto.precioDescuento,
+      descripcion: producto.descripcion,
     });
   }
 
@@ -143,13 +140,13 @@ export class ProductoUpdateComponent implements OnInit {
       ...new Producto(),
       id: this.editForm.get(['id'])!.value,
       nombre: this.editForm.get(['nombre'])!.value,
+      precio: this.editForm.get(['precio'])!.value,
       cantidad: this.editForm.get(['cantidad'])!.value,
-      descripcion: this.editForm.get(['descripcion'])!.value,
       categoria: this.editForm.get(['categoria'])!.value,
-      precio: this.editForm.get(['precio'])?.value,
       imagenContentType: this.editForm.get(['imagenContentType'])!.value,
       imagen: this.editForm.get(['imagen'])!.value,
-      valorDescuento: this.editForm.get(['valorDescuento'])!.value,
+      precioDescuento: this.editForm.get(['precioDescuento'])!.value,
+      descripcion: this.editForm.get(['descripcion'])!.value,
     };
   }
 }
