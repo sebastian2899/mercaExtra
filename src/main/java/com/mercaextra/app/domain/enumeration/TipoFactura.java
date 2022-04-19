@@ -6,4 +6,6 @@ package com.mercaextra.app.domain.enumeration;
 public enum TipoFactura {
     CREDITO,
     DEBITO,
+    CONTADO,
+    TRANSACCION,
 }

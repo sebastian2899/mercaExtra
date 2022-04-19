@@ -50,4 +50,6 @@ public interface FacturaService {
     List<ProductoDTO> productosDisponibles();
 
     List<ProductoDTO> productosCategoria(String categoria);
+
+    List<FacturaDTO> facturasPorUsuario();
 }

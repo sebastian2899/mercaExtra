@@ -199,6 +199,12 @@ h4 {
   font-size: 22px;
 }
 
+.titulos {
+  color: rgb(79, 117, 255);
+  font-style: normal;
+  font-weight: bold;
+}
+
 .font-size-black {
   color: rgb(164, 89, 234);
   font-style: normal;
@@ -240,6 +246,10 @@ h4 {
   color: rgb(255, 255, 255);
   font-style: normal;
   font-weight: bold;
+}
+.boton-count {
+  background-color: white;
+  color: black;
 }
 
 .font-size-home-white {
@@ -285,6 +295,15 @@ h4 {
   }
 }
 
+.menu-buttons {
+  background: none;
+  border: none;
+}
+
+.menu-buttons:hover {
+  background-color: rgb(72, 124, 246);
+}
+
 .raise:hover,
 .raise:focus {
   box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
@@ -313,7 +332,8 @@ a:hover {
 }
 
 .dropdown-item:hover {
-  color: $dropdown-link-hover-color;
+  color: #f0f0f0;
+  background-color: #1e7df8;
 }
 
 /* ==========================================================================

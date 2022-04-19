@@ -12,12 +12,15 @@ import { IFactura, Factura } from '../factura.model';
 import { FacturaService } from '../service/factura.service';
 import { TipoFactura } from 'app/entities/enumerations/tipo-factura.model';
 import { MetodoPago } from 'app/entities/enumerations/metodo-pago.model';
-import { IProducto } from 'app/entities/producto/producto.model';
+import { IProducto, Producto } from 'app/entities/producto/producto.model';
 import { DataUtils } from 'app/core/util/data-util.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IItemFacturaVenta, ItemFacturaVenta } from 'app/entities/item-factura-venta/item-factura-venta.model';
 import { AlertService } from 'app/core/util/alert.service';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/auth/account.model';
+import { ProductoService } from 'app/entities/producto/service/producto.service';
 
 @Component({
   selector: 'jhi-factura-update',
@@ -26,6 +29,9 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
 export class FacturaUpdateComponent implements OnInit {
   @ViewChild('verCarroCompra', { static: true }) content: ElementRef | undefined;
   @ViewChild('llenarCarro', { static: true }) content2: ElementRef | undefined;
+  @ViewChild('validarCompra', { static: true }) content3: ElementRef | undefined;
+  @ViewChild('verCarroCompra2', { static: true }) content4: ElementRef | undefined;
+  @ViewChild('cantidadInvalida', { static: true }) content5: ElementRef | undefined;
 
   isSaving = false;
   tipoFacturaValues = Object.keys(TipoFactura);
@@ -40,6 +46,14 @@ export class FacturaUpdateComponent implements OnInit {
   productoNom?: string | null;
   tipoCategoria?: string | null;
   productoStorage?: IProducto | null;
+  productoNuevo = true;
+  account?: Account | null;
+  mensaje?: string | null;
+  nombre?: string | null;
+  productoFiltro?: IProducto | null;
+  numeroConsignacion = '111-222-333-444';
+  contadorCarrito = 0;
+  totalFactura = 0;
 
   editForm = this.fb.group({
     id: [],
@@ -64,7 +78,9 @@ export class FacturaUpdateComponent implements OnInit {
     protected dataUtils: DataUtils,
     protected ngbModal: NgbModal,
     protected alertService: AlertService,
-    protected storageService: StateStorageService
+    protected storageService: StateStorageService,
+    protected accountService: AccountService,
+    protected productoService: ProductoService
   ) {}
 
   ngOnInit(): void {
@@ -79,15 +95,35 @@ export class FacturaUpdateComponent implements OnInit {
     });
     this.productoStorage = this.storageService.getParametroProducto();
     if (this.productoStorage) {
-      this.productoItem = new ItemFacturaVenta();
-      this.productoItem.nombreProducto = this.productoStorage.nombre;
-      this.productoItem.precioOriginal = this.productoStorage.precio;
-      this.productosSeleccionados.push(this.productoItem);
+      this.llenarCarroCompra(this.productoStorage);
+      this.storageService.clearUrlProducto();
     }
+
+    this.accountService.getAuthenticationState().subscribe(account => {
+      this.account = account;
+    });
+    this.editForm.get(['infoCiente'])?.setValue(this.account?.login.toString());
   }
 
   previousState(): void {
     window.history.back();
+  }
+
+  confirmarCompra(): void {
+    this.calcularValores();
+    this.ngbModal.open(this.content3, { size: 'lg', backdrop: 'static', scrollable: true });
+  }
+
+  productosPorFiltro(): void {
+    this.productoFiltro = new Producto();
+    this.productoFiltro.nombre = this.nombre;
+
+    this.productoService.productosFiltro(this.productoFiltro).subscribe({
+      next: (res: HttpResponse<IProducto[]>) => {
+        this.productos = res.body ?? [];
+      },
+      error: () => [(this.productos = [])],
+    });
   }
 
   consultarProductosDisponibles(): void {
@@ -116,23 +152,60 @@ export class FacturaUpdateComponent implements OnInit {
 
   agregarProducto(): void {
     let cantidad;
-    if (this.productoSeleccionado) {
-      if (this.cantidad) {
-        cantidad = this.cantidad;
-      }
-
-      this.productoSeleccionado.cantidadSeleccionada = cantidad;
-
-      this.productoItem = new ItemFacturaVenta();
-      this.productoItem.nombreProducto = this.productoSeleccionado.nombre;
-      this.productoItem.cantidad = this.productoSeleccionado.cantidadSeleccionada;
-      this.productoItem.precioOriginal = this.productoSeleccionado.precio;
-      this.productoItem.precio = this.productoSeleccionado.precio = this.productoSeleccionado.precio! * Number(cantidad);
-
-      this.productosSeleccionados.push(this.productoItem);
+    if (this.cantidad) {
+      cantidad = this.cantidad;
     }
 
-    this.ngbModal.dismissAll();
+    if (this.productosSeleccionados.length && this.productoSeleccionado) {
+      for (let i = 0; i < this.productosSeleccionados.length; i++) {
+        if (this.productosSeleccionados[i].idProducto === this.productoSeleccionado.id) {
+          this.productosSeleccionados[i].cantidad! += Number(this.cantidad!);
+          if (this.productosSeleccionados[i].cantidad! > this.productoSeleccionado.cantidad!) {
+            this.mensaje = `No se puede seleccionar el producto, ya que has llegado al tope disponible total
+                    de productos. Disponibles: ${String(this.productoSeleccionado.cantidad)}, Cantidad Seleccionada: ${String(
+              this.productosSeleccionados[i].cantidad!
+            )}`;
+            this.ngbModal.open(this.content5);
+            this.productoNuevo = false;
+          } else {
+            const totalTemp = this.cantidad! * this.productoSeleccionado.precio!;
+            this.productosSeleccionados[i].precio! += totalTemp;
+            this.productoNuevo = false;
+            this.ngbModal.dismissAll();
+            this.mensajeProductoAddSuccess();
+            break;
+          }
+        } else {
+          this.productoNuevo = true;
+        }
+      }
+    }
+
+    if (this.productoSeleccionado && this.productoNuevo && cantidad) {
+      if (cantidad > this.productoSeleccionado.cantidad!) {
+        this.mensaje = `No se puede agregar el producto ${String(this.productoSeleccionado.nombre)}, ya que 
+          se estan seleccionando ${String(cantidad)} y solo hay ${String(this.productoSeleccionado.cantidad)} disponibles.`;
+        this.ngbModal.open(this.content5);
+      } else {
+        this.productoSeleccionado.cantidadSeleccionada = cantidad;
+        this.productoItem = new ItemFacturaVenta();
+        this.productoItem.idProducto = this.productoSeleccionado.id;
+        this.productoItem.nombreProducto = this.productoSeleccionado.nombre;
+        this.productoItem.cantidad = this.productoSeleccionado.cantidadSeleccionada;
+        this.productoItem.precioOriginal = this.productoSeleccionado.precio;
+        this.productoItem.precio = this.productoSeleccionado.precio! * Number(cantidad);
+
+        this.productosSeleccionados.push(this.productoItem);
+        this.mensajeProductoAddSuccess();
+        this.ngbModal.dismissAll();
+        this.contadorCarrito++;
+      }
+    }
+    this.cantidad = null;
+    this.calcularValores();
+  }
+
+  mensajeProductoAddSuccess(): void {
     this.alertService.addAlert({
       type: 'success',
       message: 'Producto Agregado al carrito de compras con exito.',
@@ -146,14 +219,42 @@ export class FacturaUpdateComponent implements OnInit {
         message: 'Tu carro de compras esta vacío, por favor realiza por lo menos una compra.',
       });
     } else {
-      this.ngbModal.open(this.content);
+      this.ngbModal.open(this.content, { size: 'lg', backdrop: 'static', scrollable: true });
     }
+  }
+
+  verCarroCompras2(): void {
+    this.ngbModal.open(this.content4, { size: 'lg', scrollable: true });
+  }
+
+  calcularValores(): void {
+    let valorFactura = 0;
+    this.productosSeleccionados.forEach(element => {
+      valorFactura += element.precio!;
+    });
+    this.editForm.get(['valorFactura'])?.setValue(valorFactura);
+    this.totalFactura = valorFactura;
+    this.editForm.get(['valorDeuda'])?.setValue(valorFactura);
+  }
+
+  restarValores(): void {
+    const valorFactura = this.editForm.get(['valorFactura'])!.value;
+    const valorPagado = this.editForm.get(['valorPagado'])!.value;
+
+    const valorDeuda = Number(valorFactura) - Number(valorPagado);
+
+    this.editForm.get(['valorDeuda'])?.setValue(valorDeuda);
+  }
+
+  cancel(): void {
+    this.ngbModal.dismissAll();
   }
 
   eliminarProducto(producto: IItemFacturaVenta): void {
     const index = this.productosSeleccionados.indexOf(producto);
     if (index >= 0) {
       this.productosSeleccionados.splice(index, 1);
+      this.contadorCarrito--;
     }
     if (this.productosSeleccionados.length === 0) {
       this.ngbModal.dismissAll();
@@ -174,7 +275,9 @@ export class FacturaUpdateComponent implements OnInit {
     if (factura.id !== undefined) {
       this.subscribeToSaveResponse(this.facturaService.update(factura));
     } else {
+      factura.itemsPorFactura = this.productosSeleccionados;
       this.subscribeToSaveResponse(this.facturaService.create(factura));
+      this.cancel();
     }
   }
 

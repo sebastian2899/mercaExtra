@@ -1,11 +1,18 @@
 <div class="d-flex justify-content-end">
-  <button class="btn-primary" (click)="verCarroCompras()">
+  <button class="btn btn-primary" (click)="verCarroCompras()">
     <mat-icon class="icon-config">shopping_cart</mat-icon><span>Ver carrito</span>
+    <span class="boton-count badge badge-light">{{ contadorCarrito }}</span>
   </button>
 </div>
 <jhi-alert></jhi-alert>
 <div class="d-flex">
   <div class="d-flex flex-column form-check col-md-2">
+    <div class="mb-4">
+      <h3 class="font-size-black" style="margin-right: -100">Filtra Por:</h3>
+      <button (click)="consultarProductosDisponibles()" class="btn btn-outline-info btn-sm">
+        <span>Ver todos</span><mat-icon class="icon-config">preview</mat-icon>
+      </button>
+    </div>
     <input
       class="form-check-input"
       type="radio"
@@ -76,12 +83,23 @@
       id="tipo6"
     />
     <label class="form-check-label" style="position: relative; top: -19px" for="tipo6"> Otros </label>
+    <div class="mt-3">
+      <label for="nombre" class="form-label font-size-black2">Nombre</label>
+      <input
+        style="margin-left: -30px"
+        placeholder="Busca por nombre"
+        [(ngModel)]="nombre"
+        (keyup)="productosPorFiltro()"
+        type="text"
+        class="form-control"
+      />
+    </div>
   </div>
 
   <div class="col-md-9">
     <div class="row text-center mt-5">
       <div
-        style="box-shadow: 10px 10px 10px rgb(240, 200, 1)"
+        style="box-shadow: 10px 10px 20px rgb(52, 105, 237)"
         class="col-lg-3 col-md-6 mb-4"
         *ngFor="let producto of productos! | paginate: { itemsPerPage: 12, currentPage: pA }"
       >
@@ -95,10 +113,12 @@
           </a>
           <div class="card-body">
             <h5 class="card-title titulo-entidades">{{ producto.nombre }}</h5>
-            <p class="card-text titulo-entidades">{{ producto.descripcion }}</p>
-            <p class="card-text titulo-entidades">Categoria: {{ producto.categoria }}</p>
-            <p class="card-text titulo-entidades">Cantidad: {{ producto.cantidad }}</p>
-            <p class="card-text titulo-entidades">Precio: {{ producto.precio | currency }}</p>
+            <p class="card-text font-size-black2">{{ producto.descripcion }}</p>
+            <p class="card-text titulo-entidades"><span class="font-size-black2">Categoria:</span>{{ producto.categoria }}</p>
+            <p *ngIf="account!.login === 'admin'" class="card-text titulo-entidades">
+              <span class="font-size-black2">Cantidad:</span> {{ producto.cantidad }}
+            </p>
+            <p class="card-text titulo-entidades"><span class="font-size-black2">Precio:</span> {{ producto.precio | currency }}</p>
             <button class="btn btn-info btn-sm" (click)="llenarCarroCompra(producto)">Comprar</button>
           </div>
         </div>
@@ -107,6 +127,7 @@
     </div>
   </div>
 </div>
+
 <ng-template #validarCompra>
   <div class="modal-header">
     <h4 class="modal-title" style="color: red">Carro de Compras</h4>
@@ -126,10 +147,11 @@
                 id="field_infoCiente"
                 data-cy="infoCiente"
                 formControlName="infoCiente"
+                readonly
               />
             </div>
 
-            <div class="col-md-6">
+            <!-- <div class="col-md-6">
               <label class="form-label" jhiTranslate="mercaExtraApp.factura.numeroFactura" for="field_numeroFactura">Numero Factura</label>
               <input
                 type="text"
@@ -139,11 +161,21 @@
                 data-cy="numeroFactura"
                 formControlName="numeroFactura"
               />
-            </div>
+            </div> -->
+          </div>
+
+          <div class="col-md-6 mb-4">
+            <label class="form-label" jhiTranslate="mercaExtraApp.factura.metodoPago" for="field_metodoPago">Metodo Pago</label>
+            <select class="form-control" name="metodoPago" formControlName="metodoPago" id="field_metodoPago" data-cy="metodoPago">
+              <option [ngValue]="null">{{ 'mercaExtraApp.MetodoPago.null' | translate }}</option>
+              <option *ngFor="let metodoPago of metodoPagoValues" [value]="metodoPago">
+                {{ 'mercaExtraApp.MetodoPago.' + metodoPago | translate }}
+              </option>
+            </select>
           </div>
 
           <div class="row mb-4">
-            <div class="col-md-6">
+            <!-- <div class="col-md-6">
               <label class="form-label" jhiTranslate="mercaExtraApp.factura.tipoFactura" for="field_tipoFactura">Tipo Factura</label>
               <select class="form-control" name="tipoFactura" formControlName="tipoFactura" id="field_tipoFactura" data-cy="tipoFactura">
                 <option [ngValue]="null">{{ 'mercaExtraApp.TipoFactura.null' | translate }}</option>
@@ -151,11 +183,12 @@
                   {{ 'mercaExtraApp.TipoFactura.' + tipoFactura | translate }}
                 </option>
               </select>
-            </div>
+            </div> -->
 
             <div class="col-md-6">
               <label class="form-label" jhiTranslate="mercaExtraApp.factura.valorFactura" for="field_valorFactura">Valor Factura</label>
               <input
+                readonly
                 type="number"
                 class="form-control"
                 name="valorFactura"
@@ -166,11 +199,12 @@
             </div>
           </div>
 
-          <div class="row mb-4">
+          <div *ngIf="editForm.get(['metodoPago'])!.value === 'CONTRA_ENTREGA'" class="row mb-4">
             <div class="col-md-6">
-              <label class="form-label" jhiTranslate="mercaExtraApp.factura.valorPagado" for="field_valorPagado">Valor Pagado</label>
+              <label class="form-label" for="field_valorPagado">Ingrese el valor con el que pagara</label>
               <input
                 type="number"
+                (keyup)="restarValores()"
                 class="form-control"
                 name="valorPagado"
                 id="field_valorPagado"
@@ -179,9 +213,10 @@
               />
             </div>
 
-            <div class="col-md-6">
-              <label class="form-label" jhiTranslate="mercaExtraApp.factura.valorDeuda" for="field_valorDeuda">Valor Deuda</label>
+            <div *ngIf="this.editForm.get(['valorDeuda'])!.value > 0" class="col-md-6">
+              <label class="form-label" for="field_valorDeuda">Debe</label>
               <input
+                readonly
                 type="number"
                 class="form-control"
                 name="valorDeuda"
@@ -189,10 +224,21 @@
                 data-cy="valorDeuda"
                 formControlName="valorDeuda"
               />
+              <div class="alert alert-warning" role="alert">
+                <p class="mb-0">La compra no será efectuada mientras el valor pagado sea menor val valor de la factura.</p>
+              </div>
             </div>
           </div>
 
-          <div class="row mb-4">
+          <div *ngIf="editForm.get(['metodoPago'])!.value === 'TRANSACCION_BANCARIA'" class="col-md-6">
+            <label class="form-label" for="field_valorDeuda">Numero a Consignar</label>
+            <input readonly type="text" class="form-control" value="111-222-333-444" />
+            <div class="alert alert-warning" role="alert">
+              <p class="mb-0">Tan pronto como la transaccion sea exitosa podra continuar y realizar el pedido.</p>
+            </div>
+          </div>
+
+          <!-- <div class="row mb-4">
             <div class="col-md-6">
               <label class="form-label" jhiTranslate="mercaExtraApp.factura.estadoFactura" for="field_estadoFactura">Estado Factura</label>
               <input
@@ -203,22 +249,14 @@
                 data-cy="estadoFactura"
                 formControlName="estadoFactura"
               />
-            </div>
+            </div> 
 
-            <div class="col-md-6">
-              <label class="form-label" jhiTranslate="mercaExtraApp.factura.metodoPago" for="field_metodoPago">Metodo Pago</label>
-              <select class="form-control" name="metodoPago" formControlName="metodoPago" id="field_metodoPago" data-cy="metodoPago">
-                <option [ngValue]="null">{{ 'mercaExtraApp.MetodoPago.null' | translate }}</option>
-                <option *ngFor="let metodoPago of metodoPagoValues" [value]="metodoPago">
-                  {{ 'mercaExtraApp.MetodoPago.' + metodoPago | translate }}
-                </option>
-              </select>
-            </div>
-          </div>
+         
+          </div> -->
         </div>
 
         <div>
-          <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" (click)="cancel()" class="btn btn-secondary">
             <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
           </button>
 
@@ -230,6 +268,10 @@
             class="btn btn-primary"
           >
             <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+          </button>
+
+          <button type="button" class="btn btn-primary" (click)="verCarroCompras2()">
+            <span>Ver Productos <mat-icon class="icon-config">shopping_cart</mat-icon></span>
           </button>
         </div>
       </form>
@@ -255,15 +297,58 @@
         <input type="number" min="0" max="20" placeholder="Cantidad que deseas adquirir" class="form-control" [(ngModel)]="cantidad" />
       </div>
       <div class="col-md-2">
-        <button class="btn btn-primary btn-sm" (click)="agregarProducto()" style="margin-top: 30px">Agregar</button>
+        <button class="btn btn-primary btn-sm" (click)="agregarProducto()" style="margin-top: 35px">Agregar</button>
       </div>
     </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-outline-info btn-sm" (click)="cancel()">
+      <span>Cancelar<mat-icon class="icon-config">not_interested</mat-icon></span>
+    </button>
   </div>
 </ng-template>
 
 <ng-template #verCarroCompra>
   <div class="modal-header">
     <h4 class="text-pattern">Tu carrito de Compras hasta el momento</h4>
+  </div>
+  <div class="modal-body">
+    <h4>Productos:</h4>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Producto</th>
+          <th scope="col">Cantidad</th>
+          <th scope="col">Precio</th>
+          <th scope="col">Subtotal</th>
+          <th scope="col">Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of productosSeleccionados">
+          <td>{{ item.nombreProducto }}</td>
+          <td>{{ item.cantidad }}</td>
+          <td>{{ item.precioOriginal }}</td>
+          <td>{{ item.precio }}</td>
+          <a class="a-delete" (click)="eliminarProducto(item)"><mat-icon class="icon-config-delete">remove_circle_outline</mat-icon></a>
+        </tr>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-end">
+      <span><b>Total Factura: </b>{{ totalFactura | currency }}</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-outline-info btn-sm" (click)="cancel()">
+      <span><mat-icon class="icon-config">arrow_back</mat-icon>Volver</span>
+    </button>
+    <button class="btn btn raise" (click)="confirmarCompra()">Confirmar Pedido</button>
+  </div>
+</ng-template>
+
+<ng-template #verCarroCompra2>
+  <div class="modal-header">
+    <h4 class="text-pattern">Tu carrito de Compras</h4>
   </div>
   <div class="modal-body">
     <h4>Productos:</h4>
@@ -283,9 +368,25 @@
           <td>{{ item.cantidad }}</td>
           <td>{{ item.precioOriginal }}</td>
           <td>{{ item.precio }}</td>
-          <a class="a-delete" (click)="eliminarProducto(item)"><mat-icon class="icon-config-delete">remove_circle_outline</mat-icon></a>
         </tr>
       </tbody>
     </table>
+  </div>
+  <div class="modal-footer">
+    <span class="font-size-black2">Toca fuera de esta sección para continuar con la confirmación de la compra</span>
+  </div>
+</ng-template>
+
+<ng-template #cantidadInvalida>
+  <div class="modal-header">
+    <h3 style="color: red">Cantidad invalida</h3>
+  </div>
+  <div class="modal-body">
+    <span>{{ mensaje }}</span>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-outline-info btn-sm" (click)="cancel()">
+      <span><mat-icon class="icon-config">arrow_back</mat-icon>Volver</span>
+    </button>
   </div>
 </ng-template>

@@ -3,7 +3,9 @@
     "TipoFactura": {
       "null": "",
       "CREDITO": "CREDITO",
-      "DEBITO": "DEBITO"
+      "DEBITO": "DEBITO",
+      "CONTADO": "CONTADO",
+      "TRANSACCION": "TRANSACCION"
     }
   }
 }

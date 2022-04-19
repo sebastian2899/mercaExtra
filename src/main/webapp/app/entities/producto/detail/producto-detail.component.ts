@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { IProducto } from '../producto.model';
 import { DataUtils } from 'app/core/util/data-util.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
 
 @Component({
   selector: 'jhi-producto-detail',
@@ -15,7 +16,13 @@ export class ProductoDetailComponent implements OnInit {
   account?: Account | null;
   valorConDescuento?: number | null;
 
-  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute, protected accountService: AccountService) {}
+  constructor(
+    protected dataUtils: DataUtils,
+    protected activatedRoute: ActivatedRoute,
+    protected accountService: AccountService,
+    protected storageService: StateStorageService,
+    protected router: Router
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ producto }) => {
@@ -32,6 +39,11 @@ export class ProductoDetailComponent implements OnInit {
       const descuento = (this.producto.precioDescuento * this.producto.precio!) / 100;
       this.valorConDescuento = this.producto.precio! - Number(descuento);
     }
+  }
+
+  pasoParametroProducto(producto: IProducto): void {
+    this.storageService.pasoParametroProducto(producto);
+    this.router.navigate(['factura/new']);
   }
 
   byteSize(base64String: string): string {

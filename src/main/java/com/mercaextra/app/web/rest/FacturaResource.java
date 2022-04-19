@@ -151,6 +151,12 @@ public class FacturaResource {
         return facturaService.findAll();
     }
 
+    @GetMapping("/facturas-usuario")
+    public List<FacturaDTO> facturasUsuario() {
+        log.debug("REST request to get facturas per user");
+        return facturaService.facturasPorUsuario();
+    }
+
     @GetMapping("/facturas-productos-disponibles")
     public List<ProductoDTO> productosDisponibles() {
         return facturaService.productosDisponibles();

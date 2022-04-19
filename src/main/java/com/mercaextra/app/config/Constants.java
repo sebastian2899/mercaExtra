@@ -22,7 +22,12 @@ public final class Constants {
     public static final String PRODUCTOS_ORDENADOS_ALFABETICAMENTE = "SELECT p FROM Producto p ORDER BY p.nombre ASC";
     public static final String PRODUCTOS_ORDENAOS_ALFABETICAMENTE_CATEGORIA =
         "SELECT p FROM Producto p WHERE p.categoria =:categoria" + " ORDER BY p.nombre ASC";
-    public static final String RESTAR_PRODUCTOS_VENDIDOS = "UPDATE Producto set cantidad = cantidad-:cantidad WHERE id=:id";
+
+    public static final String RESTAR_PRODUCTOS_VENDIDOS = "UPDATE Producto SET cantidad=cantidad-:cantidad WHERE id=:id";
+
+    //FACTURA
+    public static final String TRAER_FACTURA_POR_USUARIO = "SELECT f FROM Factura f WHERE f.userName =:userName AND f.id=:id";
+    public static final String TRAER_FACTURAS_POR_USUARIO = "SELECT f FROM Factura f WHERE f.userName =:userName";
 
     private Constants() {}
 }

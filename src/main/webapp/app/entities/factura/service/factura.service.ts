@@ -17,6 +17,7 @@ export type ProductoArrayResponseType = HttpResponse<IProducto[]>;
 @Injectable({ providedIn: 'root' })
 export class FacturaService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/facturas');
+  protected FacturasUsuarioUrl = this.applicationConfigService.getEndpointFor('api/facturas-usuario');
   protected productosDisponiblesUrl = this.applicationConfigService.getEndpointFor('api/facturas-productos-disponibles');
   protected productosCategoriaUrl = this.applicationConfigService.getEndpointFor('api/factura-productos-categoria');
 
@@ -31,6 +32,12 @@ export class FacturaService {
 
   productosDisponibles(): Observable<ProductoArrayResponseType> {
     return this.http.get<IProducto[]>(this.productosDisponiblesUrl, { observe: 'response' });
+  }
+
+  facturasUsuario(): Observable<EntityArrayResponseType> {
+    return this.http
+      .get<IFactura[]>(this.FacturasUsuarioUrl, { observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   productosCategoria(categoria: string): Observable<ProductoArrayResponseType> {

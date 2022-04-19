@@ -1,6 +1,6 @@
 <div>
   <h2 id="page-heading" data-cy="FacturaHeading">
-    <span jhiTranslate="mercaExtraApp.factura.home.title">Facturas</span>
+    <span class="titulos">Tus Facturas:</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
@@ -32,7 +32,7 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span></span></th>
           <th scope="col"><span jhiTranslate="mercaExtraApp.factura.fechaCreacion">Fecha Creacion</span></th>
           <th scope="col"><span jhiTranslate="mercaExtraApp.factura.infoCiente">Info Ciente</span></th>
           <th scope="col"><span jhiTranslate="mercaExtraApp.factura.numeroFactura">Numero Factura</span></th>
@@ -49,7 +49,33 @@
       <tbody>
         <tr *ngFor="let factura of facturas; trackBy: trackId" data-cy="entityTable">
           <td>
-            <a [routerLink]="['/factura', factura.id, 'view']">{{ factura.id }}</a>
+            <div class="dropdown">
+              <button
+                class="menu-buttons btn-secondary"
+                type="button"
+                id="dropdownMenuButton1"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li>
+                  <a class="dropdown-item" href="#">Ver<mat-icon class="icon-config">find_in_page</mat-icon></a>
+                </li>
+                <li>
+                  <a *ngIf="accountAdmin" class="dropdown-item" href="#"
+                    >Adquirir mismo pedido <mat-icon class="icon-config">repeat_one</mat-icon></a
+                  >
+                </li>
+                <li>
+                  <a *ngIf="accountAdmin" class="dropdown-item" href="#">Editar<mat-icon class="icon-config">edit</mat-icon></a>
+                </li>
+                <li>
+                  <a *ngIf="accountAdmin" class="dropdown-item" href="#">Eliminar<mat-icon class="icon-config">delete</mat-icon></a>
+                </li>
+              </ul>
+            </div>
           </td>
           <td>{{ factura.fechaCreacion | formatMediumDatetime }}</td>
           <td>{{ factura.infoCiente }}</td>
@@ -61,7 +87,7 @@
           <td>{{ factura.estadoFactura }}</td>
           <td jhiTranslate="{{ 'mercaExtraApp.MetodoPago.' + factura.metodoPago }}">{{ factura.metodoPago }}</td>
           <td>{{ factura.userName }}</td>
-          <td class="text-end">
+          <!-- <td class="text-end">
             <div class="btn-group">
               <button
                 type="submit"
@@ -88,7 +114,7 @@
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>
             </div>
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </table>

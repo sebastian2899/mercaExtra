@@ -1,5 +1,5 @@
 <div [ngSwitch]="account!.login === 'admin'" class="d-flex justify-content-center">
-  <div class="col-8">
+  <div class="col-10">
     <div *ngIf="producto">
       <h2 data-cy="productoDetailsHeading"><span jhiTranslate="mercaExtraApp.producto.detail.title">Producto</span></h2>
 
@@ -10,9 +10,9 @@
       <jhi-alert></jhi-alert>
 
       <div class="d-flex me-5 mb-3">
-        <div *ngIf="producto.imagen">
+        <div *ngIf="producto.imagen" class="col-md-6">
           <a (click)="openFile(producto.imagen, producto.imagenContentType)">
-            <img [src]="'data:' + producto.imagenContentType + ';base64,' + producto.imagen" style="max-width: 100%" alt="producto image" />
+            <img [src]="'data:' + producto.imagenContentType + ';base64,' + producto.imagen" style="max-width: 60%" alt="producto image" />
           </a>
           {{ producto.imagenContentType }}, {{ byteSize(producto.imagen) }}
         </div>
@@ -50,7 +50,8 @@
         <div class="alert alert-info" role="alert">
           <p class="mb-0 font-size-black2">Deseas adquir este producto?</p>
           <p class="mb-0 font-size-black2">
-            Pulsa <button class="pulse btn-outline-success">Aqui</button> y realiza tu compra con este y mucho mas productos!
+            Pulsa <button (click)="pasoParametroProducto(producto)" class="pulse btn-outline-success">Aqui</button> y realiza tu compra con
+            este y mucho mas productos!
           </p>
         </div>
 

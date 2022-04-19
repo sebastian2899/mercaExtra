@@ -5,6 +5,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IFactura } from '../factura.model';
 import { FacturaService } from '../service/factura.service';
 import { FacturaDeleteDialogComponent } from '../delete/factura-delete-dialog.component';
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/auth/account.model';
 
 @Component({
   selector: 'jhi-factura',
@@ -13,8 +15,10 @@ import { FacturaDeleteDialogComponent } from '../delete/factura-delete-dialog.co
 export class FacturaComponent implements OnInit {
   facturas?: IFactura[];
   isLoading = false;
+  account?: Account | null;
+  accountAdmin?: boolean | null;
 
-  constructor(protected facturaService: FacturaService, protected modalService: NgbModal) {}
+  constructor(protected facturaService: FacturaService, protected modalService: NgbModal, protected accountService: AccountService) {}
 
   loadAll(): void {
     this.isLoading = true;
@@ -31,7 +35,27 @@ export class FacturaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadAll();
+    this.accountService.getAuthenticationState().subscribe(account => {
+      this.account = account;
+    });
+    if (this.account?.login === 'admin') {
+      this.loadAll();
+      this.accountAdmin = true;
+    } else {
+      this.facturasUsuarios();
+      this.accountAdmin = false;
+    }
+  }
+
+  facturasUsuarios(): void {
+    this.facturaService.facturasUsuario().subscribe({
+      next: (res: HttpResponse<IFactura[]>) => {
+        this.facturas = res.body ?? [];
+      },
+      error: () => {
+        this.facturas = [];
+      },
+    });
   }
 
   trackId(index: number, item: IFactura): number {

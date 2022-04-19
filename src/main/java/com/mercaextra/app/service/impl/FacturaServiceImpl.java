@@ -4,16 +4,21 @@ import com.mercaextra.app.config.Constants;
 import com.mercaextra.app.domain.Factura;
 import com.mercaextra.app.domain.ItemFacturaVenta;
 import com.mercaextra.app.domain.Producto;
+import com.mercaextra.app.domain.enumeration.MetodoPago;
+import com.mercaextra.app.domain.enumeration.TipoFactura;
 import com.mercaextra.app.repository.FacturaRepository;
 import com.mercaextra.app.repository.ItemFacturaVentaRepository;
 import com.mercaextra.app.service.FacturaService;
+import com.mercaextra.app.service.UserService;
 import com.mercaextra.app.service.dto.FacturaDTO;
 import com.mercaextra.app.service.dto.ProductoDTO;
 import com.mercaextra.app.service.mapper.FacturaMapper;
 import com.mercaextra.app.service.mapper.ProductoMapper;
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -40,6 +45,8 @@ public class FacturaServiceImpl implements FacturaService {
 
     private final ProductoMapper productosMapper;
 
+    private final UserService userService;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -47,18 +54,43 @@ public class FacturaServiceImpl implements FacturaService {
         FacturaRepository facturaRepository,
         FacturaMapper facturaMapper,
         ItemFacturaVentaRepository itemFacturaVentaRepository,
-        ProductoMapper productosMapper
+        ProductoMapper productosMapper,
+        UserService userService
     ) {
         this.facturaRepository = facturaRepository;
         this.facturaMapper = facturaMapper;
         this.itemFacturaVentaRepository = itemFacturaVentaRepository;
         this.productosMapper = productosMapper;
+        this.userService = userService;
     }
 
     @Override
     public FacturaDTO save(FacturaDTO facturaDTO) {
         log.debug("Request to save Factura : {}", facturaDTO);
         Factura factura = facturaMapper.toEntity(facturaDTO);
+
+        // SE RECUPERA EL USUARIO LOGUEADO PARA GUARDAR LA FACTURA A ESE LOGIN.
+        String loginName = userService.getUserWithAuthorities().get().getLogin().toString();
+        factura.setUserName(loginName);
+
+        //LA FECHA DE CREACION DE LA FACTURA ES LA FECHA INMEDIATA EN LA QUE SE CREA LA FACTURA.
+        factura.setFechaCreacion(Instant.now());
+
+        //SE GENERA UN NUMERO ALEATORIO DE 1000 A 10000 Y SE LE SETEA A EL NUMERO DE FACTURA
+        //EN CASO DE QUE ALGUN NUMERO DE FACTURA SE REPITA AUN SE PUEDEN DISTINGUIR CON EL USERNAME O CON EL ID
+        Random numeroFactura = new Random();
+        int numRamdon = numeroFactura.nextInt(10000 - 1000 + 1) + 10000;
+        factura.numeroFactura(String.valueOf(numRamdon));
+
+        // DEPENDIENTE DE EL METODO DE PAGO SE SETEA EL TIPO DE FACTURA.
+        if (factura.getMetodoPago().equals(MetodoPago.TARJETA_CREDITO)) {
+            factura.setTipoFactura(TipoFactura.CREDITO);
+        } else if (factura.getMetodoPago().equals(MetodoPago.CONTRA_ENTREGA)) {
+            factura.setTipoFactura(TipoFactura.CONTADO);
+        } else if (factura.getMetodoPago().equals(MetodoPago.TRANSACCION_BANCARIA)) {
+            factura.setTipoFactura(TipoFactura.TRANSACCION);
+        }
+
         factura = facturaRepository.save(factura);
 
         ItemFacturaVenta itemFacturaVenta = null;
@@ -78,7 +110,7 @@ public class FacturaServiceImpl implements FacturaService {
                 Query q = entityManager
                     .createQuery(Constants.RESTAR_PRODUCTOS_VENDIDOS)
                     .setParameter("cantidad", itemFacturaVenta.getCantidad())
-                    .setParameter("id", itemFacturaVenta.getId());
+                    .setParameter("id", itemFacturaVenta.getIdProducto());
 
                 q.executeUpdate();
             }
@@ -109,6 +141,17 @@ public class FacturaServiceImpl implements FacturaService {
         return facturaRepository.findAll().stream().map(facturaMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<FacturaDTO> facturasPorUsuario() {
+        log.debug("Request to get all facturas per user");
+        String userName = userService.getUserWithAuthorities().get().getLogin();
+        Query q = entityManager.createQuery(Constants.TRAER_FACTURAS_POR_USUARIO).setParameter("userName", userName);
+
+        List<Factura> facturasPorUsuario = q.getResultList();
+        return facturasPorUsuario.stream().map(facturaMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+    }
+
     @Transactional
     @Override
     public List<ProductoDTO> productosDisponibles() {
@@ -123,11 +166,19 @@ public class FacturaServiceImpl implements FacturaService {
     @Transactional(readOnly = true)
     public FacturaDTO findOne(Long id) {
         log.debug("Request to get Factura : {}", id);
-        Factura factura = facturaRepository.facturaId(id);
+        String userName = userService.getUserWithAuthorities().get().getLogin().toString();
+        Query q = entityManager.createQuery(Constants.TRAER_FACTURA_POR_USUARIO).setParameter("userName", userName).setParameter("id", id);
+
+        Factura factura = (Factura) q.getSingleResult();
         factura.setItemsPorFactura(consultarItemsPorFactura(id));
         return facturaMapper.toDto(factura);
     }
 
+    /*
+     * SE CONSULTAR TODOS LOS ITEMS REFERENTES A LA FACTURA QUE QUEREMOS CONSULTAR Y
+     * DE ACUERDO AL ID DE LA FACTURA SE RECUPERAN LOS NOMBRES CORRESPONDIENTES, YA
+     * QUE EL NOMBRE DEL PRODUCTO EN LA ENTIDAD ITEMFACTURA ES UN TRANSITORIO
+     */
     private List<ItemFacturaVenta> consultarItemsPorFactura(Long id) {
         log.debug("Request to get all items per factura.", id);
 

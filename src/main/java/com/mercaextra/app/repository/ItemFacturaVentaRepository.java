@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface ItemFacturaVentaRepository extends JpaRepository<ItemFacturaVenta, Long> {
-    @Query("SELECT i FROM ItemFacturaVenta i WHERE i.id =:id")
+    @Query("SELECT i FROM ItemFacturaVenta i WHERE i.idFactura =:id")
     List<ItemFacturaVenta> itemsPorFactura(@Param("id") Long id);
 }
