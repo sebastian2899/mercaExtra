@@ -15,11 +15,11 @@
         "question": "¿Seguro que quiere eliminar Factura {{ id }}?"
       },
       "detail": {
-        "title": "Factura"
+        "title": "Detalle de tu factura"
       },
       "id": "ID",
       "fechaCreacion": "Fecha Creacion",
-      "infoCiente": "Info Ciente",
+      "infoCiente": "Informacion Ciente",
       "numeroFactura": "Numero Factura",
       "tipoFactura": "Tipo Factura",
       "valorFactura": "Valor Factura",

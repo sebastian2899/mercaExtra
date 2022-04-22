@@ -14,6 +14,7 @@ import com.mercaextra.app.service.dto.FacturaDTO;
 import com.mercaextra.app.service.dto.ProductoDTO;
 import com.mercaextra.app.service.mapper.FacturaMapper;
 import com.mercaextra.app.service.mapper.ProductoMapper;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
@@ -78,17 +79,18 @@ public class FacturaServiceImpl implements FacturaService {
 
         //SE GENERA UN NUMERO ALEATORIO DE 1000 A 10000 Y SE LE SETEA A EL NUMERO DE FACTURA
         //EN CASO DE QUE ALGUN NUMERO DE FACTURA SE REPITA AUN SE PUEDEN DISTINGUIR CON EL USERNAME O CON EL ID
-        Random numeroFactura = new Random();
-        int numRamdon = numeroFactura.nextInt(10000 - 1000 + 1) + 10000;
-        factura.numeroFactura(String.valueOf(numRamdon));
+
+        factura.numeroFactura(RamdomNumber());
 
         // DEPENDIENTE DE EL METODO DE PAGO SE SETEA EL TIPO DE FACTURA.
         if (factura.getMetodoPago().equals(MetodoPago.TARJETA_CREDITO)) {
             factura.setTipoFactura(TipoFactura.CREDITO);
         } else if (factura.getMetodoPago().equals(MetodoPago.CONTRA_ENTREGA)) {
             factura.setTipoFactura(TipoFactura.CONTADO);
+            factura.setEstadoFactura("Lista");
         } else if (factura.getMetodoPago().equals(MetodoPago.TRANSACCION_BANCARIA)) {
             factura.setTipoFactura(TipoFactura.TRANSACCION);
+            factura.setEstadoFactura("Transaccion Pendiente");
         }
 
         factura = facturaRepository.save(factura);
@@ -141,6 +143,13 @@ public class FacturaServiceImpl implements FacturaService {
         return facturaRepository.findAll().stream().map(facturaMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
 
+    private String RamdomNumber() {
+        Random numeroFactura = new Random();
+        int numRamdon = numeroFactura.nextInt(10000 - 1000 + 1) + 10000;
+        String numRamdonString = String.valueOf(numRamdon);
+        return numRamdonString;
+    }
+
     @Override
     @Transactional(readOnly = true)
     public List<FacturaDTO> facturasPorUsuario() {
@@ -150,6 +159,56 @@ public class FacturaServiceImpl implements FacturaService {
 
         List<Factura> facturasPorUsuario = q.getResultList();
         return facturasPorUsuario.stream().map(facturaMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Override
+    public FacturaDTO repurcharseInvoice(FacturaDTO facturaDto) {
+        log.debug("Request to repurcharse factura", facturaDto);
+
+        Factura factura = facturaMapper.toEntity(facturaDto);
+        Factura newFactura = factura;
+
+        //NOS ASEGURAMOS DIRECTAMENTE DESDE EL METODO DE LOGIN EL USUARIO QUE ACABA DE HACER LA PETICION PARA RECOMPRAR LA FACTURA
+        String userName = userService.getUserWithAuthorities().get().getLogin();
+
+        //SE CAMBIAN LOS VALORES PARA LA NUEVA FACURA
+        newFactura.setId(null);
+        newFactura.setFechaCreacion(Instant.now());
+        newFactura.setUserName(userName);
+        newFactura.setNumeroFactura(RamdomNumber());
+
+        if (factura.getMetodoPago().equals(MetodoPago.CONTRA_ENTREGA)) {
+            newFactura.setValorPagado(BigDecimal.ZERO);
+            newFactura.setValorDeuda(BigDecimal.ZERO);
+            newFactura.setEstadoFactura("lista");
+        } else if (factura.getMetodoPago().equals(MetodoPago.TRANSACCION_BANCARIA)) {
+            newFactura.setEstadoFactura("Transaccion Pendiente");
+        }
+
+        facturaRepository.save(newFactura);
+
+        List<ItemFacturaVenta> itemsFactura = consultarItemsPorFactura(facturaDto.getId());
+
+        ItemFacturaVenta itemFactura = null;
+        if (itemsFactura != null) {
+            for (ItemFacturaVenta item : itemsFactura) {
+                itemFactura = new ItemFacturaVenta();
+                itemFactura.setIdFactura(newFactura.getId());
+                itemFactura.setCantidad(item.getCantidad());
+                itemFactura.setIdProducto(item.getIdProducto());
+                itemFactura.setPrecio(item.getPrecio());
+
+                itemFacturaVentaRepository.save(itemFactura);
+                Query q = entityManager
+                    .createQuery(Constants.RESTAR_PRODUCTOS_VENDIDOS)
+                    .setParameter("cantidad", item.getCantidad())
+                    .setParameter("id", item.getIdProducto());
+
+                q.executeUpdate();
+            }
+        }
+
+        return facturaMapper.toDto(newFactura);
     }
 
     @Transactional
@@ -167,11 +226,19 @@ public class FacturaServiceImpl implements FacturaService {
     public FacturaDTO findOne(Long id) {
         log.debug("Request to get Factura : {}", id);
         String userName = userService.getUserWithAuthorities().get().getLogin().toString();
-        Query q = entityManager.createQuery(Constants.TRAER_FACTURA_POR_USUARIO).setParameter("userName", userName).setParameter("id", id);
-
-        Factura factura = (Factura) q.getSingleResult();
-        factura.setItemsPorFactura(consultarItemsPorFactura(id));
-        return facturaMapper.toDto(factura);
+        if (userName != "admin") {
+            Factura facturaAdmin = facturaRepository.facturaId(id);
+            facturaAdmin.setItemsPorFactura(consultarItemsPorFactura(id));
+            return facturaMapper.toDto(facturaAdmin);
+        } else {
+            Query q = entityManager
+                .createQuery(Constants.TRAER_FACTURA_POR_USUARIO)
+                .setParameter("userName", userName)
+                .setParameter("id", id);
+            Factura factura = (Factura) q.getSingleResult();
+            factura.setItemsPorFactura(consultarItemsPorFactura(id));
+            return facturaMapper.toDto(factura);
+        }
     }
 
     /*

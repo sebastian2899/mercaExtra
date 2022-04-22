@@ -210,4 +210,11 @@ public class ProductoResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    @GetMapping("/producto-porcentaje/{opcion}/{cantidad}")
+    public ResponseEntity<Void> aplicarPorcentajeProductos(@PathVariable String opcion, @PathVariable double cantidad) {
+        log.debug("REST request to change value of all productos where option:", opcion, " and cantidad: ", cantidad);
+        productoService.aplicarPorcentajePrecio(opcion, cantidad);
+        return ResponseEntity.noContent().build();
+    }
 }

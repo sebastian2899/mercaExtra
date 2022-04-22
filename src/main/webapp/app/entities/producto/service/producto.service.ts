@@ -18,11 +18,16 @@ export class ProductoService {
   protected productosCategoriaUrl = this.applicationConfigService.getEndpointFor('api/productos-categoria');
   protected productosFiltroUrl = this.applicationConfigService.getEndpointFor('api/producto-filtros');
   protected productosCategoriaFiltroUrl = this.applicationConfigService.getEndpointFor('api/productos-filtros-categoria');
+  protected aplicarPorcentajeProductosUrl = this.applicationConfigService.getEndpointFor('api/producto-porcentaje');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   create(producto: IProducto): Observable<EntityResponseType> {
     return this.http.post<IProducto>(this.resourceUrl, producto, { observe: 'response' });
+  }
+
+  aplicarPorcentajeProducto(opcion: string, cantidad: number): Observable<HttpResponse<{}>> {
+    return this.http.get(`${this.aplicarPorcentajeProductosUrl}/${opcion}/${cantidad}`, { observe: 'response' });
   }
 
   productosCategoriaFiltro(opcion: number, categoria: string): Observable<EntityArrayResponseType> {

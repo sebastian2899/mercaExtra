@@ -70,6 +70,19 @@ public class FacturaResource {
             .body(result);
     }
 
+    @PostMapping("factura-rePurcharse")
+    public ResponseEntity<FacturaDTO> rePurcharseFactura(@RequestBody FacturaDTO facturaDTO) throws URISyntaxException {
+        log.debug("REST request to repurchase factura", facturaDTO);
+        if (facturaDTO.getId() == null) {
+            throw new BadRequestAlertException("A new factura cannot already have an id", ENTITY_NAME, "idexist");
+        }
+        FacturaDTO factura = facturaService.repurcharseInvoice(facturaDTO);
+        return ResponseEntity
+            .created(new URI("api/factura-rePurcharse" + factura.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, factura.getId().toString()))
+            .body(factura);
+    }
+
     /**
      * {@code PUT  /facturas/:id} : Updates an existing factura.
      *

@@ -88,6 +88,8 @@ export class FacturaUpdateComponent implements OnInit {
       if (factura.id === undefined) {
         const today = dayjs().startOf('day');
         factura.fechaCreacion = today;
+      } else {
+        this.productosSeleccionados = factura.itemsPorFactura;
       }
 
       this.updateForm(factura);
@@ -223,6 +225,12 @@ export class FacturaUpdateComponent implements OnInit {
     }
   }
 
+  deleteAllElementsCarrito(): void {
+    this.productosSeleccionados.splice(0, this.productosSeleccionados.length);
+    this.totalFactura = 0;
+    this.contadorCarrito = 0;
+  }
+
   verCarroCompras2(): void {
     this.ngbModal.open(this.content4, { size: 'lg', scrollable: true });
   }
@@ -255,6 +263,7 @@ export class FacturaUpdateComponent implements OnInit {
     if (index >= 0) {
       this.productosSeleccionados.splice(index, 1);
       this.contadorCarrito--;
+      this.calcularValores();
     }
     if (this.productosSeleccionados.length === 0) {
       this.ngbModal.dismissAll();

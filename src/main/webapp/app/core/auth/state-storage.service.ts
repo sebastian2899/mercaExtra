@@ -6,6 +6,7 @@ import { SessionStorageService } from 'ngx-webstorage';
 export class StateStorageService {
   private previousUrlKey = 'previousUrl';
   private productoUrlKey = 'productoKeyUrl';
+  private carritoStateUrlKey = 'carroitoStateUrl';
 
   constructor(private sessionStorageService: SessionStorageService) {}
 
@@ -20,6 +21,18 @@ export class StateStorageService {
   clearUrlProducto(): void {
     this.sessionStorageService.clear(this.productoUrlKey);
   }
+
+  // storeCarrito(carrito: IItemFacturaVenta[]): void {
+  //   this.sessionStorageService.store(this.carritoStateUrlKey,carrito);
+  // }
+
+  // getCarrito(): IItemFacturaVenta[] | null {
+  //   return this.sessionStorageService.retrieve(this.carritoStateUrlKey) as IItemFacturaVenta[] | null;
+  // }
+
+  // clearCarrito():void{
+  //   this.sessionStorageService.clear(this.carritoStateUrlKey);
+  // }
 
   storeUrl(url: string): void {
     this.sessionStorageService.store(this.previousUrlKey, url);

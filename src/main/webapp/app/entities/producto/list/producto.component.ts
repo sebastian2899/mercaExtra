@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -10,12 +10,15 @@ import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { ICategoriaProducto } from 'app/entities/categoria-producto/categoria-producto.model';
 import { CategoriaProductoService } from 'app/entities/categoria-producto/service/categoria-producto.service';
+import { AlertService } from 'app/core/util/alert.service';
 
 @Component({
   selector: 'jhi-producto',
   templateUrl: './producto.component.html',
 })
 export class ProductoComponent implements OnInit {
+  @ViewChild('mensajeAyuda', { static: true }) content: ElementRef | undefined;
+
   productos?: IProducto[];
   producto?: IProducto;
   isLoading = false;
@@ -25,17 +28,24 @@ export class ProductoComponent implements OnInit {
   categoria?: string | null;
   nombre?: string | null;
   descripcion?: string | null;
-  verAgotados = false;
+  verAgotados?: boolean | null;
   mostrarAgotados = false;
   productosAgotados?: IProducto[] | null;
   productosEscasos?: IProducto[] | null;
+  isAdmin?: boolean | null;
+  aumento?: boolean | null;
+  decremento?: boolean | null;
+  opcion?: string | null;
+  cantidadAplicar?: number | number;
+  deshabilitarCambio?: boolean | null;
 
   constructor(
     protected productoService: ProductoService,
     protected dataUtils: DataUtils,
     protected modalService: NgbModal,
     protected accountService: AccountService,
-    protected categoriaService: CategoriaProductoService
+    protected categoriaService: CategoriaProductoService,
+    protected alertService: AlertService
   ) {}
 
   loadAll(): void {
@@ -58,6 +68,24 @@ export class ProductoComponent implements OnInit {
       this.account = account;
     });
     this.consultarCategorias();
+    this.isAdminMethod();
+    this.consultarProductosAE();
+  }
+
+  isAuthenticated(): boolean {
+    return this.accountService.isAuthenticated();
+  }
+
+  verMensajeAyuda(): void {
+    this.modalService.open(this.content);
+  }
+
+  isAdminMethod(): void {
+    if (this.account?.login === 'admin') {
+      this.isAdmin = true;
+    } else {
+      this.isAdmin = false;
+    }
   }
 
   consultarCategorias(): void {
@@ -69,7 +97,6 @@ export class ProductoComponent implements OnInit {
         this.categorias = [];
       },
     });
-    this.consultarProductosAE();
   }
 
   productosFiltro(): void {
@@ -87,6 +114,13 @@ export class ProductoComponent implements OnInit {
     });
   }
 
+  cancelarPorcentaje(): void {
+    this.aumento = false;
+    this.decremento = false;
+    this.cantidadAplicar = 0;
+    this.deshabilitarCambio = false;
+  }
+
   productosPorCategoriaYFiltro(opcion: number): void {
     this.productoService.productosCategoriaFiltro(opcion, this.categoria!).subscribe({
       next: (res: HttpResponse<IProducto[]>) => {
@@ -98,11 +132,47 @@ export class ProductoComponent implements OnInit {
     });
   }
 
+  aplicarAumento(): void {
+    this.aumento = true;
+    this.decremento = false;
+    this.opcion = 'aumentar';
+  }
+
+  aplicarDecremento(): void {
+    this.aumento = false;
+    this.decremento = true;
+    this.opcion = 'decrementar';
+  }
+
+  ejecutarCambioPrecio(opcion: string): void {
+    if (this.cantidadAplicar) {
+      if (this.cantidadAplicar < 1 || this.cantidadAplicar > 10) {
+        this.deshabilitarCambio = true;
+      } else {
+        this.deshabilitarCambio = false;
+        this.messageSuccess(opcion);
+      }
+    } else {
+      this.deshabilitarCambio = true;
+    }
+  }
+
+  messageSuccess(opcion: string): void {
+    this.productoService.aplicarPorcentajeProducto(opcion, this.cantidadAplicar!).subscribe(() => {
+      this.alertService.addAlert({
+        type: 'success',
+        message: 'Porcentaje aplicado con exito!',
+      });
+      this.loadAll();
+    });
+    this.cancelarPorcentaje();
+  }
+
   consultarProductosAE(): void {
     this.productoService.productosAgotados().subscribe({
       next: (res: HttpResponse<IProducto[]>) => {
         this.productosAgotados = res.body ?? [];
-        if (this.productosAgotados.length >= 0) {
+        if (this.productosAgotados.length > 0) {
           this.verAgotados = true;
         } else {
           this.verAgotados = false;
@@ -116,7 +186,7 @@ export class ProductoComponent implements OnInit {
     this.productoService.productosEscasos().subscribe({
       next: (res: HttpResponse<IProducto[]>) => {
         this.productosEscasos = res.body ?? [];
-        if (this.productosEscasos.length >= 0) {
+        if (this.productosEscasos.length > 0) {
           this.verAgotados = true;
         } else {
           this.verAgotados = false;

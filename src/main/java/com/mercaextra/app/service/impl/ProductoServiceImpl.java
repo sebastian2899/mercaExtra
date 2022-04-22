@@ -6,6 +6,7 @@ import com.mercaextra.app.repository.ProductoRepository;
 import com.mercaextra.app.service.ProductoService;
 import com.mercaextra.app.service.dto.ProductoDTO;
 import com.mercaextra.app.service.mapper.ProductoMapper;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -195,5 +196,35 @@ public class ProductoServiceImpl implements ProductoService {
          */
 
         return productos.stream().map(productoMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Override
+    public void aplicarPorcentajePrecio(String opcion, double cantidad) {
+        log.debug("Request to change value of all products where option: ", opcion, " and value: ", cantidad);
+
+        List<Producto> productos = productoRepository.findAll();
+
+        for (Producto producto : productos) {
+            BigDecimal porcentaje = (producto.getPrecio().multiply(BigDecimal.valueOf(cantidad))).divide(new BigDecimal(100));
+
+            switch (opcion) {
+                case "aumentar":
+                    double precioProdut = producto.getPrecio().add(porcentaje).doubleValue();
+                    double precioProductoFormater = Math.round(precioProdut * Math.pow(10, 1)) / Math.pow(10, 1);
+                    producto.setPrecio(BigDecimal.valueOf(precioProductoFormater));
+
+                    break;
+                case "decrementar":
+                    double precioProdutSubs = producto.getPrecio().subtract(porcentaje).doubleValue();
+                    double precioProductoSubsFormater = Math.round(precioProdutSubs * Math.pow(10, 1)) / Math.pow(10, 1);
+                    producto.setPrecio(BigDecimal.valueOf(precioProductoSubsFormater));
+
+                    break;
+                default:
+                    break;
+            }
+
+            productoRepository.save(producto);
+        }
     }
 }

@@ -59,4 +59,6 @@ public interface ProductoService {
     List<ProductoDTO> productoFiltros(ProductoDTO producto);
 
     List<ProductoDTO> productosFiltroCategoria(int opcion, String categoria);
+
+    void aplicarPorcentajePrecio(String opcion, double cantidad);
 }

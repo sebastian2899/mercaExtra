@@ -20,6 +20,7 @@ export class FacturaService {
   protected FacturasUsuarioUrl = this.applicationConfigService.getEndpointFor('api/facturas-usuario');
   protected productosDisponiblesUrl = this.applicationConfigService.getEndpointFor('api/facturas-productos-disponibles');
   protected productosCategoriaUrl = this.applicationConfigService.getEndpointFor('api/factura-productos-categoria');
+  protected rePurcharseInvoiceUrl = this.applicationConfigService.getEndpointFor('api/factura-rePurcharse');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -32,6 +33,12 @@ export class FacturaService {
 
   productosDisponibles(): Observable<ProductoArrayResponseType> {
     return this.http.get<IProducto[]>(this.productosDisponiblesUrl, { observe: 'response' });
+  }
+
+  rePurchaseInvoice(factura: IFactura): Observable<EntityResponseType> {
+    return this.http
+      .post<IFactura>(this.rePurcharseInvoiceUrl, factura, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   facturasUsuario(): Observable<EntityArrayResponseType> {

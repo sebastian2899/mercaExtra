@@ -2,7 +2,7 @@
 <div [ngSwitch]="account !== null && account !== undefined">
   <div class="container-fluid" style="margin-top: 30px; width: 100%; position: fixed">
     <div class="row flex-nowrap">
-      <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0" style="width: 217px; background-color: rgb(239, 239, 239)">
+      <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0" style="width: 217px; background-color: rgba(60, 195, 229, 0.83)">
         <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
           <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
             <span class="mt-2 fs-5 d-none d-sm-inline font-size-black2">Menu</span>
@@ -30,7 +30,7 @@
               </ul>
             </li>
             <li>
-              <a href="#submenu3" data-bs-toggle="collapse" class="nav-link link-home px-0 align-middle">
+              <a href="#submenu3" data-bs-toggle="collapse" class="nav-link link-home dropdown-toggle px-0 align-middle">
                 <span class="ms-1 d-none d-sm-inline font-size-black2">Productos</span>
                 <mat-icon class="icon-config-black">restaurant</mat-icon>
               </a>
@@ -51,6 +51,12 @@
                   <a href="#" class="nav-link link-home px-0">
                     <span style="font-size: 13px" class="d-none d-sm-inline font-size-black2">-Mis pedidos</span>
                     <mat-icon class="icon-config-black">local_grocery_store</mat-icon></a
+                  >
+                </li>
+                <li>
+                  <a [routerLink]="['/factura']" class="nav-link link-home px-0">
+                    <span style="font-size: 13px" class="d-none d-sm-inline font-size-black2">-Mis facturas</span>
+                    <mat-icon class="icon-config-black">feed</mat-icon></a
                   >
                 </li>
               </ul>
@@ -83,13 +89,13 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-light text-small shadow">
               <li>
-                <a *ngSwitchCase="true" [routerLink]="['account/password']" class="dropdown-item" href="#"
+                <a *ngSwitchCase="true" [routerLink]="['account/password']" class="dropdown-item"
                   >Contraseña
                   <mat-icon class="icon-config-black">lock</mat-icon>
                 </a>
               </li>
               <li>
-                <a *ngSwitchCase="true" [routerLink]="['account/settings']" class="dropdown-item" href="#"
+                <a *ngSwitchCase="true" [routerLink]="['account/settings']" class="dropdown-item"
                   >Cuenta
                   <mat-icon class="icon-config-black">admin_panel_settings</mat-icon>
                 </a>
@@ -98,7 +104,7 @@
                 <hr class="dropdown-divider" />
               </li>
               <li>
-                <a *ngSwitchCase="true" (click)="(logout)" class="dropdown-item" href="#"
+                <a *ngSwitchCase="true" (click)="logout()" class="dropdown-item" href="#"
                   ><span>Cerrar sesion</span>
                   <mat-icon class="icon-config-black">logout</mat-icon>
                 </a>

@@ -206,7 +206,7 @@ h4 {
 }
 
 .font-size-black {
-  color: rgb(164, 89, 234);
+  color: rgb(63, 146, 255);
   font-style: normal;
   font-weight: bold;
 }
@@ -237,7 +237,7 @@ h4 {
 }
 
 .font-size-entidades {
-  color: blueviolet;
+  color: rgb(43, 141, 226);
   font-style: normal;
   font-weight: bold;
 }
@@ -279,7 +279,7 @@ h4 {
 
 .text-pattern {
   color: transparent;
-  background-image: linear-gradient(to left, #000000, #dadada, #9900ff, #d094f8, #000000);
+  background-image: linear-gradient(to left, #9badff, #0072b5, #2483ff, #79c7ff, #000000);
   background-clip: text;
   animation: color 5s linear infinite;
   background-size: 500%;
@@ -302,6 +302,32 @@ h4 {
 
 .menu-buttons:hover {
   background-color: rgb(72, 124, 246);
+}
+
+.link-product {
+  text-decoration: none;
+  font-size: 18px;
+  color: black;
+}
+
+.link-product:hover {
+  color: #1e7df8;
+  font-size: 25px;
+}
+
+.menu-buttons-delete {
+  background: none;
+  border: none;
+  span {
+    color: red;
+  }
+  .icon-config {
+    color: red;
+  }
+}
+
+.menu-buttons-delete:hover {
+  background-color: rgba(255, 172, 176, 0.898);
 }
 
 .raise:hover,

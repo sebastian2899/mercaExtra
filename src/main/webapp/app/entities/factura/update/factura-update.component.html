@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-end">
-  <button class="btn btn-primary" (click)="verCarroCompras()">
+  <button class="btn btn-info" (click)="verCarroCompras()">
     <mat-icon class="icon-config">shopping_cart</mat-icon><span>Ver carrito</span>
     <span class="boton-count badge badge-light">{{ contadorCarrito }}</span>
   </button>
@@ -166,12 +166,25 @@
 
           <div class="col-md-6 mb-4">
             <label class="form-label" jhiTranslate="mercaExtraApp.factura.metodoPago" for="field_metodoPago">Metodo Pago</label>
-            <select class="form-control" name="metodoPago" formControlName="metodoPago" id="field_metodoPago" data-cy="metodoPago">
+            <select class="form-control" name="metodoPago" formControlName="metodoPago" id="field_metodoPago" data-cy="metodoPago" required>
               <option [ngValue]="null">{{ 'mercaExtraApp.MetodoPago.null' | translate }}</option>
               <option *ngFor="let metodoPago of metodoPagoValues" [value]="metodoPago">
                 {{ 'mercaExtraApp.MetodoPago.' + metodoPago | translate }}
               </option>
             </select>
+            <div
+              *ngIf="
+                this.editForm.get(['metodoPago'])!.invalid && (editForm.get('metodoPago')!.dirty || editForm.get('metodoPago')!.touched)
+              "
+            >
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('metodoPago')?.errors?.required"
+                jhiTranslate="entity.validation.required"
+              >
+                This field is required.
+              </small>
+            </div>
           </div>
 
           <div class="row mb-4">
@@ -199,7 +212,7 @@
             </div>
           </div>
 
-          <div *ngIf="editForm.get(['metodoPago'])!.value === 'CONTRA_ENTREGA'" class="row mb-4">
+          <div *ngIf="editForm.get('metodoPago')!.value === 'CONTRA_ENTREGA'" class="row mb-4">
             <div class="col-md-6">
               <label class="form-label" for="field_valorPagado">Ingrese el valor con el que pagara</label>
               <input
@@ -210,7 +223,19 @@
                 id="field_valorPagado"
                 data-cy="valorPagado"
                 formControlName="valorPagado"
+                required
               />
+
+              <div
+                *ngIf="
+                  editForm.get('valorPagado')!.invalid &&
+                  (this.editForm.get('valorPagado')!.dirty || this.editForm.get('valorPagago')!.touched)
+                "
+              >
+                <small class="form-text text-danger" *ngIf="this.editForm.get('valorPagado')?.errors?.required">
+                  Este campo es requerido
+                </small>
+              </div>
             </div>
 
             <div *ngIf="this.editForm.get(['valorDeuda'])!.value > 0" class="col-md-6">
@@ -225,7 +250,7 @@
                 formControlName="valorDeuda"
               />
               <div class="alert alert-warning" role="alert">
-                <p class="mb-0">La compra no será efectuada mientras el valor pagado sea menor val valor de la factura.</p>
+                <p class="mb-0">La compra no será efectuada mientras el valor pagado sea menor al valor de la factura.</p>
               </div>
             </div>
           </div>
@@ -337,12 +362,17 @@
     <div class="d-flex justify-content-end">
       <span><b>Total Factura: </b>{{ totalFactura | currency }}</span>
     </div>
+    <div class="d-flex justify-content-end">
+      <button (click)="deleteAllElementsCarrito()" class="menu-buttons-delete">
+        <mat-icon class="icon-config">delete_sweep</mat-icon><span>Vaciar carrito</span>
+      </button>
+    </div>
   </div>
   <div class="modal-footer">
     <button class="btn btn-outline-info btn-sm" (click)="cancel()">
       <span><mat-icon class="icon-config">arrow_back</mat-icon>Volver</span>
     </button>
-    <button class="btn btn raise" (click)="confirmarCompra()">Confirmar Pedido</button>
+    <button [disabled]="productosSeleccionados.length === 0" class="btn btn raise" (click)="confirmarCompra()">Confirmar Pedido</button>
   </div>
 </ng-template>
 

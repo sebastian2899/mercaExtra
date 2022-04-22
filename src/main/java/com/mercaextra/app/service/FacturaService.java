@@ -52,4 +52,6 @@ public interface FacturaService {
     List<ProductoDTO> productosCategoria(String categoria);
 
     List<FacturaDTO> facturasPorUsuario();
+
+    FacturaDTO repurcharseInvoice(FacturaDTO facturaDto);
 }

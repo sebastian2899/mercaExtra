@@ -1,6 +1,6 @@
-<div [ngSwitch]="account!.login === 'admin'">
+<div [ngSwitch]="isAuthenticated()">
   <div [ngStyle]="{ display: verAgotados === true ? 'flex' : '' }">
-    <div *ngIf="mostrarAgotados" class="col-md-2 me-5">
+    <div *ngIf="mostrarAgotados && isAdmin" class="col-md-2 me-5">
       <button class="btn btn-outline-primary mb-3" (click)="ocultarAgotadosMethod()">Ocultar</button>
       <div *ngIf="productosAgotados && productosAgotados.length > 0">
         <h3 class="font-size-entidades">Totalmente Agotados</h3>
@@ -27,109 +27,128 @@
       </div>
     </div>
 
-    <div [ngClass]="{ 'col-md-12': verAgotados === true }">
-      <h2 class="font-size-entidades" id="page-heading" data-cy="ProductoHeading">
-        <span jhiTranslate="mercaExtraApp.producto.home.title">Productos</span>
-        <div>
-          <button
-            *ngSwitchCase="true && verAgotados"
-            (click)="mostrarAgotadosMethod()"
-            class="mt-2 btn btn-warning text parpadea"
-            type="button"
-            style="border: none"
-          >
-            <span>Ver Agotados</span>
-          </button>
-        </div>
-
-        <div class="d-flex justify-content-end">
-          <button class="btn btn-outline-info me-2" (click)="loadAll()" [disabled]="isLoading">
-            <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-            <span jhiTranslate="mercaExtraApp.producto.home.refreshListLabel">Refresh List</span>
-          </button>
-
-          <button
-            *ngSwitchCase="true"
-            id="jh-create-entity"
-            data-cy="entityCreateButton"
-            class="btn btn-outline-primary jh-create-entity create-producto"
-            [routerLink]="['/producto/new']"
-          >
-            <fa-icon icon="plus"></fa-icon>
-            <span jhiTranslate="mercaExtraApp.producto.home.createLabel"> Create a new Producto </span>
-          </button>
-        </div>
-
-        <div class="row d-flex justify-content-center">
-          <div class="col-md-3">
-            <label class="text-pattern mb-1" for="categoria">Filtra Por Categoria</label>
-            <select [(ngModel)]="categoria" (click)="productosPorCategoria()" name="categoria" class="form-select" id="categoria">
-              <option></option>
-              <option *ngFor="let categoria of categorias">{{ categoria.nombreCategoria }}</option>
-            </select>
-          </div>
-        </div>
-      </h2>
-
-      <div class="row justify-content-around">
-        <div class="col-md-3 me-5">
-          <label for="nombre" class="form-label">Nombre</label>
-          <input type="text" (keyup)="productosFiltro()" placeholder="Busca por nombre" class="form-control" [(ngModel)]="nombre" />
-        </div>
-
-        <div class="col-md-3 ms-5">
-          <div class="dropdown">
+    <div class="col-md-12">
+      <div [ngClass]="{ 'col-md-9': mostrarAgotados }">
+        <h2 class="font-size-entidades" id="page-heading" data-cy="ProductoHeading">
+          <span jhiTranslate="mercaExtraApp.producto.home.title">Productos</span>
+          <div>
             <button
-              class="btn-producto-order dropdown-toggle"
-              style="margin-top: 21px"
+              *ngSwitchCase="true && verAgotados && isAdmin"
+              (click)="mostrarAgotadosMethod()"
+              class="mt-2 btn btn-warning text parpadea"
               type="button"
-              id="dropdownMenuButton1"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
+              style="border: none"
             >
-              <mat-icon class="icon-config" style="color: black; font-size: 50px">filter_list</mat-icon>
+              <span>Ver Agotados</span>
             </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <li>
-                <button (click)="productosPorCategoriaYFiltro(1)" class="dropdown-item btn-producto-order" href="#">
-                  <span
-                    >Ordenar Por precio
-                    <mat-icon class="icon-config">price_check</mat-icon>
-                  </span>
-                </button>
-              </li>
-              <li>
-                <button class="dropdown-item btn-producto-order" (click)="productosPorCategoriaYFiltro(2)">
-                  <span
-                    >Ordenar Alfabeticamente
-                    <mat-icon class="icon-config">sort_by_alpha</mat-icon>
-                  </span>
-                </button>
-              </li>
-            </ul>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-outline-info me-2" (click)="loadAll()" [disabled]="isLoading">
+              <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+              <span jhiTranslate="mercaExtraApp.producto.home.refreshListLabel">Refresh List</span>
+            </button>
+
+            <button
+              *ngSwitchCase="true && isAdmin"
+              id="jh-create-entity"
+              data-cy="entityCreateButton"
+              class="btn btn-outline-primary jh-create-entity create-producto"
+              [routerLink]="['/producto/new']"
+            >
+              <fa-icon icon="plus"></fa-icon>
+              <span jhiTranslate="mercaExtraApp.producto.home.createLabel"> Create a new Producto </span>
+            </button>
+          </div>
+
+          <div class="row d-flex justify-content-center">
+            <div class="col-md-3">
+              <label class="text-pattern mb-1" for="categoria">Filtra Por Categoria</label>
+              <select [(ngModel)]="categoria" (click)="productosPorCategoria()" name="categoria" class="form-select" id="categoria">
+                <option></option>
+                <option *ngFor="let categoria of categorias">{{ categoria.nombreCategoria }}</option>
+              </select>
+            </div>
+          </div>
+        </h2>
+
+        <div class="row justify-content-around">
+          <div class="col-md-3 me-5">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" (keyup)="productosFiltro()" placeholder="Busca por nombre" class="form-control" [(ngModel)]="nombre" />
+          </div>
+
+          <div class="col-md-3 ms-5">
+            <div class="dropdown">
+              <button
+                class="btn-producto-order dropdown-toggle"
+                style="margin-top: 21px"
+                type="button"
+                id="dropdownMenuButton1"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <mat-icon class="icon-config" style="color: black; font-size: 50px">filter_list</mat-icon>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li>
+                  <button (click)="productosPorCategoriaYFiltro(1)" class="dropdown-item btn-producto-order" href="#">
+                    <span
+                      >Ordenar Por precio
+                      <mat-icon class="icon-config">price_check</mat-icon>
+                    </span>
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item btn-producto-order" (click)="productosPorCategoriaYFiltro(2)">
+                    <span
+                      >Ordenar Alfabeticamente
+                      <mat-icon class="icon-config">sort_by_alpha</mat-icon>
+                    </span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <label for="nombre" class="form-label">Descripcion</label>
+            <input
+              type="text"
+              (keyup)="productosFiltro()"
+              placeholder="Busca por descripción"
+              class="form-control"
+              [(ngModel)]="descripcion"
+            />
           </div>
         </div>
 
-        <div class="col-md-3">
-          <label for="nombre" class="form-label">Descripcion</label>
-          <input
-            type="text"
-            (keyup)="productosFiltro()"
-            placeholder="Busca por descripción"
-            class="form-control"
-            [(ngModel)]="descripcion"
-          />
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <div class="mt-4 d-flex justify-content-end">
+          <button (click)="verMensajeAyuda()" class="menu-buttons"><mat-icon>help</mat-icon></button>
+          <a (click)="aplicarAumento()" class="link-product me-3">Aumentar</a>
+          <a (click)="aplicarDecremento()" class="link-product">Decrementar</a>
         </div>
-      </div>
 
-      <jhi-alert-error></jhi-alert-error>
+        <div *ngIf="aumento || decremento" class="mb-3 d-flex justify-content-end">
+          <label for="cantidad"
+            >Ingrese el porcentaje en número que desea <span class="titulos">{{ opcion }}</span></label
+          >
+          <input type="number" max="10" min="1" class="me-2 ms-2" [(ngModel)]="cantidadAplicar" style="width: 70px" />
+          <button (click)="ejecutarCambioPrecio(opcion!)" [disabled]="deshabilitarCambio" class="btn btn-info btn-sm">aplicar</button>
+          <button (click)="cancelarPorcentaje()" class="menu-buttons-delete"><mat-icon class="icon-config">cancel</mat-icon></button>
+        </div>
+        <div *ngIf="deshabilitarCambio" class="d-flex justify-content-end alert alert-warning" role="alert">
+          <p class="mb-0">El porcentaje no puede ser menor a 0 y no puede ser mayor a 10.</p>
+        </div>
 
-      <jhi-alert></jhi-alert>
-
-      <div class="alert alert-warning" id="no-result" *ngIf="productos?.length === 0">
-        <span jhiTranslate="mercaExtraApp.producto.home.notFound">No productos found</span>
-      </div>
-      <!-- 
+        <div class="alert alert-warning" id="no-result" *ngIf="productos?.length === 0">
+          <span jhiTranslate="mercaExtraApp.producto.home.notFound">No productos found</span>
+        </div>
+        <!-- 
   <div class="table-responsive" id="entities" *ngIf="productos && productos.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
@@ -195,42 +214,59 @@
     </table>
   </div> -->
 
-      <div class="row text-center mt-5">
-        <div
-          style="box-shadow: 10px 10px 10px rgb(240, 200, 1)"
-          class="col-lg-3 col-md-6 mb-4"
-          *ngFor="let producto of productos! | paginate: { itemsPerPage: 12, currentPage: pA }"
-        >
-          <div class="card" style="width: 16 rem">
-            <a *ngIf="producto.imagen" (click)="openFile(producto.imagen, producto.imagenContentType)">
-              <img
-                [src]="'data:' + producto.imagenContentType + ';base64,' + producto.imagen"
-                style="max-height: 200px"
-                alt="producto image"
-              />
-            </a>
-            <div class="card-body">
-              <h5 class="card-title titulo-entidades">{{ producto.nombre }}</h5>
-              <p class="card-text titulo-entidades">{{ producto.descripcion }}</p>
-              <p class="card-text titulo-entidades">Categoria: {{ producto.categoria }}</p>
-              <p class="card-text titulo-entidades">Cantidad: {{ producto.cantidad }}</p>
-              <p class="card-text titulo-entidades">Precio: {{ producto.precio | currency }}</p>
-              <div class="d-flex justify-content-around mt-2" style="background-color: rgba(0, 187, 255, 0.241); border-radius: 10px">
-                <button *ngSwitchCase="true" class="menu-config2" [routerLink]="['/producto', producto.id, 'view']">
-                  <mat-icon class="icon-config">pageview</mat-icon>
-                </button>
-                <button *ngSwitchCase="true" class="menu-config2" [routerLink]="['/producto', producto.id, 'edit']">
-                  <mat-icon class="icon-config">edit</mat-icon>
-                </button>
-                <button *ngSwitchCase="true" class="menu-config-eliminar" (click)="delete(producto)">
-                  <mat-icon class="icon-config-eliminar2">delete_forever</mat-icon>
-                </button>
+        <div class="row text-center mt-3">
+          <div
+            style="box-shadow: 10px 10px 30px rgb(54, 185, 255)"
+            class="col-lg-3 col-md-6 mb-4"
+            *ngFor="let producto of productos! | paginate: { itemsPerPage: 12, currentPage: pA }"
+          >
+            <div class="card me-5" style="width: 16 rem">
+              <a *ngIf="producto.imagen" (click)="openFile(producto.imagen, producto.imagenContentType)">
+                <img
+                  [src]="'data:' + producto.imagenContentType + ';base64,' + producto.imagen"
+                  style="max-height: 200px"
+                  alt="producto image"
+                />
+              </a>
+              <div class="card-body">
+                <h5 class="card-title titulo-entidades">{{ producto.nombre }}</h5>
+                <p class="card-text titulo-entidades">{{ producto.descripcion }}</p>
+                <p class="card-text titulo-entidades">Categoria: {{ producto.categoria }}</p>
+                <p *ngSwitchCase="true && isAdmin" class="card-text titulo-entidades">Cantidad: {{ producto.cantidad }}</p>
+                <p class="card-text titulo-entidades">Precio: {{ producto.precio | currency }}</p>
+                <div class="d-flex justify-content-around mt-2" style="background-color: rgba(0, 187, 255, 0.241); border-radius: 10px">
+                  <button *ngSwitchCase="true" class="menu-config2" [routerLink]="['/producto', producto.id, 'view']">
+                    <mat-icon class="icon-config">pageview</mat-icon>
+                  </button>
+                  <button *ngSwitchCase="true && isAdmin" class="menu-config2" [routerLink]="['/producto', producto.id, 'edit']">
+                    <mat-icon class="icon-config">edit</mat-icon>
+                  </button>
+                  <button *ngSwitchCase="true && isAdmin" class="menu-config-eliminar" (click)="delete(producto)">
+                    <mat-icon class="icon-config-eliminar2">delete_forever</mat-icon>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
+          <pagination-controls style="text-align: center" (pageChange)="pA = $event"></pagination-controls>
         </div>
-        <pagination-controls style="text-align: center" (pageChange)="pA = $event"></pagination-controls>
       </div>
     </div>
   </div>
 </div>
+
+<ng-template #mensajeAyuda>
+  <div class="modal-header">
+    <h2 class="titulos">¿De que se trata?</h2>
+  </div>
+  <div class="modal-body">
+    <p class="font-size-black2">
+      Esta opción le permitirá poder hacer un cambio a el precio general de los productos según el porcentaje que ingrese. ejecutará un
+      cambio a el precio a todos los productos, tenga en cuento que después de que ingrese un porcentaje, no podrá volver a el precio
+      anterior, tendrá que aplicar de nuevo el porcentaje a aumentar o decrementar.
+    </p>
+  </div>
+  <div class="modal-footer">
+    <span>Equipo Merca Extra</span>
+  </div>
+</ng-template>
