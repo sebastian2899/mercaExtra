@@ -5,9 +5,10 @@ import { PedidoDetailComponent } from './detail/pedido-detail.component';
 import { PedidoUpdateComponent } from './update/pedido-update.component';
 import { PedidoDeleteDialogComponent } from './delete/pedido-delete-dialog.component';
 import { PedidoRoutingModule } from './route/pedido-routing.module';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
-  imports: [SharedModule, PedidoRoutingModule],
+  imports: [SharedModule, PedidoRoutingModule, MatIconModule],
   declarations: [PedidoComponent, PedidoDetailComponent, PedidoUpdateComponent, PedidoDeleteDialogComponent],
   entryComponents: [PedidoDeleteDialogComponent],
 })

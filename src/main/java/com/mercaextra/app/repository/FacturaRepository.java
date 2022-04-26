@@ -18,7 +18,7 @@ public interface FacturaRepository extends JpaRepository<Factura, Long> {
     String nombreProdcuto(@Param("id") Long id);
 
     @Query("SELECT f FROM Factura f WHERE f.id=:id")
-    Factura facturaId(@Param("id") Long idProducto);
+    Factura facturaId(@Param("id") Long id);
 
     @Query("SELECT p FROM Producto p WHERE p.cantidad > 0")
     List<Producto> productosDisponibles();

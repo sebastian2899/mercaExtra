@@ -144,7 +144,12 @@ export class FacturaComponent implements OnInit {
   }
 
   protected onSaveSuccess(): void {
-    this.loadAll();
+    if (this.accountAdmin) {
+      this.loadAll();
+    } else {
+      this.facturasUsuarios();
+    }
+
     this.closeModal();
   }
 

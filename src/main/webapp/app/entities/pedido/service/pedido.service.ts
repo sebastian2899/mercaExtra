@@ -8,13 +8,19 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IPedido, getPedidoIdentifier } from '../pedido.model';
+import { IFacturaPedido } from '../factura-pedido';
 
 export type EntityResponseType = HttpResponse<IPedido>;
 export type EntityArrayResponseType = HttpResponse<IPedido[]>;
+export type FacturaPedidoResponseType = HttpResponse<IFacturaPedido[]>;
+export type BooleanResponseType = HttpResponse<boolean>;
 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/pedidos');
+  protected facturasUrl = this.applicationConfigService.getEndpointFor('api/pedidos-facturas');
+  protected aviableDomiciliaryUrl = this.applicationConfigService.getEndpointFor('api/pedido-validate-domiciliary');
+  protected pedidoCommingUrl = this.applicationConfigService.getEndpointFor('api/pedido-comming');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -23,6 +29,18 @@ export class PedidoService {
     return this.http
       .post<IPedido>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  facturasPedido(): Observable<FacturaPedidoResponseType> {
+    return this.http.get<IFacturaPedido[]>(this.facturasUrl, { observe: 'response' });
+  }
+
+  pedidoInComming(): Observable<EntityResponseType> {
+    return this.http.get<IPedido>(this.pedidoCommingUrl, { observe: 'response' });
+  }
+
+  aviableDomiciliary(): Observable<BooleanResponseType> {
+    return this.http.get<boolean>(this.aviableDomiciliaryUrl, { observe: 'response' });
   }
 
   update(pedido: IPedido): Observable<EntityResponseType> {

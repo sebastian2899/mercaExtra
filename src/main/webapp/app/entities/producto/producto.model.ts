@@ -9,6 +9,7 @@ export interface IProducto {
   precioDescuento?: number | null;
   descripcion?: string | null;
   cantidadSeleccionada?: number | null;
+  precioConDescuento?: number | null;
 }
 
 export class Producto implements IProducto {
@@ -22,7 +23,8 @@ export class Producto implements IProducto {
     public imagen?: string | null,
     public precioDescuento?: number | null,
     public descripcion?: string | null,
-    public cantidadSeleccionada?: number | null
+    public cantidadSeleccionada?: number | null,
+    public precioConDescuento?: number | null
   ) {}
 }
 

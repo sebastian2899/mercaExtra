@@ -13,6 +13,7 @@ import { PedidoDeleteDialogComponent } from '../delete/pedido-delete-dialog.comp
 export class PedidoComponent implements OnInit {
   pedidos?: IPedido[];
   isLoading = false;
+  pedido?: IPedido | null;
 
   constructor(protected pedidoService: PedidoService, protected modalService: NgbModal) {}
 
@@ -30,7 +31,19 @@ export class PedidoComponent implements OnInit {
     });
   }
 
+  pedidoComming(): void {
+    this.pedidoService.pedidoInComming().subscribe({
+      next: (res: HttpResponse<IPedido>) => {
+        this.pedido = res.body;
+      },
+      error: () => {
+        this.pedido = null;
+      },
+    });
+  }
+
   ngOnInit(): void {
+    this.pedidoComming();
     this.loadAll();
   }
 

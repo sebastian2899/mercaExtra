@@ -1,5 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { DataUtils } from 'app/core/util/data-util.service';
 import { ICategoriaProducto } from 'app/entities/categoria-producto/categoria-producto.model';
 import { CategoriaProductoService } from 'app/entities/categoria-producto/service/categoria-producto.service';
@@ -23,7 +24,8 @@ export class ProductHomeComponent implements OnInit {
   constructor(
     protected productoService: ProductoService,
     protected categoriaService: CategoriaProductoService,
-    protected dataUtils: DataUtils
+    protected dataUtils: DataUtils,
+    private route: Router
   ) {}
 
   ngOnInit(): void {
@@ -77,6 +79,14 @@ export class ProductHomeComponent implements OnInit {
         this.productos = [];
       },
     });
+  }
+
+  login(): void {
+    this.route.navigate(['login']);
+  }
+
+  createAccount(): void {
+    this.route.navigate(['account/register']);
   }
 
   byteSize(base64String: string): string {

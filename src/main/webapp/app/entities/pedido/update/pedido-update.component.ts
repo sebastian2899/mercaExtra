@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -10,13 +10,25 @@ import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 
 import { IPedido, Pedido } from '../pedido.model';
 import { PedidoService } from '../service/pedido.service';
+import { IFacturaPedido } from '../factura-pedido';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AlertService } from 'app/core/util/alert.service';
 
 @Component({
   selector: 'jhi-pedido-update',
   templateUrl: './pedido-update.component.html',
 })
 export class PedidoUpdateComponent implements OnInit {
+  @ViewChild('datosPedido', { static: true }) content: ElementRef | undefined;
+  @ViewChild('messageUnviableDomiciliary', { static: true }) content2: ElementRef | undefined;
+
   isSaving = false;
+  facturasPedido?: IFacturaPedido[] | null;
+  titulo?: string | null;
+  mensajeFechaInvalida?: string | null;
+  createOrder?: boolean | null;
+  respAviableDomiciliary?: boolean | null;
+  estadoPedido = ['Entregando', 'Finalizado'];
 
   editForm = this.fb.group({
     id: [],
@@ -29,26 +41,76 @@ export class PedidoUpdateComponent implements OnInit {
     idFactura: [],
   });
 
-  constructor(protected pedidoService: PedidoService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
+  constructor(
+    protected pedidoService: PedidoService,
+    protected activatedRoute: ActivatedRoute,
+    protected fb: FormBuilder,
+    protected modalService: NgbModal,
+    protected alertService: AlertService
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ pedido }) => {
       if (pedido.id === undefined) {
         const today = dayjs().startOf('day');
         pedido.fechaPedido = today;
+        this.titulo = 'Realizar Pedido';
+        this.createOrder = true;
+      } else {
+        this.titulo = 'Actualizar Pedido';
+        this.createOrder = false;
       }
 
       this.updateForm(pedido);
     });
+
+    this.consultarFacturas();
   }
 
   previousState(): void {
     window.history.back();
   }
 
+  consultarFacturas(): void {
+    this.pedidoService.facturasPedido().subscribe({
+      next: (res: HttpResponse<IFacturaPedido[]>) => {
+        this.facturasPedido = res.body ?? [];
+      },
+      error: () => {
+        this.facturasPedido = [];
+      },
+    });
+  }
+
+  ingresarDatos(idFactura: number): void {
+    this.editForm.get(['idFactura'])?.setValue(idFactura);
+    this.modalService.open(this.content, { size: 'lg' });
+  }
+
+  cancel(): void {
+    this.modalService.dismissAll();
+  }
+
+  validateAviableDoimiciliary(): void {
+    this.pedidoService.aviableDomiciliary().subscribe({
+      next: (res: HttpResponse<boolean>) => {
+        this.respAviableDomiciliary = res.body;
+        if (!this.respAviableDomiciliary) {
+          this.save();
+        } else {
+          this.modalService.open(this.content2, { backdrop: 'static', size: 'lg' });
+        }
+      },
+      error: () => {
+        this.respAviableDomiciliary = null;
+      },
+    });
+  }
+
   save(): void {
     this.isSaving = true;
     const pedido = this.createFromForm();
+
     if (pedido.id !== undefined) {
       this.subscribeToSaveResponse(this.pedidoService.update(pedido));
     } else {
@@ -64,7 +126,12 @@ export class PedidoUpdateComponent implements OnInit {
   }
 
   protected onSaveSuccess(): void {
-    this.previousState();
+    this.cancel();
+    this.alertService.addAlert({
+      type: 'success',
+      message: 'Pedido registrado con exito, dirijase a la opcion (Mis pedidos) para ver el estado de su pedido.',
+    });
+    this.consultarFacturas();
   }
 
   protected onSaveError(): void {

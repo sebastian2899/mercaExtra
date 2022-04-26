@@ -1,7 +1,7 @@
 <div>
   <h2 id="page-heading" data-cy="PedidoHeading">
-    <span jhiTranslate="mercaExtraApp.pedido.home.title">Pedidos</span>
-
+    <span class="titulos">Tus Pedidos</span>
+    <!-- jhiTranslate="mercaExtraApp.pedido.home.title" -->
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
@@ -19,6 +19,27 @@
       </button>
     </div>
   </h2>
+
+  <div *ngIf="pedido" class="d-flex justify-content-around">
+    <div class="d-flex flex-column">
+      <h2 class="titulos">En camino a tu casa:</h2>
+
+      <div class="card" style="width: 18rem">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="card-link">Card link</a>
+          <a href="#" class="card-link">Another link</a>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar stripes animated reverse slower">
+            <span class="progress-bar-inner"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <jhi-alert-error></jhi-alert-error>
 

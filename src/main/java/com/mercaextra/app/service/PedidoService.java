@@ -1,5 +1,6 @@
 package com.mercaextra.app.service;
 
+import com.mercaextra.app.service.dto.FacturaPedidoDTO;
 import com.mercaextra.app.service.dto.PedidoDTO;
 import java.util.List;
 import java.util.Optional;
@@ -45,4 +46,10 @@ public interface PedidoService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    List<FacturaPedidoDTO> facturasLogin();
+
+    boolean validarDomiciliario();
+
+    PedidoDTO pedidoEntrega();
 }

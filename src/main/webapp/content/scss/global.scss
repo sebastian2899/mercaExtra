@@ -224,6 +224,11 @@ h4 {
   background-color: rgba(186, 160, 197, 0.816);
 }
 
+.font-size-red {
+  color: red;
+  font-weight: bold;
+}
+
 .list-text {
   font-weight: bold;
   font-size: 14px;
@@ -240,6 +245,30 @@ h4 {
   color: rgb(43, 141, 226);
   font-style: normal;
   font-weight: bold;
+}
+
+.neons {
+}
+
+.neons span {
+  text-align: center;
+  font-weight: bold;
+  -webkit-animation: glow 2s ease-in-out infinite alternate;
+  -moz-animation: glow 2s ease-in-out infinite alternate;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    color: rgb(0, 0, 0);
+    text-shadow: 0 0 10px #00fff2, 0 0 20px #00fff2, 0 0 30px #00fff2, 0 0 40px #00fff2, 0 0 50px #00fff2, 0 0 60px #00fff2,
+      0 0 70px #00fff2, 0 0 90px #00fff2;
+  }
+  to {
+    color: rgb(250, 250, 250);
+    text-shadow: 0 0 20px #00fff2, 0 0 30px #00fff2, 0 0 40px #00fff2, 0 0 50px #00fff2, 0 0 60px #00fff2, 0 0 70px #00fff2,
+      0 0 80px #00fff2, 0 1 90px #00fff2;
+  }
 }
 
 .font-size-home {
@@ -424,6 +453,23 @@ Generic styles
   cursor: pointer;
 }
 
+.up:hover,
+.up:focus {
+  box-shadow: inset 0 -3.25em 0 0 var(--hover);
+  border-color: var(--hover);
+  color: #fff;
+}
+
+.up {
+  border: none;
+  background-color: rgba(140, 192, 255, 0.564);
+  color: var(--color);
+  -webkit-transition: 1s;
+  transition: 1s;
+  --color: #000000;
+  --hover: #0050ef;
+}
+
 /* ==========================================================================
 Custom alerts for notification
 ========================================================================== */
@@ -538,3 +584,64 @@ angular-cli removes postcss-rtl processed inline css, processed rules must be ad
   }
 }
 /* jhipster-needle-scss-add-main JHipster will add new css style */
+@keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 60px 0;
+  }
+}
+@keyframes auto-progress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+.progress-bar {
+  background-color: #6fc8ff;
+  height: 15px;
+  width: 150px;
+  margin: 50px auto;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px #000 inset, 0 1px 0 rgb(6, 6, 6);
+}
+
+.stripes {
+  background-size: 30px 30px;
+  background-image: linear-gradient(
+    135deg,
+    rgba(64, 0, 255, 0.397) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.413) 50%,
+    rgba(0, 0, 0, 0.529) 75%,
+    transparent 75%,
+    transparent
+  );
+}
+
+.stripes.animated {
+  animation: animate-stripes 0.1s linear infinite;
+}
+
+.stripes.animated.slower {
+  animation-duration: 1.25s;
+}
+
+.stripes.reverse {
+  animation-direction: reverse;
+}
+
+.progress-bar-inner {
+  display: block;
+  height: 45px;
+  width: 0%;
+  background-color: #34c2e3;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+  position: relative;
+  animation: auto-progress 2s infinite linear;
+}

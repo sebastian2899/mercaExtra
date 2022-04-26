@@ -53,5 +53,11 @@ public interface FacturaService {
 
     List<FacturaDTO> facturasPorUsuario();
 
+    /*
+     * con este metodo podemos recomprar una factura, recibimos los datos de la
+     * factura que ya existe y creamos una factura nueva con los datos
+     * correspondientes, la fecha de creacion cambia, el id cambia junto con los
+     * valores que se suponen deben ser nuevos de acuerdo a la facura
+     */
     FacturaDTO repurcharseInvoice(FacturaDTO facturaDto);
 }

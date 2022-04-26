@@ -74,9 +74,11 @@
     <h4 class="alert-heading" style="text-align: center">No has iniciado Sesion</h4>
     <p style="text-align: end">
       Podras ver nuestros productos disponibles,categorias y demas informacion. Si deseas adqurir algun producto
-      <button class="raise">Inicia sesion</button>
+      <button class="raise" (click)="login()">Inicia sesion</button>
     </p>
-    <p class="mb-0" style="text-align: end">Si no tienes cuenta registrate gratis <button class="raise">crear cuenta</button></p>
+    <p class="mb-0" style="text-align: end">
+      Si no tienes cuenta registrate gratis <button class="raise" (click)="createAccount()">crear cuenta</button>
+    </p>
   </div>
 
   <!-- 

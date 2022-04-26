@@ -1,5 +1,10 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
+<div class="justify-content-center">
+  <h2 *ngIf="facturasPedido && facturasPedido.length > 0 && createOrder" class="titulos mb-5">
+    ¡Estas son las facturas que están listas para que realices el pedido cuando quieras!
+  </h2>
+  <h2 *ngIf="facturasPedido === null || facturasPedido!.length === 0" class="titulos mb-5">Gestión de pedidos</h2>
+  <jhi-alert></jhi-alert>
+  <div *ngIf="!createOrder" class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-pedido-heading" data-cy="PedidoCreateUpdateHeading" jhiTranslate="mercaExtraApp.pedido.home.createOrEditLabel">
         Create or edit a Pedido
@@ -97,4 +102,151 @@
       </div>
     </form>
   </div>
+
+  <div *ngIf="createOrder" class="row text-center">
+    <div style="box-shadow: 10px 10px 30px rgb(54, 185, 255)" class="col-lg-3 col-md-6 mb-4" *ngFor="let factura of facturasPedido">
+      <div class="card" style="width: 18rem">
+        <div class="card-body">
+          <h5 class="card-title"><span class="font-size-black">Cliente: </span>{{ factura.infoCliente }}</h5>
+          <h6 class="card-subtitle mb-2 text-muted"><span class="font-size-black">Numero de Factura: </span>{{ factura.numeroFactura }}</h6>
+          <p class="card-text"><span class="font-size-black">Valor de la factura: </span>{{ factura.valorFactura }}</p>
+          <p class="card-text"><span class="font-size-black">Estado: </span>{{ factura.estadoFactura }}</p>
+          <p class="card-text"><span class="font-size-black">id: </span>{{ factura.idFactura }}</p>
+          <button (click)="ingresarDatos(factura.idFactura!)" class="up" type="button">
+            Realizar pedido
+            <mat-icon class="icon-config">shopping_bag</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="facturasPedido === null || facturasPedido?.length === 0" class="alert alert-warning">
+    <span>No hay facturas pendientes para hacer un pedido</span>
+  </div>
+  <!-- <div class="alert alert-success">
+  asdasd
 </div>
+  <div>
+    <span>Presiona el boton cuanto recibas tu pedido </span><button class="btn btn-success btn-sm"><mat-icon>check</mat-icon></button>
+  </div> -->
+</div>
+
+<ng-template #datosPedido>
+  <div class="col-12 p-3">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 class="titulos mb-3" id="jhi-pedido-heading" data-cy="PedidoCreateUpdateHeading">
+        {{ titulo }}
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row">
+          <!-- <div class="col-md-5 mb-3" [hidden]="editForm.get('id')!.value == null">
+            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div> -->
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label" jhiTranslate="mercaExtraApp.pedido.fechaPedido" for="field_fechaPedido">Fecha Pedido</label>
+            <div class="d-flex">
+              <input
+                id="field_fechaPedido"
+                data-cy="fechaPedido"
+                type="datetime-local"
+                class="form-control"
+                name="fechaPedido"
+                formControlName="fechaPedido"
+                placeholder="YYYY-MM-DD HH:mm"
+                readonly
+              />
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label" jhiTranslate="mercaExtraApp.pedido.direccion" for="field_direccion">Direccion</label>
+            <input
+              placeholder="Barrio / Calle / Carrera"
+              type="text"
+              class="form-control"
+              name="direccion"
+              id="field_direccion"
+              data-cy="direccion"
+              formControlName="direccion"
+              required
+            />
+            <div
+              *ngIf="editForm.get(['direccion'])!.invalid && (editForm.get(['direccion'])!.dirty || editForm.get(['direccion'])!.touched)"
+            >
+              <small class="form-text text-danger" *ngIf="editForm.get(['direccion'])?.errors?.required"> Este campo es requerido </small>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.pedido.estado" for="field_estado">Estado</label>
+          <input type="text" class="form-control" name="estado" id="field_estado" data-cy="estado" formControlName="estado" />
+        </div> -->
+
+        <!-- <div class="mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.pedido.infoDomicilio" for="field_infoDomicilio">Info Domicilio</label>
+          <input
+            type="text"
+            class="form-control"
+            name="infoDomicilio"
+            id="field_infoDomicilio"
+            data-cy="infoDomicilio"
+            formControlName="infoDomicilio"
+          />
+        </div> -->
+
+        <!-- <div class="mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.pedido.idDomiciliario" for="field_idDomiciliario">Id Domiciliario</label>
+          <input
+            type="number"
+            class="form-control"
+            name="idDomiciliario"
+            id="field_idDomiciliario"
+            data-cy="idDomiciliario"
+            formControlName="idDomiciliario"
+          />
+        </div> -->
+
+        <!-- <div class="mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.pedido.idNotificacion" for="field_idNotificacion">Id Notificacion</label>
+          <input
+            type="number"
+            class="form-control"
+            name="idNotificacion"
+            id="field_idNotificacion"
+            data-cy="idNotificacion"
+            formControlName="idNotificacion"
+          />
+        </div> -->
+
+        <!-- <div class="mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.pedido.idFactura" for="field_idFactura">Id Factura</label>
+          <input type="number" class="form-control" name="idFactura" id="field_idFactura" data-cy="idFactura" formControlName="idFactura" />
+        </div>-->
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="cancel()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="button"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-info"
+          (click)="validateAviableDoimiciliary()"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

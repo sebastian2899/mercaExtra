@@ -1,3 +1,7 @@
+<div class="d-flex justify-content-center">
+  <h2 class="titulos">Carrito de compras</h2>
+</div>
+
 <div class="d-flex justify-content-end">
   <button class="btn btn-info" (click)="verCarroCompras()">
     <mat-icon class="icon-config">shopping_cart</mat-icon><span>Ver carrito</span>
@@ -96,7 +100,7 @@
     </div>
   </div>
 
-  <div class="col-md-9">
+  <div class="col-md-10">
     <div class="row text-center mt-5">
       <div
         style="box-shadow: 10px 10px 20px rgb(52, 105, 237)"
@@ -119,6 +123,13 @@
               <span class="font-size-black2">Cantidad:</span> {{ producto.cantidad }}
             </p>
             <p class="card-text titulo-entidades"><span class="font-size-black2">Precio:</span> {{ producto.precio | currency }}</p>
+            <p *ngIf="producto.precioDescuento" class="card-text titulo-entidades neons">
+              <span class="">Descuento del dia: </span> {{ producto.precioDescuento }}%
+            </p>
+            <p *ngIf="producto.precioDescuento" class="card-text font-size-red">
+              <span>Antes</span> <del>{{ producto.precio }}</del>
+              <span class="font-size-black2">| Ahora: {{ producto.precioConDescuento }}</span>
+            </p>
             <button class="btn btn-info btn-sm" (click)="llenarCarroCompra(producto)">Comprar</button>
           </div>
         </div>
@@ -281,21 +292,17 @@
         </div>
 
         <div>
-          <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" (click)="cancel()" class="btn btn-secondary">
-            <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-          </button>
-
           <button
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
             [disabled]="editForm.invalid || isSaving"
-            class="btn btn-primary"
+            class="btn btn-info"
           >
             <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
           </button>
 
-          <button type="button" class="btn btn-primary" (click)="verCarroCompras2()">
+          <button type="button" class="btn btn-info" (click)="verCarroCompras2()">
             <span>Ver Productos <mat-icon class="icon-config">shopping_cart</mat-icon></span>
           </button>
         </div>
@@ -303,7 +310,10 @@
     </div>
   </div>
   <div class="modal-footer color-toggle text-black">
-    <h4>Equipo Merca Extra.</h4>
+    <div class="d-flex flex-column">
+      <h4>Equipo Merca Extra.</h4>
+      <span class="font-size-black2">Presione la telca [Esc] para salir</span>
+    </div>
   </div>
 </ng-template>
 

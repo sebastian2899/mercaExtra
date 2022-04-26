@@ -2,6 +2,7 @@ package com.mercaextra.app.web.rest;
 
 import com.mercaextra.app.repository.PedidoRepository;
 import com.mercaextra.app.service.PedidoService;
+import com.mercaextra.app.service.dto.FacturaPedidoDTO;
 import com.mercaextra.app.service.dto.PedidoDTO;
 import com.mercaextra.app.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -12,8 +13,17 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -141,6 +151,18 @@ public class PedidoResource {
         return pedidoService.findAll();
     }
 
+    @GetMapping("/pedido-comming")
+    public ResponseEntity<PedidoDTO> pedidoComming() throws URISyntaxException {
+        log.debug("REST request to get pedido in comming");
+
+        PedidoDTO pedido = pedidoService.pedidoEntrega();
+        if (pedido == null) {
+            throw new BadRequestAlertException("NO hay pedidos en entrega", ENTITY_NAME, "no existe");
+        }
+
+        return new ResponseEntity<PedidoDTO>(pedido, HttpStatus.OK);
+    }
+
     /**
      * {@code GET  /pedidos/:id} : get the "id" pedido.
      *
@@ -160,6 +182,13 @@ public class PedidoResource {
      * @param id the id of the pedidoDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
+
+    @GetMapping("/pedidos-facturas")
+    public List<FacturaPedidoDTO> facturasPedido() {
+        log.debug("REST request to get all facturas pedidos per userName");
+        return pedidoService.facturasLogin();
+    }
+
     @DeleteMapping("/pedidos/{id}")
     public ResponseEntity<Void> deletePedido(@PathVariable Long id) {
         log.debug("REST request to delete Pedido : {}", id);
@@ -168,5 +197,11 @@ public class PedidoResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/pedido-validate-domiciliary")
+    public boolean validateAvibleDomiciliary() {
+        log.debug("REST request to validate aviable domiciliary");
+        return pedidoService.validarDomiciliario();
     }
 }

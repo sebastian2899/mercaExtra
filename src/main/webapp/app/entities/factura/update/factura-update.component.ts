@@ -132,6 +132,11 @@ export class FacturaUpdateComponent implements OnInit {
     this.facturaService.productosDisponibles().subscribe({
       next: (res: HttpResponse<IProducto[]>) => {
         this.productos = res.body ?? [];
+        this.productos.forEach(element => {
+          const dec = (Number(element.precioDescuento) * Number(element.precio)) / 100;
+          const precioFormat = Number(element.precio) - dec;
+          element.precioConDescuento = Number(precioFormat.toFixed(2));
+        });
       },
       error: () => {
         this.productos = [];
@@ -170,8 +175,14 @@ export class FacturaUpdateComponent implements OnInit {
             this.ngbModal.open(this.content5);
             this.productoNuevo = false;
           } else {
-            const totalTemp = this.cantidad! * this.productoSeleccionado.precio!;
-            this.productosSeleccionados[i].precio! += totalTemp;
+            if (this.productoSeleccionado.precioDescuento) {
+              const desc = (Number(this.productoSeleccionado.precio) * Number(this.productoSeleccionado.precioDescuento)) / 100;
+              const valueDiscount = Number(this.productoSeleccionado.precio) - desc;
+              this.productosSeleccionados[i].precio! += valueDiscount;
+            } else {
+              const totalTemp = this.cantidad! * this.productoSeleccionado.precio!;
+              this.productosSeleccionados[i].precio! += totalTemp;
+            }
             this.productoNuevo = false;
             this.ngbModal.dismissAll();
             this.mensajeProductoAddSuccess();
@@ -195,7 +206,13 @@ export class FacturaUpdateComponent implements OnInit {
         this.productoItem.nombreProducto = this.productoSeleccionado.nombre;
         this.productoItem.cantidad = this.productoSeleccionado.cantidadSeleccionada;
         this.productoItem.precioOriginal = this.productoSeleccionado.precio;
-        this.productoItem.precio = this.productoSeleccionado.precio! * Number(cantidad);
+        if (this.productoSeleccionado.precioDescuento) {
+          const desc = (Number(this.productoSeleccionado.precio) * Number(this.productoSeleccionado.precioDescuento)) / 100;
+          const valueDiscount = Number(this.productoSeleccionado.precio) - desc;
+          this.productoItem.precio = Number(valueDiscount) * Number(cantidad);
+        } else {
+          this.productoItem.precio = Number(this.productoSeleccionado.precio) * cantidad;
+        }
 
         this.productosSeleccionados.push(this.productoItem);
         this.mensajeProductoAddSuccess();
@@ -240,6 +257,7 @@ export class FacturaUpdateComponent implements OnInit {
     this.productosSeleccionados.forEach(element => {
       valorFactura += element.precio!;
     });
+
     this.editForm.get(['valorFactura'])?.setValue(valorFactura);
     this.totalFactura = valorFactura;
     this.editForm.get(['valorDeuda'])?.setValue(valorFactura);
@@ -275,7 +293,7 @@ export class FacturaUpdateComponent implements OnInit {
 
     this.productoSeleccionado = producto;
 
-    this.ngbModal.open(this.content2);
+    this.ngbModal.open(this.content2, { backdrop: 'static' });
   }
 
   save(): void {

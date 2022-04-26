@@ -9,6 +9,11 @@ import java.util.Objects;
  */
 public class PedidoDTO implements Serializable {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     private Instant fechaPedido;
@@ -25,12 +30,22 @@ public class PedidoDTO implements Serializable {
 
     private Long idFactura;
 
+    private String userName;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public Instant getFechaPedido() {

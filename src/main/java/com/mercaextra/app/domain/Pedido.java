@@ -42,6 +42,9 @@ public class Pedido implements Serializable {
     @Column(name = "id_factura")
     private Long idFactura;
 
+    @Column(name = "user_name")
+    private String userName;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -51,6 +54,14 @@ public class Pedido implements Serializable {
     public Pedido id(Long id) {
         this.setId(id);
         return this;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public void setId(Long id) {
