@@ -104,14 +104,13 @@
   </div>
 
   <div *ngIf="createOrder" class="row text-center">
-    <div style="box-shadow: 10px 10px 30px rgb(54, 185, 255)" class="col-lg-3 col-md-6 mb-4" *ngFor="let factura of facturasPedido">
-      <div class="card" style="width: 18rem">
+    <div style="box-shadow: 5px 5px 30px rgb(54, 185, 255)" class="col-lg-3 col-md-6 mb-4" *ngFor="let factura of facturasPedido">
+      <div class="card" style="width: 18rem mr-3">
         <div class="card-body">
           <h5 class="card-title"><span class="font-size-black">Cliente: </span>{{ factura.infoCliente }}</h5>
           <h6 class="card-subtitle mb-2 text-muted"><span class="font-size-black">Numero de Factura: </span>{{ factura.numeroFactura }}</h6>
-          <p class="card-text"><span class="font-size-black">Valor de la factura: </span>{{ factura.valorFactura }}</p>
+          <p class="card-text"><span class="font-size-black">Valor de la factura: </span>{{ factura.valorFactura | currency }}</p>
           <p class="card-text"><span class="font-size-black">Estado: </span>{{ factura.estadoFactura }}</p>
-          <p class="card-text"><span class="font-size-black">id: </span>{{ factura.idFactura }}</p>
           <button (click)="ingresarDatos(factura.idFactura!)" class="up" type="button">
             Realizar pedido
             <mat-icon class="icon-config">shopping_bag</mat-icon>
@@ -248,5 +247,35 @@
         </button>
       </div>
     </form>
+  </div>
+</ng-template>
+
+<ng-template #messageUnviableDomiciliary>
+  <div class="modal-header alert-warning">
+    <h2>¡Lo sentimos!</h2>
+  </div>
+  <div class="modal-body">
+    <span style="color: black"
+      >En estos momentos no hay domiciliarios disponibles para entregar tu pedido.Esperá un momento mientras algún domiciliario completa su
+      pedido para que se disponga a entregar tu pedido. Muchas gracias
+    </span>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" (click)="cancel()">Volver</button>
+  </div>
+</ng-template>
+
+<ng-template #messageAlreadyOrderComming>
+  <div class="modal-header alert-warning">
+    <h2>¡Lo sentimos!</h2>
+  </div>
+  <div class="modal-body">
+    <span style="color: black"
+      >En estos momentos hay un pedido siendo entregado a tu casa por un domiciliario asignado, por favor espera que tu pedido sea entregado
+      para volver a realizar un pedido. Muchas gracias
+    </span>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" (click)="cancel()">Volver</button>
   </div>
 </ng-template>

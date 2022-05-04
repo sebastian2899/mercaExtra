@@ -21,14 +21,15 @@ import { AlertService } from 'app/core/util/alert.service';
 export class PedidoUpdateComponent implements OnInit {
   @ViewChild('datosPedido', { static: true }) content: ElementRef | undefined;
   @ViewChild('messageUnviableDomiciliary', { static: true }) content2: ElementRef | undefined;
+  @ViewChild('messageAlreadyOrderComming', { static: true }) content3: ElementRef | undefined;
 
   isSaving = false;
   facturasPedido?: IFacturaPedido[] | null;
   titulo?: string | null;
   mensajeFechaInvalida?: string | null;
   createOrder?: boolean | null;
-  respAviableDomiciliary?: boolean | null;
   estadoPedido = ['Entregando', 'Finalizado'];
+  pedidoEntregado?: boolean | null;
 
   editForm = this.fb.group({
     id: [],
@@ -93,16 +94,21 @@ export class PedidoUpdateComponent implements OnInit {
 
   validateAviableDoimiciliary(): void {
     this.pedidoService.aviableDomiciliary().subscribe({
-      next: (res: HttpResponse<boolean>) => {
-        this.respAviableDomiciliary = res.body;
-        if (!this.respAviableDomiciliary) {
-          this.save();
-        } else {
+      next: (res: HttpResponse<number>) => {
+        const resp = res.body;
+        if (resp === 1) {
           this.modalService.open(this.content2, { backdrop: 'static', size: 'lg' });
+        } else if (resp === 2) {
+          this.modalService.open(this.content3, { backdrop: 'static', size: 'lg' });
+        } else if (resp === 3) {
+          this.save();
         }
       },
       error: () => {
-        this.respAviableDomiciliary = null;
+        this.alertService.addAlert({
+          type: 'danger',
+          message: 'Error en la validación',
+        });
       },
     });
   }

@@ -126,9 +126,11 @@
             <p *ngIf="producto.precioDescuento" class="card-text titulo-entidades neons">
               <span class="">Descuento del dia: </span> {{ producto.precioDescuento }}%
             </p>
-            <p *ngIf="producto.precioDescuento" class="card-text font-size-red">
-              <span>Antes</span> <del>{{ producto.precio }}</del>
-              <span class="font-size-black2">| Ahora: {{ producto.precioConDescuento }}</span>
+            <p *ngIf="producto.precioDescuento" class="card-text">
+              <span style="background-color: rgba(247, 150, 150, 0.631); color: red"
+                >Antes <del>{{ producto.precio | currency }}</del></span
+              >
+              <span class="font-size-black2">| Ahora: {{ producto.precioConDescuento | currency }}</span>
             </p>
             <button class="btn btn-info btn-sm" (click)="llenarCarroCompra(producto)">Comprar</button>
           </div>
@@ -329,10 +331,26 @@
       </div>
       <div class="col-md-5">
         <label for="cantidad" class="form-label">Cantidad</label>
-        <input type="number" min="0" max="20" placeholder="Cantidad que deseas adquirir" class="form-control" [(ngModel)]="cantidad" />
+        <input
+          (keyup)="validationValueAmount()"
+          type="number"
+          oninput="this.value = Math.max(this.value, null)"
+          min="0"
+          max="10"
+          placeholder="Cantidad que deseas adquirir"
+          class="form-control"
+          [(ngModel)]="cantidad"
+        />
       </div>
       <div class="col-md-2">
-        <button class="btn btn-primary btn-sm" (click)="agregarProducto()" style="margin-top: 35px">Agregar</button>
+        <button
+          [disabled]="disableAdd || cantidad === 0 || cantidad === undefined"
+          class="btn btn-primary btn-sm"
+          (click)="agregarProducto()"
+          style="margin-top: 35px"
+        >
+          Agregar
+        </button>
       </div>
     </div>
   </div>
@@ -350,7 +368,7 @@
   <div class="modal-body">
     <h4>Productos:</h4>
     <table class="table">
-      <thead class="thead-dark">
+      <thead class="">
         <tr>
           <th scope="col">Producto</th>
           <th scope="col">Cantidad</th>
@@ -363,9 +381,19 @@
         <tr *ngFor="let item of productosSeleccionados">
           <td>{{ item.nombreProducto }}</td>
           <td>{{ item.cantidad }}</td>
-          <td>{{ item.precioOriginal }}</td>
-          <td>{{ item.precio }}</td>
+          <td>{{ item.precioOriginal | currency }}</td>
+          <td>{{ item.precio | currency }}</td>
           <a class="a-delete" (click)="eliminarProducto(item)"><mat-icon class="icon-config-delete">remove_circle_outline</mat-icon></a>
+          <td>
+            <div class="d-flex">
+              <button class="menu-config2" (click)="ChangeValuesShopingCard('add', item)" [disabled]="item.cantidad === 10">
+                <mat-icon class="icon-config">add</mat-icon>
+              </button>
+              <button class="menu-config2" (click)="ChangeValuesShopingCard('subs', item)" [disabled]="item.cantidad === 1">
+                <mat-icon class="icon-config">remove</mat-icon>
+              </button>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -379,10 +407,17 @@
     </div>
   </div>
   <div class="modal-footer">
+    <div class="d-flex justify-content-start">
+      <span style="color: rgb(0, 106, 255)"
+        >Si algún producto adquirido tiene un descuento, este se aplicara automáticamente al subtotal y al total de la factura.</span
+      >
+    </div>
+  </div>
+  <div class="modal-footer">
     <button class="btn btn-outline-info btn-sm" (click)="cancel()">
       <span><mat-icon class="icon-config">arrow_back</mat-icon>Volver</span>
     </button>
-    <button [disabled]="productosSeleccionados.length === 0" class="btn btn raise" (click)="confirmarCompra()">Confirmar Pedido</button>
+    <button [disabled]="productosSeleccionados!.length === 0" class="btn btn raise" (click)="confirmarCompra()">Confirmar Pedido</button>
   </div>
 </ng-template>
 
@@ -393,7 +428,7 @@
   <div class="modal-body">
     <h4>Productos:</h4>
     <table class="table">
-      <thead class="thead-dark">
+      <thead>
         <tr>
           <th scope="col">Producto</th>
           <th scope="col">Cantidad</th>
@@ -428,5 +463,36 @@
     <button class="btn btn-outline-info btn-sm" (click)="cancel()">
       <span><mat-icon class="icon-config">arrow_back</mat-icon>Volver</span>
     </button>
+  </div>
+</ng-template>
+
+<ng-template #carroCompraStorage>
+  <div class="modal-header">
+    <h4 class="text-pattern">Tu carrito de Compras</h4>
+  </div>
+  <div class="modal-body">
+    <h4>Productos:</h4>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Producto</th>
+          <th scope="col">Cantidad</th>
+          <th scope="col">Precio</th>
+          <th scope="col">Subtotal</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of carroCompStorage">
+          <td>{{ item.nombreProducto }}</td>
+          <td>{{ item.cantidad }}</td>
+          <td>{{ item.precioOriginal }}</td>
+          <td>{{ item.precio }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <span class="font-size-black2">Toca fuera de esta sección para continuar con la confirmación de la compra</span>
   </div>
 </ng-template>

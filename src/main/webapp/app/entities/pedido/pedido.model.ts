@@ -10,6 +10,7 @@ export interface IPedido {
   idNotificacion?: number | null;
   idFactura?: number | null;
   userName?: string | null;
+  descripcionNotificacion?: string | null;
 }
 
 export class Pedido implements IPedido {
@@ -22,7 +23,8 @@ export class Pedido implements IPedido {
     public idDomiciliario?: number | null,
     public idNotificacion?: number | null,
     public idFactura?: number | null,
-    public userName?: string | null
+    public userName?: string | null,
+    public descripcionNotificacion?: string | null
   ) {}
 }
 

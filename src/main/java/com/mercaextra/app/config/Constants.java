@@ -29,5 +29,9 @@ public final class Constants {
     public static final String TRAER_FACTURA_POR_USUARIO = "SELECT f FROM Factura f WHERE f.userName =:userName AND f.id=:id";
     public static final String TRAER_FACTURAS_POR_USUARIO = "SELECT f FROM Factura f WHERE f.userName =:userName";
 
+    //CONSULTAR LOGIN
+    public static final String TRAER_PEDIDOS_POR_USUARIO =
+        "SELECT p.fechaPedido,p.direccion,p.infoDomicilio FROM Pedido p" + " WHERE p.userName = :userName";
+
     private Constants() {}
 }

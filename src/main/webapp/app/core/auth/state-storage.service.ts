@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { IItemFacturaVenta } from 'app/entities/item-factura-venta/item-factura-venta.model';
 import { IProducto } from 'app/entities/producto/producto.model';
 import { SessionStorageService } from 'ngx-webstorage';
 
@@ -22,17 +23,17 @@ export class StateStorageService {
     this.sessionStorageService.clear(this.productoUrlKey);
   }
 
-  // storeCarrito(carrito: IItemFacturaVenta[]): void {
-  //   this.sessionStorageService.store(this.carritoStateUrlKey,carrito);
-  // }
+  storeCarrito(carrito: IItemFacturaVenta[]): void {
+    this.sessionStorageService.store(this.carritoStateUrlKey, carrito);
+  }
 
-  // getCarrito(): IItemFacturaVenta[] | null {
-  //   return this.sessionStorageService.retrieve(this.carritoStateUrlKey) as IItemFacturaVenta[] | null;
-  // }
+  getCarrito(): IItemFacturaVenta[] | null {
+    return this.sessionStorageService.retrieve(this.carritoStateUrlKey) as IItemFacturaVenta[] | null;
+  }
 
-  // clearCarrito():void{
-  //   this.sessionStorageService.clear(this.carritoStateUrlKey);
-  // }
+  clearCarrito(): void {
+    this.sessionStorageService.clear(this.carritoStateUrlKey);
+  }
 
   storeUrl(url: string): void {
     this.sessionStorageService.store(this.previousUrlKey, url);

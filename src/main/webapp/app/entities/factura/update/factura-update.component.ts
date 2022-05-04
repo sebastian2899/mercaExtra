@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
@@ -32,6 +32,7 @@ export class FacturaUpdateComponent implements OnInit {
   @ViewChild('validarCompra', { static: true }) content3: ElementRef | undefined;
   @ViewChild('verCarroCompra2', { static: true }) content4: ElementRef | undefined;
   @ViewChild('cantidadInvalida', { static: true }) content5: ElementRef | undefined;
+  @ViewChild('carro torage', { static: true }) content6: ElementRef | undefined;
 
   isSaving = false;
   tipoFacturaValues = Object.keys(TipoFactura);
@@ -54,6 +55,8 @@ export class FacturaUpdateComponent implements OnInit {
   numeroConsignacion = '111-222-333-444';
   contadorCarrito = 0;
   totalFactura = 0;
+  carroCompStorage?: IItemFacturaVenta[] | null = [];
+  disableAdd?: boolean | null;
 
   editForm = this.fb.group({
     id: [],
@@ -80,10 +83,27 @@ export class FacturaUpdateComponent implements OnInit {
     protected alertService: AlertService,
     protected storageService: StateStorageService,
     protected accountService: AccountService,
-    protected productoService: ProductoService
+    protected productoService: ProductoService,
+    protected route: Router
   ) {}
 
   ngOnInit(): void {
+    const carrito = this.storageService.getCarrito();
+    if (carrito) {
+      this.productosSeleccionados = carrito;
+      this.ngbModal.open(this.content, { backdrop: 'static', size: 'lg' });
+    }
+
+    /* si el carrode compras al refrescar la pantalla tiene uno o mas productos,
+     se le setan los valores a el contador para identificar cuantos productos 
+     tiene el carro de CompraService.
+    */
+    if (this.productosSeleccionados.length > 0) {
+      this.productosSeleccionados.forEach(() => {
+        this.contadorCarrito++;
+      });
+    }
+
     this.activatedRoute.data.subscribe(({ factura }) => {
       if (factura.id === undefined) {
         const today = dayjs().startOf('day');
@@ -98,6 +118,7 @@ export class FacturaUpdateComponent implements OnInit {
     this.productoStorage = this.storageService.getParametroProducto();
     if (this.productoStorage) {
       this.llenarCarroCompra(this.productoStorage);
+
       this.storageService.clearUrlProducto();
     }
 
@@ -114,6 +135,11 @@ export class FacturaUpdateComponent implements OnInit {
   confirmarCompra(): void {
     this.calcularValores();
     this.ngbModal.open(this.content3, { size: 'lg', backdrop: 'static', scrollable: true });
+  }
+
+  carroComprasStorage(): void {
+    this.carroCompStorage = this.storageService.getCarrito();
+    this.ngbModal.open(this.content6);
   }
 
   productosPorFiltro(): void {
@@ -135,7 +161,7 @@ export class FacturaUpdateComponent implements OnInit {
         this.productos.forEach(element => {
           const dec = (Number(element.precioDescuento) * Number(element.precio)) / 100;
           const precioFormat = Number(element.precio) - dec;
-          element.precioConDescuento = Number(precioFormat.toFixed(2));
+          element.precioConDescuento = Number(precioFormat.toFixed(0));
         });
       },
       error: () => {
@@ -178,10 +204,12 @@ export class FacturaUpdateComponent implements OnInit {
             if (this.productoSeleccionado.precioDescuento) {
               const desc = (Number(this.productoSeleccionado.precio) * Number(this.productoSeleccionado.precioDescuento)) / 100;
               const valueDiscount = Number(this.productoSeleccionado.precio) - desc;
-              this.productosSeleccionados[i].precio! += valueDiscount;
+              this.productosSeleccionados[i].precio! += valueDiscount * this.cantidad!;
+              this.storageService.storeCarrito(this.productosSeleccionados);
             } else {
               const totalTemp = this.cantidad! * this.productoSeleccionado.precio!;
               this.productosSeleccionados[i].precio! += totalTemp;
+              this.storageService.storeCarrito(this.productosSeleccionados);
             }
             this.productoNuevo = false;
             this.ngbModal.dismissAll();
@@ -209,12 +237,15 @@ export class FacturaUpdateComponent implements OnInit {
         if (this.productoSeleccionado.precioDescuento) {
           const desc = (Number(this.productoSeleccionado.precio) * Number(this.productoSeleccionado.precioDescuento)) / 100;
           const valueDiscount = Number(this.productoSeleccionado.precio) - desc;
-          this.productoItem.precio = Number(valueDiscount) * Number(cantidad);
+          this.productoItem.precioDesc = Number(valueDiscount.toFixed(0));
+          const totalValue = Number(valueDiscount) * Number(cantidad);
+          this.productoItem.precio = Number(totalValue.toFixed(0));
         } else {
           this.productoItem.precio = Number(this.productoSeleccionado.precio) * cantidad;
         }
 
         this.productosSeleccionados.push(this.productoItem);
+        this.storageService.storeCarrito(this.productosSeleccionados);
         this.mensajeProductoAddSuccess();
         this.ngbModal.dismissAll();
         this.contadorCarrito++;
@@ -238,12 +269,15 @@ export class FacturaUpdateComponent implements OnInit {
         message: 'Tu carro de compras esta vacío, por favor realiza por lo menos una compra.',
       });
     } else {
+      this.calcularValores();
       this.ngbModal.open(this.content, { size: 'lg', backdrop: 'static', scrollable: true });
     }
   }
 
   deleteAllElementsCarrito(): void {
     this.productosSeleccionados.splice(0, this.productosSeleccionados.length);
+    this.storageService.storeCarrito(this.productosSeleccionados);
+    this.calcularValores();
     this.totalFactura = 0;
     this.contadorCarrito = 0;
   }
@@ -258,9 +292,10 @@ export class FacturaUpdateComponent implements OnInit {
       valorFactura += element.precio!;
     });
 
-    this.editForm.get(['valorFactura'])?.setValue(valorFactura);
-    this.totalFactura = valorFactura;
-    this.editForm.get(['valorDeuda'])?.setValue(valorFactura);
+    const valFormar = Number(valorFactura.toFixed(0));
+    this.editForm.get(['valorFactura'])?.setValue(valFormar);
+    this.totalFactura = valFormar;
+    this.editForm.get(['valorDeuda'])?.setValue(valFormar);
   }
 
   restarValores(): void {
@@ -280,6 +315,7 @@ export class FacturaUpdateComponent implements OnInit {
     const index = this.productosSeleccionados.indexOf(producto);
     if (index >= 0) {
       this.productosSeleccionados.splice(index, 1);
+      this.storageService.storeCarrito(this.productosSeleccionados);
       this.contadorCarrito--;
       this.calcularValores();
     }
@@ -294,6 +330,41 @@ export class FacturaUpdateComponent implements OnInit {
     this.productoSeleccionado = producto;
 
     this.ngbModal.open(this.content2, { backdrop: 'static' });
+  }
+
+  validationValueAmount(): void {
+    if (this.cantidad! > 10) {
+      this.disableAdd = true;
+    } else {
+      this.disableAdd = false;
+    }
+  }
+
+  ChangeValuesShopingCard(opcion: string, item: IItemFacturaVenta): void {
+    const index = this.productosSeleccionados.indexOf(item);
+    if (opcion === 'add') {
+      this.productosSeleccionados[index].cantidad! += 1;
+
+      if (this.productosSeleccionados[index].precioDesc!) {
+        this.productosSeleccionados[index].precio! += Number(this.productosSeleccionados[index].precioDesc!.toFixed(0));
+      } else {
+        this.productosSeleccionados[index].precio! += Number(this.productosSeleccionados[index].precioOriginal!.toFixed(0));
+      }
+
+      this.calcularValores();
+
+      this.storageService.storeCarrito(this.productosSeleccionados);
+    } else if (opcion === 'subs') {
+      this.productosSeleccionados[index].cantidad! -= 1;
+
+      if (this.productosSeleccionados[index].precioDesc) {
+        this.productosSeleccionados[index].precio! -= Number(this.productosSeleccionados[index].precioDesc!.toFixed(0));
+      } else {
+        this.productosSeleccionados[index].precio! -= Number(this.productosSeleccionados[index].precioDesc?.toFixed(0));
+      }
+      this.calcularValores();
+      this.storageService.storeCarrito(this.productosSeleccionados);
+    }
   }
 
   save(): void {
@@ -320,7 +391,9 @@ export class FacturaUpdateComponent implements OnInit {
   }
 
   protected onSaveSuccess(): void {
-    this.previousState();
+    // cuando se complete la Compra, se limpia el stateStorage de el carrito de compras para que quede vacio
+    this.storageService.clearCarrito();
+    this.route.navigate(['/pedido/new']);
   }
 
   protected onSaveError(): void {

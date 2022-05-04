@@ -1,3 +1,13 @@
+<div
+  *ngIf="isAuthenticated() && existShoppingCar"
+  class="d-flex justify-content-center"
+  style="background-color: rgba(135, 182, 249, 0.468)"
+>
+  <button class="btn-info" style="border-radius: 5px" (click)="verCarritoDeCompras()">
+    <span class="carro"> Ver carro de compras</span>
+  </button>
+</div>
+
 <div [ngSwitch]="isAuthenticated()">
   <div [ngStyle]="{ display: verAgotados === true ? 'flex' : '' }">
     <div *ngIf="mostrarAgotados && isAdmin" class="col-md-2 me-5">
@@ -88,7 +98,7 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <mat-icon class="icon-config" style="color: black; font-size: 50px">filter_list</mat-icon>
+                <mat-icon class="icon-config" style="font-size: 50px">filter_list</mat-icon>
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li>
@@ -268,5 +278,39 @@
   </div>
   <div class="modal-footer">
     <span>Equipo Merca Extra</span>
+  </div>
+</ng-template>
+
+<ng-template #carritoCompras>
+  <div class="modal-header">Tu carrito de compras</div>
+  <div class="modal-body">
+    <table class="table table-bordered border-info">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+          <th>SubTotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of productosCarrito">
+          <td>{{ item.nombreProducto }}</td>
+          <td>{{ item.cantidad }}</td>
+          <td>{{ item.precioOriginal }}</td>
+          <td>{{ item.precio?.toFixed(0) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <span><b>Si el producto tiene descuento, este se aplicara automáticamente en el subtotal de la compra.</b></span>
+    <span
+      >¡Presiona <button class="btn-info pulse" (click)="redirectionToShopingCar()">AQUI</button> para completar y verificar tu
+      compra!</span
+    >
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning" (click)="cancel()">Salir</button>
   </div>
 </ng-template>

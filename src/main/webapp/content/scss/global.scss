@@ -14,6 +14,29 @@ h4 {
   font-weight: 300;
 }
 
+.carro {
+  position: relative;
+  font-family: sans-serif;
+  text-transform: uppercase;
+  font-size: 1em;
+  letter-spacing: 4px;
+  overflow: hidden;
+  background: linear-gradient(90deg, #000, rgb(214, 214, 214), #000);
+  background-repeat: no-repeat;
+  background-size: 80%;
+  animation: animate 3s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0);
+}
+@keyframes animate {
+  0% {
+    background-position: -500%;
+  }
+  100% {
+    background-position: 500%;
+  }
+}
+
 .dropdown-item:hover {
   span {
     color: white;
@@ -137,10 +160,12 @@ h4 {
 }
 
 .btn-producto-order:hover {
-  background-color: blueviolet;
-  font-size: 22px;
+  color: rgba(43, 125, 226, 0.77);
   span {
     color: white;
+  }
+  .icon-config {
+    color: rgba(43, 125, 226, 0.77);
   }
 }
 
@@ -174,17 +199,17 @@ h4 {
 
 .link-home:hover {
   background-color: rgb(255, 255, 255);
-  color: rgb(0, 0, 0);
+  color: rgb(62, 159, 255);
   font-size: 16px;
   .font-size-black {
-    color: rgb(0, 0, 0);
-    font-style: normal;
-    font-weight: bold;
+    color: #1a73e8;
+    background-color: #e0f4f7;
+    font: 500 16px/24px Google Sans Text, Arial, Helvetica, sans-serif;
   }
   .icon-config-black {
     position: relative;
     top: 5px;
-    color: rgb(95, 0, 191);
+    color: rgb(52, 170, 243);
   }
 }
 
@@ -201,14 +226,17 @@ h4 {
 
 .titulos {
   color: rgb(79, 117, 255);
-  font-style: normal;
-  font-weight: bold;
+  font: 500 29px/24px Google Sans Text, Arial, Helvetica, sans-serif;
+}
+
+.tituloSmall {
+  color: rgb(79, 117, 255);
+  font: 500 16px/24px Google Sans Text, Arial, Helvetica, sans-serif;
 }
 
 .font-size-black {
-  color: rgb(63, 146, 255);
-  font-style: normal;
-  font-weight: bold;
+  color: rgb(83, 83, 83);
+  font: 500 16px/24px Google Sans Text, Arial, Helvetica, sans-serif;
 }
 
 .alert-gray {
@@ -221,7 +249,7 @@ h4 {
 }
 
 .list-bg {
-  background-color: rgba(186, 160, 197, 0.816);
+  background-color: rgba(154, 194, 231, 0.804);
 }
 
 .font-size-red {
@@ -237,14 +265,12 @@ h4 {
 
 .font-size-black2 {
   color: rgb(0, 0, 0);
-  font-style: normal;
-  font-weight: bold;
+  font: 500 16px/24px Google Sans Text, Arial, Helvetica, sans-serif;
 }
 
 .font-size-entidades {
   color: rgb(43, 141, 226);
-  font-style: normal;
-  font-weight: bold;
+  font: 500 16px/24px Google Sans Text, Arial, Helvetica, sans-serif;
 }
 
 .neons {
@@ -364,13 +390,13 @@ h4 {
   box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
   -webkit-transform: translateY(-0.25em);
   transform: translateY(-0.25em);
-  color: rgb(255, 255, 255);
-  border-color: white;
+  color: rgb(57, 57, 57);
+  border-color: rgb(144, 189, 244);
 }
 
 .raise {
-  --color: #ffa260;
-  --hover: #e5ff60;
+  --color: #609dff;
+  --hover: #60c2ff;
   background-color: rgb(107, 140, 250);
   color: rgb(255, 255, 255);
   border-color: #1702ff;
@@ -583,6 +609,7 @@ angular-cli removes postcss-rtl processed inline css, processed rules must be ad
     }
   }
 }
+
 /* jhipster-needle-scss-add-main JHipster will add new css style */
 @keyframes animate-stripes {
   0% {

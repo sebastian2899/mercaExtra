@@ -24,16 +24,16 @@
           </dd>
           <dt><span class="font-size-entidades">Precio</span></dt>
           <dd>
-            <span>{{ producto.precio }}</span>
+            <span>{{ producto.precio | currency }}</span>
           </dd>
           <dt *ngIf="producto.precioDescuento"><span class="font-size-entidades">Descuento del dia</span></dt>
           <dd *ngIf="producto.precioDescuento">
             <span>{{ producto.precioDescuento }} %</span><br />
-            <b
-              ><span
-                >Valor Antes: <del>{{ producto.precio }}</del> Ahora: {{ valorConDescuento }}</span
-              ></b
-            >
+
+            <span style="background-color: rgba(255, 0, 0, 0.285)"
+              >Valor Antes: <del>{{ producto.precio | currency }}</del> </span
+            ><br />
+            <span> Valor Ahora: {{ valorConDescuento | currency }} </span>
           </dd>
           <dt><span class="font-size-entidades" jhiTranslate="mercaExtraApp.producto.descripcion">Descripcion</span></dt>
           <dd>

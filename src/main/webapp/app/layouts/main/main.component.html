@@ -2,15 +2,15 @@
 <div [ngSwitch]="account !== null && account !== undefined">
   <div class="container-fluid" style="margin-top: 30px; width: 100%; position: fixed">
     <div class="row flex-nowrap">
-      <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0" style="width: 217px; background-color: rgba(60, 195, 229, 0.83)">
+      <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0" style="width: 205px; box-shadow: 0px 0px 20px -8px black">
         <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
           <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            <span class="mt-2 fs-5 d-none d-sm-inline font-size-black2">Menu</span>
+            <span class="mt-2 fs-5 d-none d-sm-inline font-size-black">Menu</span>
           </a>
           <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
             <li>
               <a href="#" class="nav-link link-home px-0 align-middle">
-                <span class="ms-1 d-none d-sm-inline font-size-black2"
+                <span class="ms-1 d-none d-sm-inline font-size-black"
                   >Info Domicilio
                   <mat-icon class="icon-config-black">contact_support</mat-icon>
                 </span></a
@@ -18,44 +18,51 @@
             </li>
             <li>
               <a href="#submenu2" data-bs-toggle="collapse" class="nav-link link-home px-0 align-middle">
-                <span class="ms-1 d-none d-sm-inline font-size-black2">Idioma</span>
+                <span class="ms-1 d-none d-sm-inline font-size-black">Idioma</span>
                 <mat-icon class="icon-config-black">g_translate</mat-icon>
               </a>
               <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
                 <li *ngFor="let language of languages">
-                  <a class="dropdown-item" [jhiActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language)">{{
-                    language | findLanguageFromKey
-                  }}</a>
+                  <a
+                    style="background-color: rgba(205, 229, 252, 0.546); color: rgb(41, 101, 212)"
+                    class="link-home"
+                    [jhiActiveMenu]="language"
+                    href="javascript:void(0);"
+                    (click)="changeLanguage(language)"
+                    >{{ language | findLanguageFromKey }}</a
+                  >
                 </li>
               </ul>
             </li>
             <li>
+              <a (click)="categoriaProductos()" class="nav-link link-home px-0 align-middle">
+                <span class="ms-1 d-none d-sm-inline font-size-black"
+                  >Ver Productos
+                  <mat-icon class="icon-config-black">production_quantity_limits</mat-icon>
+                </span></a
+              >
+            </li>
+            <li>
               <a href="#submenu3" data-bs-toggle="collapse" class="nav-link link-home dropdown-toggle px-0 align-middle">
-                <span class="ms-1 d-none d-sm-inline font-size-black2">Productos</span>
-                <mat-icon class="icon-config-black">restaurant</mat-icon>
+                <span class="ms-1 d-none d-sm-inline font-size-black">Pedidos-Facturas</span>
+                <mat-icon class="icon-config-black">fact_check</mat-icon>
               </a>
               <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                <li class="w-100">
-                  <a (click)="categoriaProductos()" class="nav-link link-home px-0">
-                    <span style="font-size: 13px" class="d-none d-sm-inline font-size-black2">-Ver categorias</span>
-                    <mat-icon class="icon-config-black">category</mat-icon></a
-                  >
-                </li>
                 <li>
                   <a [routerLink]="['/pedido/new']" class="nav-link link-home px-0">
-                    <span style="font-size: 13px" class="d-none d-sm-inline font-size-black2">-Realizar pedido</span>
+                    <span style="font-size: 13px" class="d-none d-sm-inline font-size-black">-Realizar pedido</span>
                     <mat-icon class="icon-config-black">list_alt</mat-icon></a
                   >
                 </li>
                 <li>
-                  <a href="#" class="nav-link link-home px-0">
-                    <span style="font-size: 13px" class="d-none d-sm-inline font-size-black2">-Mis pedidos</span>
+                  <a [routerLink]="['/pedido']" class="nav-link link-home px-0">
+                    <span style="font-size: 13px" class="d-none d-sm-inline font-size-black">-Mis pedidos</span>
                     <mat-icon class="icon-config-black">local_grocery_store</mat-icon></a
                   >
                 </li>
                 <li>
                   <a [routerLink]="['/factura']" class="nav-link link-home px-0">
-                    <span style="font-size: 13px" class="d-none d-sm-inline font-size-black2">-Mis facturas</span>
+                    <span style="font-size: 13px" class="d-none d-sm-inline font-size-black">-Mis facturas</span>
                     <mat-icon class="icon-config-black">feed</mat-icon></a
                   >
                 </li>
@@ -63,7 +70,7 @@
             </li>
             <li>
               <a [routerLink]="['/factura/new']" class="nav-link link-home px-0 align-middle">
-                <span class="ms-1 d-none d-sm-inline font-size-black2">Realizar Compra</span>
+                <span class="ms-1 d-none d-sm-inline font-size-black">Realizar Compra</span>
                 <mat-icon class="icon-config-black">storefront</mat-icon>
               </a>
             </li>
@@ -84,8 +91,8 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <span *ngSwitchCase="false" style="color: black" class="d-none d-sm-inline mx-1 font-size-home">Iniciar Sesion</span>
-              <span *ngSwitchCase="true" style="color: black" class="d-none font-size-white d-sm-inline mx-1 font-size-home">Cuenta</span>
+              <span *ngSwitchCase="false" class="font-size-black d-none d-sm-inline mx-1">Iniciar Sesion</span>
+              <span *ngSwitchCase="true" class="font-size-black d-none font-size-white d-sm-inline mx-1">Cuenta</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-light text-small shadow">
               <li>
@@ -127,10 +134,8 @@
       </div>
     </div>
   </div>
-  <div></div>
 </div>
 <router-outlet name="navbar"></router-outlet>
-
 <div class="container" style="margin-left: 205px">
   <div class="card jh-card">
     <router-outlet style="margin-top: 40px"></router-outlet>

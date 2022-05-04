@@ -45,7 +45,18 @@ public class Pedido implements Serializable {
     @Column(name = "user_name")
     private String userName;
 
+    @Transient
+    private String descripcionNotificacion;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public String getDescripcionNotificacion() {
+        return descripcionNotificacion;
+    }
+
+    public void setDescripcionNotificacion(String descripcionNotificacion) {
+        this.descripcionNotificacion = descripcionNotificacion;
+    }
 
     public Long getId() {
         return this.id;

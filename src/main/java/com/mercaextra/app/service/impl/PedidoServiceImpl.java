@@ -1,5 +1,6 @@
 package com.mercaextra.app.service.impl;
 
+import com.mercaextra.app.config.Constants;
 import com.mercaextra.app.domain.Domiciliario;
 import com.mercaextra.app.domain.Factura;
 import com.mercaextra.app.domain.Pedido;
@@ -13,14 +14,21 @@ import com.mercaextra.app.service.dto.FacturaPedidoDTO;
 import com.mercaextra.app.service.dto.PedidoDTO;
 import com.mercaextra.app.service.mapper.PedidoMapper;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +53,9 @@ public class PedidoServiceImpl implements PedidoService {
 
     private static List<Long> aviableDomiciliary = null;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     public PedidoServiceImpl(
         PedidoRepository pedidoRepository,
         PedidoMapper pedidoMapper,
@@ -68,21 +79,21 @@ public class PedidoServiceImpl implements PedidoService {
         String userName = userService.getUserWithAuthorities().get().getLogin();
         pedido.setUserName(userName);
 
-        /* De la lista recuperada por el metodo que valida la disponibilidad de
-         * domiciliarios disponibles, se usa la clase random para eligir cualquiera de
-         * los domicilios disponibles para que haga el pedido.
-         */
-        Random random_method = new Random();
-        Long idDomiciliario = (long) random_method.nextInt(aviableDomiciliary.size());
-        Long idDomiciliarioIndex = aviableDomiciliary.get(idDomiciliario.intValue());
-        pedido.setIdDomiciliario(idDomiciliarioIndex);
-
-        //cambiamos el estado de la factura de lista a comprada
-        Factura factura = facturaRepositoty.facturaId(pedido.getIdFactura());
-        factura.setEstadoFactura("Comprada");
-        facturaRepositoty.save(factura);
-
         if (pedidoDTO.getId() == null) {
+            //cambiamos el estado de la factura de lista a comprada
+            Factura factura = facturaRepositoty.facturaId(pedido.getIdFactura());
+            factura.setEstadoFactura("Comprada");
+            facturaRepositoty.save(factura);
+
+            /* De la lista recuperada por el metodo que valida la disponibilidad de
+             * domiciliarios disponibles, se usa la clase random para eligir cualquiera de
+             * los domicilios disponibles para que haga el pedido.
+             */
+            Random random_method = new Random();
+            Long idDomiciliario = (long) random_method.nextInt(aviableDomiciliary.size());
+            Long idDomiciliarioIndex = aviableDomiciliary.get(idDomiciliario.intValue());
+            pedido.setIdDomiciliario(idDomiciliarioIndex);
+
             pedido.setIdNotificacion(1L);
             pedido.setEstado("Entregando");
             pedido.setInfoDomicilio(consultarDomiciliario(idDomiciliarioIndex));
@@ -114,17 +125,46 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoRepository.nombreDomiciliario(id);
     }
 
+    /*
+     * METODO PARA VALIDAR EL ENVIO DEL PEDIDO,
+     * VALIDACION 1: SI HAY DOMICILIARIOS
+     * EN ESTADO DISPONIBLE SE PODRA REALIZAR EL PEDIDO, POR EL CONTRARIO SI NO
+     * HAY DISPONIBILIDAD DE DOMICILIARIOS NO SE PUDE REALIZAR. (RETORNAR 1)
+     *
+     * VALIDACION 2: SI EL USUARIO YA TIENE UN PEDIDO EN CAMINO NO PODRA REALIZAR 2
+     * VECES UN PEDIDO, PODRA TENER LAS FACTURAS QUE QUIERA PERO PEDIDOD SOLO TENDRA
+     * UNO. (RETORNAR 2)
+     *
+     * POR ULTIMO (RETORNAR 3) CUANDO EL PEDIDO CUMPLA CON LOS
+     * REQUISITOS PARA PODER SER ENTREGADO CON EXITO.
+     */
     @Override
-    public boolean validarDomiciliario() {
+    public int validarDomiciliario() {
         log.debug("Request to validate aviable domiciliary");
 
-        boolean resp;
+        int resp;
         //CONSULTAMOS LOS DOMICILIARIOS QUE ESTEN DISPONBILES
         aviableDomiciliary = pedidoRepository.domiciliariosDisponibles(EstadoDomiciliario.DISPONIBLE);
-        if (aviableDomiciliary != null) {
-            resp = false;
+
+        /*
+         * SE VALIDA QUE EL USUSARIO NO TENGA PEDIDOS EN ENTREGA, SI ESTE LOS TIENE,
+         * TENDRA QUE ESPERAR A QUE SU PEDIDO SEA ENTREGADO PARA PODER REALIZAR OTRO
+         * PEDIDO
+         */
+
+        //SE RECUPERA EL USER
+        String login = userService.getUserWithAuthorities().get().getLogin();
+
+        //SE CASTEA LA RESPUESTA DEL REPOSITOTY DE STRING A BOOLEAN
+        boolean answerOrderComming = Boolean.parseBoolean(pedidoRepository.existingOrder(login));
+
+        //SE HACE LAS VALIDACIONES, SI LA LISTA DE LOS DOMICILIARIOS ESTA VACIA Y SI EXISTE UN PEDIDO EN PROGRESO
+        if (aviableDomiciliary.isEmpty()) {
+            resp = 1;
+        } else if (answerOrderComming) {
+            resp = 2;
         } else {
-            resp = true;
+            resp = 3;
         }
 
         /*
@@ -132,6 +172,11 @@ public class PedidoServiceImpl implements PedidoService {
          * debera esperar que un domiciliario este disponible.
          */
         return resp;
+    }
+
+    private String descpNotificacion(Long id) {
+        log.debug("Request to asignate description message notification");
+        return pedidoRepository.descripcionNotificacion(id);
     }
 
     @Override
@@ -153,14 +198,53 @@ public class PedidoServiceImpl implements PedidoService {
     @Transactional(readOnly = true)
     public List<PedidoDTO> findAll() {
         log.debug("Request to get all Pedidos");
-        return pedidoRepository.findAll().stream().map(pedidoMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+
+        /*
+         * Para el metodo findAll que es llamado por el componente pedido en el front,
+         * tenenos que validar que usuario esta realizando la peticion, y de acuerdo con
+         * el usuario que haga dicha peticion, se le retornas los datos correspondientes
+         * de ese usuario.
+         */
+
+        String userName = userService.getUserWithAuthorities().get().getLogin();
+
+        if (userName.equals("admin")) {
+            return pedidoRepository.findAll().stream().map(pedidoMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+        } else {
+            Query q = entityManager.createQuery(Constants.TRAER_PEDIDOS_POR_USUARIO).setParameter("userName", userName);
+
+            List<Object[]> pedidosObject = q.getResultList();
+
+            PedidoDTO pedido = null;
+            List<PedidoDTO> pedidosDTO = new ArrayList<>();
+
+            for (Object[] pedidoObject : pedidosObject) {
+                pedido = new PedidoDTO();
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    Instant pedidoInstant = format
+                        .parse(pedidoObject[0].toString().substring(0, pedidoObject[0].toString().indexOf("T")))
+                        .toInstant();
+                    pedido.setFechaPedido(pedidoInstant);
+                    pedido.setDireccion(pedidoObject[1].toString());
+                    pedido.setInfoDomicilio(pedidoObject[2].toString());
+                    pedidosDTO.add(pedido);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return pedidosDTO;
+        }
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<PedidoDTO> findOne(Long id) {
         log.debug("Request to get Pedido : {}", id);
-        return pedidoRepository.findById(id).map(pedidoMapper::toDto);
+        Optional<Pedido> pedido = pedidoRepository.findById(id);
+        pedido.get().setDescripcionNotificacion(descpNotificacion(pedido.get().getIdNotificacion()));
+        return pedido.map(pedidoMapper::toDto);
     }
 
     @Override
@@ -169,6 +253,12 @@ public class PedidoServiceImpl implements PedidoService {
         pedidoRepository.deleteById(id);
     }
 
+    /*
+     * metodo para consultar los factura que estan listas para poder realizae un
+     * pedido en la seccion update de angular en la entidad pedido.
+     * Se crea un dto con los datos especififcos para no consultar todos los campos de la factuira
+     * si no slo los campos necesarios.
+     */
     @Override
     @Transactional(readOnly = true)
     public List<FacturaPedidoDTO> facturasLogin() {
@@ -193,4 +283,82 @@ public class PedidoServiceImpl implements PedidoService {
 
         return facturasReturn.stream().collect(Collectors.toCollection(LinkedList::new));
     }
+
+    @Override
+    public void pedidoFinalizado(PedidoDTO pedidoDTO) {
+        log.debug("Request to change state pedido to finalised");
+
+        //Se asigna el usuario logueado.
+        String userName = userService.getUserWithAuthorities().get().getLogin();
+
+        Pedido pedido = pedidoMapper.toEntity(pedidoDTO);
+
+        /*
+         * Cuando el pedido ya este finalizado, el estado camnbia a finalizado, tambien
+         * cambie la notificacion y el estado del domiciliario que estaba repartiendo el
+         * pedido, pasara a disponible nuevamente.
+         */
+
+        //se consulta el domiciliario que fue asignado para repartir el pedido.
+        Domiciliario domiciliario = domiciliarioRepository.domiciliarioPorId(pedido.getIdDomiciliario());
+        domiciliario.setEstado(EstadoDomiciliario.DISPONIBLE);
+        domiciliarioRepository.save(domiciliario);
+
+        pedido.setEstado("Finalizado");
+        pedido.setUserName(userName);
+        pedido.setIdNotificacion(2L);
+
+        pedidoRepository.save(pedido);
+    }
+
+    @Override
+    public List<PedidoDTO> pedidosFecha(String fecha) {
+        log.debug("Request to get all pedidos per fecha", fecha);
+
+        //Se formatea la fecha de instant a String para hacer la consulta con tipo de dato String y no Instant
+        String fechaFormat = fecha.substring(0, fecha.indexOf("T"));
+        String userName = userService.getUserWithAuthorities().get().getLogin();
+
+        //Se recupera la lista object
+        List<Object[]> pedidosObject = pedidoRepository.pedidosFecha(fechaFormat, userName);
+
+        //Se instancia una clase Pedido y un arrayList de Pedido que sera retornada
+        PedidoDTO pedidoNew = null;
+        List<PedidoDTO> pedidosDTO = new ArrayList<>();
+
+        //Se recorre a lista y se setan los valores correspondientes a la clase instanciada
+        for (Object[] pedido : pedidosObject) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            pedidoNew = new PedidoDTO();
+            try {
+                Instant fechaInstant = format.parse(pedido[0].toString().substring(0, pedido[0].toString().indexOf("T"))).toInstant();
+                pedidoNew.setFechaPedido(fechaInstant);
+                pedidoNew.setDireccion(pedido[1].toString());
+                pedidoNew.setInfoDomicilio(pedido[2].toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            pedidosDTO.add(pedidoNew);
+        }
+
+        return pedidosDTO;
+    }
+    /*
+     * CREAR TAREA PROGRAMADA PARA MONITOREAR LA ENTREGA DEL PEDIDO, CADA 30 MINUTOS
+     * EN CASO DEL PEDIDO NO SER ENTREGADO EN EL TIEMPO ESTIMADO, AUTOMATICAMENTE
+     * DESPUES DE 30 MINUTOS EL PEDIDO CAMBIARA DE ESTO
+     */
+
+    /*
+     * public void expiredOrder() {
+     * log.debug("Request to expired order by time out");
+     *
+     *
+     *
+     * Pedido pedido = pedidoRepository.pedidoEntrega();
+     *
+     * if(pedido != null) { pedido.setEstado("Finalizado");
+     * pedidoRepository.save(pedido); } }
+     */
 }

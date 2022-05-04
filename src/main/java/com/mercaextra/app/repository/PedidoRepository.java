@@ -32,4 +32,20 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     @Query("SELECT p FROM Pedido p WHERE p.estado = 'Entregando' AND p.userName = :userName")
     Pedido pedidoEntrega(@Param("userName") String userName);
+
+    @Query(
+        "SELECT p.fechaPedido,p.direccion,p.infoDomicilio FROM Pedido p WHERE DATE_FORMAT(p.fechaPedido,'%Y-%m-%d')=:fecha" +
+        " AND p.userName = :userName"
+    )
+    List<Object[]> pedidosFecha(@Param("fecha") String fecha, @Param("userName") String userName);
+
+    @Query(
+        value = "SELECT CASE WHEN EXISTS (SELECT p.estado FROM pedido p WHERE p.estado = 'Entregando' AND p.user_name =:userName)" +
+        " THEN 'true' ELSE 'false' END",
+        nativeQuery = true
+    )
+    String existingOrder(@Param("userName") String userName);
+
+    @Query("SELECT n.descripcion FROM Notificacion n WHERE n.id =:idNotificacion")
+    String descripcionNotificacion(@Param("idNotificacion") Long idNotificacion);
 }

@@ -32,6 +32,16 @@ public class PedidoDTO implements Serializable {
 
     private String userName;
 
+    private String descripcionNotificacion;
+
+    public String getDescripcionNotificacion() {
+        return descripcionNotificacion;
+    }
+
+    public void setDescripcionNotificacion(String descripcionNotificacion) {
+        this.descripcionNotificacion = descripcionNotificacion;
+    }
+
     public Long getId() {
         return id;
     }

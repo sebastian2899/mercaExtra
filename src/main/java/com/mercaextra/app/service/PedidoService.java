@@ -2,6 +2,7 @@ package com.mercaextra.app.service;
 
 import com.mercaextra.app.service.dto.FacturaPedidoDTO;
 import com.mercaextra.app.service.dto.PedidoDTO;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +50,11 @@ public interface PedidoService {
 
     List<FacturaPedidoDTO> facturasLogin();
 
-    boolean validarDomiciliario();
+    int validarDomiciliario();
 
     PedidoDTO pedidoEntrega();
+
+    void pedidoFinalizado(PedidoDTO pedidoDTO);
+
+    List<PedidoDTO> pedidosFecha(String fecha);
 }

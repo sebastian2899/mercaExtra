@@ -10,10 +10,6 @@
       <jhi-alert></jhi-alert>
 
       <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ pedido.id }}</span>
-        </dd>
         <dt><span jhiTranslate="mercaExtraApp.pedido.fechaPedido">Fecha Pedido</span></dt>
         <dd>
           <span>{{ pedido.fechaPedido | formatMediumDatetime }}</span>
@@ -26,21 +22,13 @@
         <dd>
           <span>{{ pedido.estado }}</span>
         </dd>
-        <dt><span jhiTranslate="mercaExtraApp.pedido.infoDomicilio">Info Domicilio</span></dt>
+        <dt><span>Domiciliario</span></dt>
         <dd>
           <span>{{ pedido.infoDomicilio }}</span>
         </dd>
-        <dt><span jhiTranslate="mercaExtraApp.pedido.idDomiciliario">Id Domiciliario</span></dt>
+        <dt><span>Notificacion</span></dt>
         <dd>
-          <span>{{ pedido.idDomiciliario }}</span>
-        </dd>
-        <dt><span jhiTranslate="mercaExtraApp.pedido.idNotificacion">Id Notificacion</span></dt>
-        <dd>
-          <span>{{ pedido.idNotificacion }}</span>
-        </dd>
-        <dt><span jhiTranslate="mercaExtraApp.pedido.idFactura">Id Factura</span></dt>
-        <dd>
-          <span>{{ pedido.idFactura }}</span>
+          <span>{{ pedido.descripcionNotificacion }}</span>
         </dd>
       </dl>
 

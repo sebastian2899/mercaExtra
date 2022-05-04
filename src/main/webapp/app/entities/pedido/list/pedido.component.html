@@ -1,8 +1,8 @@
 <div>
-  <h2 id="page-heading" data-cy="PedidoHeading">
+  <h2 class="mb-5" id="page-heading" data-cy="PedidoHeading">
     <span class="titulos">Tus Pedidos</span>
     <!-- jhiTranslate="mercaExtraApp.pedido.home.title" -->
-    <div class="d-flex justify-content-end">
+    <!-- <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="mercaExtraApp.pedido.home.refreshListLabel">Refresh List</span>
@@ -17,27 +17,60 @@
         <fa-icon icon="plus"></fa-icon>
         <span jhiTranslate="mercaExtraApp.pedido.home.createLabel"> Create a new Pedido </span>
       </button>
-    </div>
+    </div> -->
   </h2>
 
   <div *ngIf="pedido" class="d-flex justify-content-around">
     <div class="d-flex flex-column">
       <h2 class="titulos">En camino a tu casa:</h2>
 
-      <div class="card" style="width: 18rem">
+      <div class="card" style="width: 18rem; background-color: rgba(192, 228, 245, 0.627)">
         <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="card-link">Card link</a>
-          <a href="#" class="card-link">Another link</a>
+          <h5 class="card-title font-size-black2">Domiciliario:</h5>
+          <h6 class="card-subtitle mb-4 ms-5">{{ pedido.infoDomicilio }}</h6>
+          <p class="card-text font-size-black2">Direccion: {{ pedido.direccion }}</p>
+          <p class="card-text font-size-black2">Estado: {{ pedido.estado }}</p>
+          <span style="color: blue"
+            ><mat-icon>notifications</mat-icon>
+            <p style="color: blue" class="font-size-black2">{{ notificacion }}</p>
+          </span>
         </div>
-        <div class="progress-bar-container">
+        <div style="position: relative; bottom: 50px" class="d-flex justify-content-center progress-bar-container">
           <div class="progress-bar stripes animated reverse slower">
             <span class="progress-bar-inner"></span>
           </div>
         </div>
+        <span
+          >Ver Detalle<button class="btn btn-sm" (click)="verDetalle(pedido.idFactura!)">
+            <mat-icon style="color: rgb(35, 35, 226)">search</mat-icon>
+          </button></span
+        >
+        <span class="me-2 font-size-black2">¿Ya recibiste el pedido?</span>
+        <button class="menu-config2" (click)="modalAdvertencia()"><mat-icon>help</mat-icon></button>
+        <button class="btn btn-success btn-sm" (click)="validarEntrega()"><mat-icon>check</mat-icon></button>
       </div>
+    </div>
+  </div>
+
+  <div *ngIf="pedido === null">
+    <span class="alert alert-warning">No hay pedidos en entrega.</span>
+  </div>
+
+  <div class="d-flex justify-content-center mt-5 mb-4">
+    <h2 class="titulos">Pedidos Entregados</h2>
+  </div>
+
+  <div class="d-flex justify-content-between mb-4">
+    <div class="col-md-3" style="background-color: rgba(138, 187, 215, 0.478)">
+      <label for="fecha" class="form-label tituloSmall">Filtra tus pedidos por fecha</label>
+      <input type="datetime-local" class="form-control" name="fecha" [(ngModel)]="fecha" />
+      <button style="margin-left: 100px" class="btn-info pulse mt-2 mb-2" (click)="pedidosPorFecha()">Buscar</button>
+    </div>
+    <div class="mt-5">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="mercaExtraApp.pedido.home.refreshListLabel">Refresh List</span>
+      </button>
     </div>
   </div>
 
@@ -49,34 +82,44 @@
     <span jhiTranslate="mercaExtraApp.pedido.home.notFound">No pedidos found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="pedidos && pedidos.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
+  <div class="" id="entities" *ngIf="pedidos && pedidos.length > 0">
+    <table class="table table-bordered border-info" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span>Acciones</span></th>
           <th scope="col"><span jhiTranslate="mercaExtraApp.pedido.fechaPedido">Fecha Pedido</span></th>
           <th scope="col"><span jhiTranslate="mercaExtraApp.pedido.direccion">Direccion</span></th>
-          <th scope="col"><span jhiTranslate="mercaExtraApp.pedido.estado">Estado</span></th>
-          <th scope="col"><span jhiTranslate="mercaExtraApp.pedido.infoDomicilio">Info Domicilio</span></th>
-          <th scope="col"><span jhiTranslate="mercaExtraApp.pedido.idDomiciliario">Id Domiciliario</span></th>
+          <th scope="col"><span>Domiciliario</span></th>
+          <!-- <th scope="col"><span jhiTranslate="mercaExtraApp.pedido.idDomiciliario">Id Domiciliario</span></th>
           <th scope="col"><span jhiTranslate="mercaExtraApp.pedido.idNotificacion">Id Notificacion</span></th>
-          <th scope="col"><span jhiTranslate="mercaExtraApp.pedido.idFactura">Id Factura</span></th>
+          <th scope="col"><span jhiTranslate="mercaExtraApp.pedido.idFactura">Id Factura</span></th> -->
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let pedido of pedidos; trackBy: trackId" data-cy="entityTable">
           <td>
-            <a [routerLink]="['/pedido', pedido.id, 'view']">{{ pedido.id }}</a>
+            <div class="dropdown">
+              <button class="menu-config2" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" [routerLink]="['/pedido', pedido.id, 'view']">Ver</a></li>
+                <li *ngIf="account!.login === 'admin'">
+                  <a class="dropdown-item" [routerLink]="['/pedido', pedido.id, 'edit']">Editar</a>
+                </li>
+                <li *ngIf="account!.login === 'admin'"><a class="dropdown-item" (click)="delete(pedido)">Eliminar</a></li>
+              </ul>
+            </div>
           </td>
           <td>{{ pedido.fechaPedido | formatMediumDatetime }}</td>
           <td>{{ pedido.direccion }}</td>
-          <td>{{ pedido.estado }}</td>
+          <td>{{ pedido.infoDomicilio }}</td>
+          <!-- <td>{{ pedido.estado }}</td>
           <td>{{ pedido.infoDomicilio }}</td>
           <td>{{ pedido.idDomiciliario }}</td>
-          <td>{{ pedido.idNotificacion }}</td>
-          <td>{{ pedido.idFactura }}</td>
-          <td class="text-end">
+          <td>{{ pedido.idFactura }}</td> -->
+          <!-- <td class="text-end">
             <div class="btn-group">
               <button type="submit" [routerLink]="['/pedido', pedido.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                 <fa-icon icon="eye"></fa-icon>
@@ -93,9 +136,102 @@
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>
             </div>
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </table>
   </div>
 </div>
+
+<ng-template #detalleFactura>
+  <div class="modal-header">
+    <h3 class="titulos">Detalle Factura</h3>
+  </div>
+  <div class="modal-body">
+    <dl *ngIf="factura" class="row-md jh-entity-details">
+      <dt><span jhiTranslate="mercaExtraApp.factura.fechaCreacion">Fecha Creacion</span></dt>
+      <dd>
+        <span>{{ factura.fechaCreacion | formatMediumDatetime }}</span>
+      </dd>
+      <dt><span jhiTranslate="mercaExtraApp.factura.infoCiente">Info Ciente</span></dt>
+      <dd>
+        <span>{{ factura.infoCiente }}</span>
+      </dd>
+      <dt><span jhiTranslate="mercaExtraApp.factura.numeroFactura">Numero Factura</span></dt>
+      <dd>
+        <span>{{ factura.numeroFactura }}</span>
+      </dd>
+      <dt><span jhiTranslate="mercaExtraApp.factura.tipoFactura">Tipo Factura</span></dt>
+      <dd>
+        <span jhiTranslate="{{ 'mercaExtraApp.TipoFactura.' + factura.tipoFactura }}">{{ factura.tipoFactura }}</span>
+      </dd>
+      <dt><span jhiTranslate="mercaExtraApp.factura.valorFactura">Valor Factura</span></dt>
+      <dd>
+        <span>{{ factura.valorFactura }}</span>
+      </dd>
+      <dt><span jhiTranslate="mercaExtraApp.factura.valorPagado">Valor Pagado</span></dt>
+      <dd>
+        <span>{{ factura.valorPagado }}</span>
+      </dd>
+      <dt><span jhiTranslate="mercaExtraApp.factura.estadoFactura">Estado Factura</span></dt>
+      <dd>
+        <span>{{ factura.estadoFactura }}</span>
+      </dd>
+      <dt><span jhiTranslate="mercaExtraApp.factura.metodoPago">Metodo Pago</span></dt>
+      <dd>
+        <span jhiTranslate="{{ 'mercaExtraApp.MetodoPago.' + factura.metodoPago }}">{{ factura.metodoPago }}</span>
+      </dd>
+    </dl>
+
+    <h2 class="mt-5 mb-2 titulos">Productos adquiridos en la factura:</h2>
+    <table class="mb-4 table table-bordered border-info table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Nombre</th>
+          <th scope="col">cantidad</th>
+          <th scope="col">precio</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of factura!.itemsPorFactura">
+          <td>{{ producto.nombreProducto }}</td>
+          <td>{{ producto.cantidad }}</td>
+          <td>{{ producto.precio }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" (click)="cancel()">Volver</button>
+  </div>
+</ng-template>
+
+<ng-template #advertencia>
+  <div class="modal-header">
+    <h3 style="color: red; font-weight: bold">ADVERTENCIA</h3>
+  </div>
+  <div class="modal-body">
+    <span class="font-size-black2"
+      >Si el domiciliario aún no ha llegado con el pedido y marcas el pedido como entregado, el equipo merca extra no se hará responsable de
+      tu pedido, en caso de que el pedido no llegue, póngase en contacto con el equipo y su problema será solucionado, de lo contrario,
+      marcar el pedido como entregado cuando aún no ha sido entregado será tu responsabilidad.
+    </span>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" (click)="cancel()">Volver</button>
+  </div>
+</ng-template>
+
+<ng-template #pedidoEntregado>
+  <div class="modal-header">
+    <h3 style="color: rgb(54, 164, 54)">Confirmacion del pedido</h3>
+  </div>
+  <div class="modal-body">
+    <span class="font-size-black2">Esta seguro de que acaba de recibir su pedido?</span>
+    <button class="btn btn-success ms-3 me-3" (click)="pedidoFinalizado()">Confirmar</button>
+    <button class="btn btn-danger" (click)="cancel()">Cancelar</button>
+  </div>
+  <div class="modal-footer">
+    <p><b>Equipo Merca Extra.</b></p>
+  </div>
+</ng-template>

@@ -156,10 +156,11 @@ public class PedidoResource {
         log.debug("REST request to get pedido in comming");
 
         PedidoDTO pedido = pedidoService.pedidoEntrega();
-        if (pedido == null) {
-            throw new BadRequestAlertException("NO hay pedidos en entrega", ENTITY_NAME, "no existe");
-        }
-
+        /*
+         * if (pedido == null) { throw new
+         * BadRequestAlertException("NO hay pedidos en entrega", ENTITY_NAME,
+         * "no existe"); }
+         */
         return new ResponseEntity<PedidoDTO>(pedido, HttpStatus.OK);
     }
 
@@ -189,6 +190,29 @@ public class PedidoResource {
         return pedidoService.facturasLogin();
     }
 
+    @PostMapping("/pedido-finalizado")
+    public ResponseEntity<Void> pedidoFinalizado(@RequestBody PedidoDTO pedidoDTO) throws URISyntaxException {
+        log.debug("REST request to change state pedido to finalised");
+
+        if (pedidoDTO.getId() == null) {
+            throw new BadRequestAlertException("ID is null", ENTITY_NAME, ENTITY_NAME);
+        }
+
+        if (!pedidoRepository.existsById(pedidoDTO.getId())) {
+            throw new BadRequestAlertException("ID not exist", ENTITY_NAME, ENTITY_NAME);
+        }
+
+        pedidoService.pedidoFinalizado(pedidoDTO);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("pedidos-fecha/{fecha}")
+    public List<PedidoDTO> pedidosPorFecha(@PathVariable String fecha) {
+        log.debug("REST request to get all pedido per date", fecha);
+        return pedidoService.pedidosFecha(fecha);
+    }
+
     @DeleteMapping("/pedidos/{id}")
     public ResponseEntity<Void> deletePedido(@PathVariable Long id) {
         log.debug("REST request to delete Pedido : {}", id);
@@ -200,7 +224,7 @@ public class PedidoResource {
     }
 
     @GetMapping("/pedido-validate-domiciliary")
-    public boolean validateAvibleDomiciliary() {
+    public int validateAvibleDomiciliary() {
         log.debug("REST request to validate aviable domiciliary");
         return pedidoService.validarDomiciliario();
     }

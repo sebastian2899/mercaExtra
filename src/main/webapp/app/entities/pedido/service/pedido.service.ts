@@ -14,6 +14,7 @@ export type EntityResponseType = HttpResponse<IPedido>;
 export type EntityArrayResponseType = HttpResponse<IPedido[]>;
 export type FacturaPedidoResponseType = HttpResponse<IFacturaPedido[]>;
 export type BooleanResponseType = HttpResponse<boolean>;
+export type NumberResponseType = HttpResponse<number>;
 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
@@ -21,6 +22,8 @@ export class PedidoService {
   protected facturasUrl = this.applicationConfigService.getEndpointFor('api/pedidos-facturas');
   protected aviableDomiciliaryUrl = this.applicationConfigService.getEndpointFor('api/pedido-validate-domiciliary');
   protected pedidoCommingUrl = this.applicationConfigService.getEndpointFor('api/pedido-comming');
+  protected pedidoFinalizadoUrl = this.applicationConfigService.getEndpointFor('api/pedido-finalizado');
+  protected pedidosFechaUrl = this.applicationConfigService.getEndpointFor('api/pedidos-fecha');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -31,6 +34,12 @@ export class PedidoService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  pedidosFecha(fecha: string): Observable<EntityArrayResponseType> {
+    return this.http
+      .get<IPedido[]>(`${this.pedidosFechaUrl}/${fecha.toString()}`, { observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
   facturasPedido(): Observable<FacturaPedidoResponseType> {
     return this.http.get<IFacturaPedido[]>(this.facturasUrl, { observe: 'response' });
   }
@@ -39,8 +48,12 @@ export class PedidoService {
     return this.http.get<IPedido>(this.pedidoCommingUrl, { observe: 'response' });
   }
 
-  aviableDomiciliary(): Observable<BooleanResponseType> {
-    return this.http.get<boolean>(this.aviableDomiciliaryUrl, { observe: 'response' });
+  pedidoFinalizado(pedido: IPedido): Observable<HttpResponse<{}>> {
+    return this.http.post(this.pedidoFinalizadoUrl, pedido, { observe: 'response' });
+  }
+
+  aviableDomiciliary(): Observable<NumberResponseType> {
+    return this.http.get<number>(this.aviableDomiciliaryUrl, { observe: 'response' });
   }
 
   update(pedido: IPedido): Observable<EntityResponseType> {

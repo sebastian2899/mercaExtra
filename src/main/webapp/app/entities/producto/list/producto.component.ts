@@ -11,6 +11,9 @@ import { AccountService } from 'app/core/auth/account.service';
 import { ICategoriaProducto } from 'app/entities/categoria-producto/categoria-producto.model';
 import { CategoriaProductoService } from 'app/entities/categoria-producto/service/categoria-producto.service';
 import { AlertService } from 'app/core/util/alert.service';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
+import { IItemFacturaVenta } from 'app/entities/item-factura-venta/item-factura-venta.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'jhi-producto',
@@ -18,6 +21,7 @@ import { AlertService } from 'app/core/util/alert.service';
 })
 export class ProductoComponent implements OnInit {
   @ViewChild('mensajeAyuda', { static: true }) content: ElementRef | undefined;
+  @ViewChild('carritoCompras', { static: true }) content2: ElementRef | undefined;
 
   productos?: IProducto[];
   producto?: IProducto;
@@ -38,6 +42,8 @@ export class ProductoComponent implements OnInit {
   opcion?: string | null;
   cantidadAplicar?: number | number;
   deshabilitarCambio?: boolean | null;
+  existShoppingCar?: boolean | null;
+  productosCarrito?: IItemFacturaVenta[] | null = [];
 
   constructor(
     protected productoService: ProductoService,
@@ -45,12 +51,13 @@ export class ProductoComponent implements OnInit {
     protected modalService: NgbModal,
     protected accountService: AccountService,
     protected categoriaService: CategoriaProductoService,
-    protected alertService: AlertService
+    protected alertService: AlertService,
+    protected storageService: StateStorageService,
+    protected router: Router
   ) {}
 
   loadAll(): void {
     this.isLoading = true;
-
     this.productoService.query().subscribe({
       next: (res: HttpResponse<IProducto[]>) => {
         this.isLoading = false;
@@ -64,12 +71,25 @@ export class ProductoComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAll();
+    this.consultarCategorias();
+    this.consultarProductosAE();
+    const shopingCard = this.storageService.getCarrito();
+    if (shopingCard) {
+      this.existShoppingCar = true;
+      this.productosCarrito = shopingCard;
+    } else {
+      this.existShoppingCar = false;
+      this.productosCarrito = null;
+    }
+
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
+      if (this.account?.login === 'admin') {
+        this.isAdmin = true;
+      } else {
+        this.isAdmin = false;
+      }
     });
-    this.consultarCategorias();
-    this.isAdminMethod();
-    this.consultarProductosAE();
   }
 
   isAuthenticated(): boolean {
@@ -80,12 +100,10 @@ export class ProductoComponent implements OnInit {
     this.modalService.open(this.content);
   }
 
-  isAdminMethod(): void {
-    if (this.account?.login === 'admin') {
-      this.isAdmin = true;
-    } else {
-      this.isAdmin = false;
-    }
+  // Si existen productos en el localStorage se podran mostrar los prodcuctos que hay guardados en el momento pero para realizar
+  // la compra se debera ir a la seccion de factura para completar el pedido y hacer las respectivas confirmaciones.
+  verCarritoDeCompras(): void {
+    this.modalService.open(this.content2, { backdrop: 'static', scrollable: true });
   }
 
   consultarCategorias(): void {
@@ -97,6 +115,11 @@ export class ProductoComponent implements OnInit {
         this.categorias = [];
       },
     });
+  }
+
+  redirectionToShopingCar(): void {
+    this.modalService.dismissAll();
+    this.router.navigate(['factura/new']);
   }
 
   productosFiltro(): void {
@@ -209,6 +232,10 @@ export class ProductoComponent implements OnInit {
         },
       });
     }
+  }
+
+  cancel(): void {
+    this.modalService.dismissAll();
   }
 
   ocultarAgotadosMethod(): void {
