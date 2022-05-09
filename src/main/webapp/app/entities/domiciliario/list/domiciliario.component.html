@@ -96,7 +96,6 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="mercaExtraApp.domiciliario.nombre">Nombre</span></th>
           <th scope="col"><span jhiTranslate="mercaExtraApp.domiciliario.apellido">Apellido</span></th>
           <th scope="col"><span jhiTranslate="mercaExtraApp.domiciliario.salario">Salario</span></th>
@@ -109,9 +108,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let domiciliario of domiciliarios; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/domiciliario', domiciliario.id, 'view']">{{ domiciliario.id }}</a>
-          </td>
           <td>{{ domiciliario.nombre }}</td>
           <td>{{ domiciliario.apellido }}</td>
           <td jhiTranslate="{{ 'mercaExtraApp.TipoSalario.' + domiciliario.salario }}">{{ domiciliario.salario }}</td>
