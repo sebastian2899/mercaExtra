@@ -63,6 +63,7 @@ public class CacheConfiguration {
             createCache(cm, com.mercaextra.app.domain.Egreso.class.getName());
             createCache(cm, com.mercaextra.app.domain.ItemFacturaVenta.class.getName());
             createCache(cm, com.mercaextra.app.domain.Producto.class.getName());
+            createCache(cm, com.mercaextra.app.domain.Reembolso.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

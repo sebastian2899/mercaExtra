@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="reembolso">
+      <h2 data-cy="reembolsoDetailsHeading"><span jhiTranslate="mercaExtraApp.reembolso.detail.title">Reembolso</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ reembolso.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.reembolso.idPedido">Id Pedido</span></dt>
+        <dd>
+          <span>{{ reembolso.idPedido }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.reembolso.idDomiciliario">Id Domiciliario</span></dt>
+        <dd>
+          <span>{{ reembolso.idDomiciliario }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.reembolso.idFactura">Id Factura</span></dt>
+        <dd>
+          <span>{{ reembolso.idFactura }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.reembolso.descripcion">Descripcion</span></dt>
+        <dd>
+          <span>{{ reembolso.descripcion }}</span>
+        </dd>
+        <dt><span jhiTranslate="mercaExtraApp.reembolso.estado">Estado</span></dt>
+        <dd>
+          <span>{{ reembolso.estado }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/reembolso', reembolso.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>
