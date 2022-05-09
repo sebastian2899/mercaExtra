@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
+	
     @Query("SELECT p FROM Producto p WHERE p.categoria=:categoria")
     List<Producto> productuosPorCategoria(@Param("categoria") String categoria);
 
