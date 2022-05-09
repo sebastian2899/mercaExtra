@@ -213,6 +213,16 @@ h4 {
   }
 }
 
+.a-productos {
+  text-decoration: none;
+  background: none;
+  color: #000;
+}
+
+.a-productos:hover {
+  color: #3498db;
+}
+
 .style-a-footer {
   text-decoration: none;
   color: #000;
@@ -227,6 +237,14 @@ h4 {
 .titulos {
   color: rgb(79, 117, 255);
   font: 500 29px/24px Google Sans Text, Arial, Helvetica, sans-serif;
+}
+
+.font-size-new {
+  font: 500 23px/24px Google Sans Text, Arial, Helvetica, sans-serif;
+}
+
+.font-size-small {
+  font: 500 18px/24px Google Sans Text, Arial, Helvetica, sans-serif;
 }
 
 .tituloSmall {
@@ -671,4 +689,12 @@ angular-cli removes postcss-rtl processed inline css, processed rules must be ad
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
   position: relative;
   animation: auto-progress 2s infinite linear;
+}
+
+.image-help {
+  display: inline-block;
+  width: 647px;
+  height: 497px;
+  background: url('../../content/images/ayudaReembolso.png') no-repeat;
+  background-size: contain;
 }

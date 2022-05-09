@@ -227,4 +227,21 @@ public class ProductoServiceImpl implements ProductoService {
             productoRepository.save(producto);
         }
     }
+
+    /*
+     * METODO PARA CONSULTAR LOS PRODUCTOS SIMILARES AL VER EL DETALLE DE UN
+     * PRODUCTO. SOLO SE CONSULTAN 3 PRODUCTOS QUE ESTEN DENTRO DE LA MISMA
+     * CATEGORIA DEL PRODUCTO QUE SE ESTA CONSULTADO, DE ESOS 3 PRODUCTOS
+     * RECOLECTADOS DE LA BD NO SE PUEDE REPETIR EL MISMO PRODUCTO QUE SE ESTA
+     * CONSULTANDO
+     */
+    @Override
+    public List<ProductoDTO> productosSimilares(ProductoDTO producto) {
+        log.debug("Request to get similar products");
+
+        // SE ENVIAN LOS 2 PARAMETROS QUE EJECUTAN LA CONSULTA CORRECTAMENTE.
+        List<Producto> productosSimilares = productoRepository.proctosSimilares(producto.getId(), producto.getCategoria());
+
+        return productosSimilares.stream().map(productoMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+    }
 }

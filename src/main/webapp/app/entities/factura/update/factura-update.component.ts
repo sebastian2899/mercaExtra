@@ -91,7 +91,7 @@ export class FacturaUpdateComponent implements OnInit {
     const carrito = this.storageService.getCarrito();
     if (carrito) {
       this.productosSeleccionados = carrito;
-      this.ngbModal.open(this.content, { backdrop: 'static', size: 'lg' });
+      this.productosSeleccionados.length > 0 ? this.ngbModal.open(this.content, { backdrop: 'static', size: 'lg' }) : undefined;
     }
 
     /* si el carrode compras al refrescar la pantalla tiene uno o mas productos,

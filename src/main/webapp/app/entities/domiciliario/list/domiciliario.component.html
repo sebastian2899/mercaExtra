@@ -1,4 +1,68 @@
-<div>
+<div *ngIf="userLogin === 'admin'" class="d-flex justify-content-end">
+  <button class="btn btn-outline-info" (click)="changeLookInfo()">{{ opcion }}</button>
+</div>
+<div class="d-flex justify-content-center mb-5" *ngIf="verInfo">
+  <div class="col-8">
+    <header class="titulos mb-4"><h3>Información domicilios y pedidos</h3></header>
+
+    <div class="font-size-new">
+      En esta sección damos a conocer información acerca de sucesos que pueden ocurrir durante tu pedido en entrega o un caso en específico
+      con algún domiciliario.
+    </div>
+
+    <div class="container mt-3">
+      <h4 class="titulos mt-5 mb-3">Casos</h4>
+      <ol class="font-size-small">
+        <li class="mb-2"><b>Pedido no entregado</b></li>
+        <p class="ms-3">
+          En caso el pedido no sea entregado a tu domicilio en un tiempo estimado de 30 min, se presupone que es problema directamente del
+          domiciliario, en dicho caso, el usuario tendrá acceso a un reembolso de su dinero, (si el método de pago fue transacción
+          bancaria). Si el método de pago es contra entrega, no abran dilemas de dinero, el usuario será libre de abandonar el aplicativo o
+          reintentar su compra con un domiciliario diferente asignado internamente.
+        </p>
+        <li class="mt-5 mb-2">
+          <b>Pedido no pagado</b>
+          <p class="ms-3">
+            En caso el usuario se niegue a pagar un domicilio por causas diferentes a: (productos alterados, productos en mal estado,
+            productos equivocados, etc.) negarse o no pagar el domicilio cuando el proceso es correcto, supone una alteracion en el
+            funcionamiento del aplicativo como de la tienda, de este modo se procedera a betar el usuario de el aplicativo.
+          </p>
+        </li>
+        <li class="mt-5 mb-2">
+          <b>Pedido no finalizado</b>
+          <p class="ms-3">
+            Al momento de realizar un pedido, se le informa al usuario que deberá marcar el pedido como finalizado una vez reciba su pedido.
+            En caso de no hacerlo y recibir su pedido, su pedido será marcado como expirado después de recibir su pedido y no finalizarlo,
+            de este modo no tendrá acceso a reclamos y reembolsos.
+          </p>
+        </li>
+        <li class="mt-5 mb-2">
+          <b>Pedido finalizado antes de tiempo</b>
+          <p class="ms-3">
+            Si un usuario del aplicativo marca su pedido en entrega como finalizado antes de recibirlo, el equipo mercaExtra no se hará
+            responsable de su pedido en caso exista un inconveniente con el pedido.
+          </p>
+        </li>
+      </ol>
+    </div>
+    <div class="d-flex justify-content-center mb-4">
+      <h2 class="titulos">¿En que casos puedes hacer un reembolso?</h2>
+    </div>
+    <div>
+      <p class="font-size-small">
+        Si el pedido no es entregado a tu domicilio, podrás hacer un reembolso, dichos pedidos serán analizados por el aplicativo para
+        diferenciar cuando no finalizas el pedido de cuando no es recibido por el usuario. Luego de analizado el caso de no haber recibido
+        el pedido y el método de pago fue transacción bancaria, el usuario tendrá 5 días hábiles para recibir su reembolso.
+        <br /><br /><br />
+        Encontraras la seccion de reembolso en: Cuenta - reembolsos, situada en la parte inferior del menu vertial del aplicativo. Desde
+        alli podras seguir el paso a paso para realizar un reembolso.
+      </p>
+      <span class="image-help"></span>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="userLogin === 'admin'">
   <h2 id="page-heading" data-cy="DomiciliarioHeading">
     <span jhiTranslate="mercaExtraApp.domiciliario.home.title">Domiciliarios</span>
 

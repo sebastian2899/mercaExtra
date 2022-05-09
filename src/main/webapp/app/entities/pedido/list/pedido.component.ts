@@ -22,6 +22,7 @@ export class PedidoComponent implements OnInit {
   @ViewChild('detalleFactura', { static: true }) content: ElementRef | undefined;
   @ViewChild('advertencia', { static: true }) content2: ElementRef | undefined;
   @ViewChild('pedidoEntregado', { static: true }) content3: ElementRef | undefined;
+  @ViewChild('expiredOrder', { static: true }) content4: ElementRef | undefined;
 
   pedidos?: IPedido[];
   isLoading = false;
@@ -31,6 +32,7 @@ export class PedidoComponent implements OnInit {
   fecha?: dayjs.Dayjs | null;
   account?: Account | null;
   intervalId?: any;
+  expired?: boolean | null;
 
   constructor(
     protected pedidoService: PedidoService,
@@ -111,7 +113,7 @@ export class PedidoComponent implements OnInit {
         this.pedido = res.body;
         if (this.pedido) {
           this.consultarNotificacionPedido(this.pedido.idNotificacion!);
-          // this.cronPedido();
+          this.cronPedido();
         }
       },
       error: () => {
@@ -125,24 +127,22 @@ export class PedidoComponent implements OnInit {
     this.loadAll();
   }
 
-  // cronPedido():void{
-  //   let contador =0;
-  //   if(this.pedido){
-  //    this.intervalId = setInterval(() => {
-  //       contador++;
-  //       this.alertService.addAlert({
-  //         type:'info',
-  //         message:`${String(contador)}`
-  //       })
-  //       if(contador === 4){
-  //         clearInterval( this.intervalId);
-  //       }
-  // }, 1000);
+  cronPedido(): void {
+    // let contador =0;
+    if (this.pedido) {
+      this.intervalId = setInterval(() => {
+        // contador++;
+        this.pedidoComming();
+        this.pedido === null ? (this.expired = true) : (this.expired = false);
+        if (this.expired) {
+          clearInterval(this.intervalId);
+          window.location.reload();
+        }
+      }, 300000);
+    }
+  }
 
-  //   }
-
-  // }
-
+  // 300000
   pedidoFinalizado(): void {
     if (this.pedido) {
       this.pedidoService.pedidoFinalizado(this.pedido).subscribe({

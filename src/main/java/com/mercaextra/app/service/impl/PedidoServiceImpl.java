@@ -17,11 +17,14 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,6 +32,7 @@ import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -97,6 +101,11 @@ public class PedidoServiceImpl implements PedidoService {
             pedido.setIdNotificacion(1L);
             pedido.setEstado("Entregando");
             pedido.setInfoDomicilio(consultarDomiciliario(idDomiciliarioIndex));
+
+            //SE TRAE LA HORA ACTUAL  Y SE FORMATEA
+            LocalTime time = LocalTime.now();
+            String fechaFormat = time.toString().substring(0, 5);
+            pedido.setHoraDespacho(fechaFormat);
 
             //despues de darle al pedido un domiciliario disponible, dicho domiciliario pasara a estado en entrega
             Domiciliario domiciliario = domiciliarioRepository.domiciliarioPorId(idDomiciliarioIndex);
@@ -228,6 +237,7 @@ public class PedidoServiceImpl implements PedidoService {
                     pedido.setFechaPedido(pedidoInstant);
                     pedido.setDireccion(pedidoObject[1].toString());
                     pedido.setInfoDomicilio(pedidoObject[2].toString());
+                    pedido.setId(Long.parseLong(pedidoObject[3].toString()));
                     pedidosDTO.add(pedido);
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -344,21 +354,41 @@ public class PedidoServiceImpl implements PedidoService {
 
         return pedidosDTO;
     }
+
     /*
-     * CREAR TAREA PROGRAMADA PARA MONITOREAR LA ENTREGA DEL PEDIDO, CADA 30 MINUTOS
+     * CREAR TAREA PROGRAMADA PARA MONITOREAR LA ENTREGA DEL PEDIDO, CADA 5 MINUTOS.
      * EN CASO DEL PEDIDO NO SER ENTREGADO EN EL TIEMPO ESTIMADO, AUTOMATICAMENTE
      * DESPUES DE 30 MINUTOS EL PEDIDO CAMBIARA DE ESTO
      */
 
-    /*
-     * public void expiredOrder() {
-     * log.debug("Request to expired order by time out");
-     *
-     *
-     *
-     * Pedido pedido = pedidoRepository.pedidoEntrega();
-     *
-     * if(pedido != null) { pedido.setEstado("Finalizado");
-     * pedidoRepository.save(pedido); } }
-     */
+    //CRON 30 MIN */30 * * * *  10seg */10 * * * * *   5min */5 * *  * *
+
+    @Scheduled(cron = "0 */5 * ? * *")
+    public void expiredOrder() {
+        log.debug("Request to expired order by time out");
+
+        //TRAEMOS TODOS LOS PEDIDOS QUE ESTAN EN ESTADO ENTREGANDO
+        List<Object[]> enEntrega = pedidoRepository.AllOrdersInComming();
+
+        //HORA ACTUAL
+        LocalTime time = LocalTime.now();
+        String timeFormat = time.toString().substring(0, 5);
+
+        int timeComparing = Integer.parseInt(timeFormat.replace(":", ""));
+
+        for (Object[] entrega : enEntrega) {
+            String timeEntrega = entrega[0].toString();
+            Long idPedido = Long.parseLong(entrega[1].toString());
+
+            //SE HACE LA COMPARACION DE LA HORA DE EL PEDIDO CON LA HORA ACTUAL.
+            int timeEntregaLong = Integer.parseInt(timeEntrega.replace(":", ""));
+
+            if (timeComparing - timeEntregaLong > 30) {
+                //SI SE CUMPLE LA CONDICION SE CAMBIA EL ESTADO AL PEDIDO CON EL ID QUE YA SE CONSULTO DE EL PEDIDO
+                Query q = entityManager.createQuery(Constants.CAMBIAR_ESTADO_PEDIDO_EXPIRADO).setParameter("id", idPedido);
+
+                q.executeUpdate();
+            }
+        }
+    }
 }

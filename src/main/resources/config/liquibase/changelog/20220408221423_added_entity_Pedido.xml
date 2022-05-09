@@ -38,6 +38,9 @@
             <column name="user_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+             <column name="hora_despacho" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
         <dropDefaultValue tableName="pedido" columnName="fecha_pedido" columnDataType="${datetimeType}"/>

@@ -2,7 +2,14 @@ package com.mercaextra.app.domain;
 
 import java.io.Serializable;
 import java.time.Instant;
-import javax.persistence.*;
+import java.time.LocalTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -48,6 +55,9 @@ public class Pedido implements Serializable {
     @Transient
     private String descripcionNotificacion;
 
+    @Column(name = "hora_despacho")
+    private String horaDespacho;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public String getDescripcionNotificacion() {
@@ -60,6 +70,14 @@ public class Pedido implements Serializable {
 
     public Long getId() {
         return this.id;
+    }
+
+    public String getHoraDespacho() {
+        return horaDespacho;
+    }
+
+    public void setHoraDespacho(String horaDespacho) {
+        this.horaDespacho = horaDespacho;
     }
 
     public Pedido id(Long id) {

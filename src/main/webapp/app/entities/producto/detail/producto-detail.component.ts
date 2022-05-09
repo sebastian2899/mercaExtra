@@ -6,6 +6,9 @@ import { DataUtils } from 'app/core/util/data-util.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
+import { ProductoService } from '../service/producto.service';
+import { HttpResponse } from '@angular/common/http';
+import { AlertService } from 'app/core/util/alert.service';
 
 @Component({
   selector: 'jhi-producto-detail',
@@ -15,19 +18,26 @@ export class ProductoDetailComponent implements OnInit {
   producto: IProducto | null = null;
   account?: Account | null;
   valorConDescuento?: number | null;
+  productosSimilares?: IProducto[] = [];
 
   constructor(
     protected dataUtils: DataUtils,
     protected activatedRoute: ActivatedRoute,
     protected accountService: AccountService,
     protected storageService: StateStorageService,
-    protected router: Router
+    protected router: Router,
+    protected productoService: ProductoService,
+    protected alertService: AlertService
   ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ producto }) => {
       this.producto = producto;
+      if (this.producto) {
+        this.asignateSimilarProducts(this.producto);
+      }
     });
+
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
     });
@@ -39,6 +49,21 @@ export class ProductoDetailComponent implements OnInit {
       const descuento = (this.producto.precioDescuento * this.producto.precio!) / 100;
       this.valorConDescuento = this.producto.precio! - Number(descuento);
     }
+  }
+
+  asignateSimilarProducts(producto: IProducto): void {
+    this.productoService.getSimilarProductos(producto).subscribe({
+      next: (res: HttpResponse<IProducto[]>) => {
+        this.productosSimilares = res.body ?? [];
+      },
+      error: () => {
+        this.productosSimilares = [];
+        this.alertService.addAlert({
+          type: 'danger',
+          message: 'Error al cargar los productos similares.',
+        });
+      },
+    });
   }
 
   pasoParametroProducto(producto: IProducto): void {

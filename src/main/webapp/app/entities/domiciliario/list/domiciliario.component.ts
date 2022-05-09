@@ -5,6 +5,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IDomiciliario } from '../domiciliario.model';
 import { DomiciliarioService } from '../service/domiciliario.service';
 import { DomiciliarioDeleteDialogComponent } from '../delete/domiciliario-delete-dialog.component';
+import { Account } from 'app/core/auth/account.model';
+import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
   selector: 'jhi-domiciliario',
@@ -13,8 +15,16 @@ import { DomiciliarioDeleteDialogComponent } from '../delete/domiciliario-delete
 export class DomiciliarioComponent implements OnInit {
   domiciliarios?: IDomiciliario[];
   isLoading = false;
+  userLogin?: string | null;
+  account?: Account | null;
+  verInfo = true;
+  opcion = 'Ocultar';
 
-  constructor(protected domiciliarioService: DomiciliarioService, protected modalService: NgbModal) {}
+  constructor(
+    protected domiciliarioService: DomiciliarioService,
+    protected modalService: NgbModal,
+    protected accountService: AccountService
+  ) {}
 
   loadAll(): void {
     this.isLoading = true;
@@ -32,6 +42,17 @@ export class DomiciliarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAll();
+    this.accountService.getAuthenticationState().subscribe(account => {
+      this.account = account;
+      if (this.account) {
+        this.userLogin = this.account.login;
+      }
+    });
+  }
+
+  changeLookInfo(): void {
+    this.verInfo ? (this.verInfo = false) : (this.verInfo = true);
+    this.verInfo ? (this.opcion = 'Ocultar') : (this.opcion = 'Ver Informacion');
   }
 
   trackId(index: number, item: IDomiciliario): number {

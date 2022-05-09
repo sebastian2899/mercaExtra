@@ -2,6 +2,7 @@ package com.mercaextra.app.service.dto;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalTime;
 import java.util.Objects;
 
 /**
@@ -34,8 +35,18 @@ public class PedidoDTO implements Serializable {
 
     private String descripcionNotificacion;
 
+    private String horaDespacho;
+
     public String getDescripcionNotificacion() {
         return descripcionNotificacion;
+    }
+
+    public String getHoraDespacho() {
+        return horaDespacho;
+    }
+
+    public void setHoraDespacho(String horaDespacho) {
+        this.horaDespacho = horaDespacho;
     }
 
     public void setDescripcionNotificacion(String descripcionNotificacion) {

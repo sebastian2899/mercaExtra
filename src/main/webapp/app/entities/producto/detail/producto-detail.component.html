@@ -61,6 +61,26 @@
         </div>
       </div>
 
+      <div class="row text-center mt-3">
+        <div class="mt-5 col-lg-3 col-md-6 mb-4" *ngFor="let productoSimilar of productosSimilares" style="margin-right: 70px">
+          <a class="a-productos" [routerLink]="['/producto', productoSimilar.id, 'view']">
+            <div class="card" style="width: 300px; height: 340px">
+              <img
+                [src]="'data:' + productoSimilar.imagenContentType + ';base64,' + productoSimilar.imagen"
+                style="max-height: 200px; padding: 10px"
+                alt="producto image"
+              />
+
+              <div class="card-body">
+                <h5 class="card-title">{{ productoSimilar.nombre }}</h5>
+                <p class="card-text"><span>Precio</span>{{ productoSimilar.precio | currency }}</p>
+                <p class="card-text"><span>Disponible</span> {{ productoSimilar.cantidad }}</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
       <button type="submit" (click)="previousState()" class="btn btn-info mt-5" data-cy="entityDetailsBackButton">
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
       </button>

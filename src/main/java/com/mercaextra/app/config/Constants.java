@@ -31,7 +31,10 @@ public final class Constants {
 
     //CONSULTAR LOGIN
     public static final String TRAER_PEDIDOS_POR_USUARIO =
-        "SELECT p.fechaPedido,p.direccion,p.infoDomicilio FROM Pedido p" + " WHERE p.userName = :userName";
+        "SELECT p.fechaPedido,p.direccion,p.infoDomicilio,p.id FROM Pedido p" + " WHERE p.userName = :userName";
+
+    //PEDIDO
+    public static final String CAMBIAR_ESTADO_PEDIDO_EXPIRADO = "UPDATE Pedido SET estado='Expirado' WHERE id=:id";
 
     private Constants() {}
 }

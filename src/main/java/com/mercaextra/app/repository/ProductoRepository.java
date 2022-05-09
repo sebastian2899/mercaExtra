@@ -25,4 +25,10 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
     @Query("SELECT p.precio FROM Producto p WHERE p.id=:id")
     BigDecimal precioProductoPorId(@Param("id") Long id);
+
+    @Query(
+        value = "SELECT * FROM Producto AS p WHERE p.id NOT IN (:id) AND p.categoria =:categoria ORDER BY rand() LIMIT 3",
+        nativeQuery = true
+    )
+    List<Producto> proctosSimilares(@Param("id") Long id, @Param("categoria") String categoria);
 }

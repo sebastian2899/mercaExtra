@@ -12,6 +12,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -101,6 +102,19 @@ public class ProductoResource {
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, productoDTO.getId().toString()))
             .body(result);
+    }
+
+    @PostMapping("/productos-similares")
+    public ResponseEntity<List<ProductoDTO>> productosRecomendados(@RequestBody ProductoDTO productoDTO) throws URISyntaxException {
+        log.debug("REST request to get similar producto");
+
+        if (productoDTO == null) {
+            throw new BadRequestAlertException("Product is null", ENTITY_NAME, ENTITY_NAME);
+        }
+
+        List<ProductoDTO> productosSimilares = productoService.productosSimilares(productoDTO);
+
+        return new ResponseEntity<List<ProductoDTO>>(productosSimilares, HttpStatus.OK);
     }
 
     /**
