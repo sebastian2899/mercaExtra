@@ -1,0 +1,87 @@
+<table>
+  <thead>
+    <th>Fecha</th>
+    <th>Direccion</th>
+    <th>Domiciliario</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let pedido of pedidosExpirados">
+      <td>{{ pedido.fechaPedido | formatMediumDatetime }}</td>
+      <td>{{ pedido.direccion }}</td>
+      <td>{{ pedido.infoDomicilio }}</td>
+    </tr>
+  </tbody>
+</table>
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-reembolso-heading" data-cy="ReembolsoCreateUpdateHeading" jhiTranslate="mercaExtraApp.reembolso.home.createOrEditLabel">
+        Create or edit a Reembolso
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.reembolso.idPedido" for="field_idPedido">Id Pedido</label>
+          <input type="number" class="form-control" name="idPedido" id="field_idPedido" data-cy="idPedido" formControlName="idPedido" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.reembolso.idDomiciliario" for="field_idDomiciliario">Id Domiciliario</label>
+          <input
+            type="number"
+            class="form-control"
+            name="idDomiciliario"
+            id="field_idDomiciliario"
+            data-cy="idDomiciliario"
+            formControlName="idDomiciliario"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.reembolso.idFactura" for="field_idFactura">Id Factura</label>
+          <input type="number" class="form-control" name="idFactura" id="field_idFactura" data-cy="idFactura" formControlName="idFactura" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.reembolso.descripcion" for="field_descripcion">Descripcion</label>
+          <input
+            type="text"
+            class="form-control"
+            name="descripcion"
+            id="field_descripcion"
+            data-cy="descripcion"
+            formControlName="descripcion"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.reembolso.estado" for="field_estado">Estado</label>
+          <input type="text" class="form-control" name="estado" id="field_estado" data-cy="estado" formControlName="estado" />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

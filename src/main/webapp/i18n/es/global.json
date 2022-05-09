@@ -19,6 +19,7 @@
         "proveedor": "Proveedor",
         "egreso": "Egreso",
         "itemFacturaVenta": "Item Factura Venta",
+        "reembolso": "Reembolso",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
