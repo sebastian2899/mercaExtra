@@ -1,15 +1,16 @@
 package com.mercaextra.app.service.impl;
 
+import com.mercaextra.app.domain.Pedido;
 import com.mercaextra.app.domain.Reembolso;
+import com.mercaextra.app.repository.PedidoRepository;
 import com.mercaextra.app.repository.ReembolsoRepository;
 import com.mercaextra.app.service.ReembolsoService;
 import com.mercaextra.app.service.UserService;
-import com.mercaextra.app.service.dto.PedidoDTO;
+import com.mercaextra.app.service.dto.DatosPedidoReembolsoDTO;
 import com.mercaextra.app.service.dto.ReembolsoDTO;
 import com.mercaextra.app.service.mapper.ReembolsoMapper;
-import java.text.ParseException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,18 +34,38 @@ public class ReembolsoServiceImpl implements ReembolsoService {
 
     private final ReembolsoMapper reembolsoMapper;
 
+    private final PedidoRepository pedidoRepository;
+
     private UserService userService;
 
-    public ReembolsoServiceImpl(ReembolsoRepository reembolsoRepository, ReembolsoMapper reembolsoMapper, UserService userService) {
+    public ReembolsoServiceImpl(
+        ReembolsoRepository reembolsoRepository,
+        ReembolsoMapper reembolsoMapper,
+        UserService userService,
+        PedidoRepository pedidoRepository
+    ) {
         this.reembolsoRepository = reembolsoRepository;
         this.reembolsoMapper = reembolsoMapper;
         this.userService = userService;
+        this.pedidoRepository = pedidoRepository;
     }
 
     @Override
     public ReembolsoDTO save(ReembolsoDTO reembolsoDTO) {
         log.debug("Request to save Reembolso : {}", reembolsoDTO);
         Reembolso reembolso = reembolsoMapper.toEntity(reembolsoDTO);
+
+        // Consultamos el pedido para cambiarlo de estado.
+        if (reembolso.getIdPedido() != null) {
+            Pedido pedido = pedidoRepository.getById(reembolso.getIdPedido());
+            pedido.setEstado("Reembolso en estudio");
+            pedidoRepository.save(pedido);
+        }
+
+        if (reembolsoDTO.getId() == null) {
+            reembolso.setEstado("Reembolso en estudio");
+        }
+
         reembolso = reembolsoRepository.save(reembolso);
         return reembolsoMapper.toDto(reembolso);
     }
@@ -85,29 +106,28 @@ public class ReembolsoServiceImpl implements ReembolsoService {
     }
 
     @Override
-    public List<PedidoDTO> pedidosExpirados() {
+    public List<DatosPedidoReembolsoDTO> pedidosExpirados() {
         log.debug("Request to get all expired orders");
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         String userName = userService.getUserWithAuthorities().get().getLogin();
 
-        PedidoDTO pedido = null;
-        List<PedidoDTO> pedidosExpirados = new ArrayList<>();
+        DatosPedidoReembolsoDTO pedido = null;
+        List<DatosPedidoReembolsoDTO> pedidosExpirados = new ArrayList<>();
 
         List<Object[]> expirados = reembolsoRepository.pedidosReembolso(userName);
 
         for (Object[] expirado : expirados) {
-            pedido = new PedidoDTO();
-            try {
-                Instant fecha = format.parse(expirado[0].toString().substring(0, expirado[0].toString().indexOf("T"))).toInstant();
-                pedido.setFechaPedido(fecha);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            pedido.setDireccion(expirado[1].toString());
-            pedido.setInfoDomicilio(expirado[2].toString());
-
+            pedido = new DatosPedidoReembolsoDTO();
+            pedido.setIdPedido(Long.parseLong(expirado[0].toString()));
+            String fecha = expirado[1].toString().substring(0, expirado[1].toString().indexOf("T")).toString();
+            pedido.setFechaPedido(fecha);
+            pedido.setPedidoDireccion(expirado[2].toString());
+            pedido.setValorFactura(new BigDecimal(expirado[3].toString()));
+            pedido.setIdFactura(Long.parseLong(expirado[4].toString()));
+            pedido.setDomiciliario(expirado[5].toString());
+            pedido.setIdDomiciliario(Long.parseLong(expirado[6].toString()));
             pedidosExpirados.add(pedido);
         }
 

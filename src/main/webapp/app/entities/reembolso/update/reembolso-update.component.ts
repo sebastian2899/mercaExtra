@@ -7,8 +7,8 @@ import { finalize } from 'rxjs/operators';
 
 import { IReembolso, Reembolso } from '../reembolso.model';
 import { ReembolsoService } from '../service/reembolso.service';
-import { IPedido } from 'app/entities/pedido/pedido.model';
 import { PedidoService } from 'app/entities/pedido/service/pedido.service';
+import { IDatosPedidoReembolso } from '../DatosPedidoReembolso';
 
 @Component({
   selector: 'jhi-reembolso-update',
@@ -16,7 +16,8 @@ import { PedidoService } from 'app/entities/pedido/service/pedido.service';
 })
 export class ReembolsoUpdateComponent implements OnInit {
   isSaving = false;
-  pedidosExpirados?: IPedido[] = [];
+  pedidosExpirados?: IDatosPedidoReembolso[] = [];
+  addDescription = false;
 
   editForm = this.fb.group({
     id: [],
@@ -47,13 +48,23 @@ export class ReembolsoUpdateComponent implements OnInit {
 
   consultarPedidosExpirados(): void {
     this.pedioService.reembolsosPedidos().subscribe({
-      next: (res: HttpResponse<IPedido[]>) => {
+      next: (res: HttpResponse<IDatosPedidoReembolso[]>) => {
         this.pedidosExpirados = res.body ?? [];
       },
       error: () => {
         this.pedidosExpirados = [];
       },
     });
+  }
+
+  validateRefund(): void {
+    this.addDescription = true;
+  }
+
+  aisgnarDatosReembolso(pedido: IDatosPedidoReembolso): void {
+    this.editForm.get(['idPedido'])?.setValue(pedido.idPedido);
+    this.editForm.get(['idDomiciliario'])?.setValue(pedido.idDomiciliario);
+    this.editForm.get(['idFactura'])?.setValue(pedido.idFactura);
   }
 
   save(): void {
