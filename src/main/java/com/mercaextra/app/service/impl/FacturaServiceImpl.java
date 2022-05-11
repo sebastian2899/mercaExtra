@@ -179,8 +179,8 @@ public class FacturaServiceImpl implements FacturaService {
         newFactura.setNumeroFactura(RamdomNumber());
 
         if (factura.getMetodoPago().equals(MetodoPago.CONTRA_ENTREGA)) {
-            newFactura.setValorPagado(BigDecimal.ZERO);
-            newFactura.setValorDeuda(BigDecimal.ZERO);
+            newFactura.setValorPagado(factura.getValorPagado());
+            newFactura.setValorDeuda(factura.getValorDeuda());
             newFactura.setEstadoFactura("lista");
         } else if (factura.getMetodoPago().equals(MetodoPago.TRANSACCION_BANCARIA)) {
             newFactura.setEstadoFactura("Transaccion Pendiente");

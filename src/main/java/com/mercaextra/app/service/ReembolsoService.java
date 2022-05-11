@@ -1,6 +1,6 @@
 package com.mercaextra.app.service;
 
-import com.mercaextra.app.service.dto.PedidoDTO;
+import com.mercaextra.app.service.dto.DatosPedidoReembolsoDTO;
 import com.mercaextra.app.service.dto.ReembolsoDTO;
 import java.util.List;
 import java.util.Optional;
@@ -47,5 +47,5 @@ public interface ReembolsoService {
      */
     void delete(Long id);
 
-    List<PedidoDTO> pedidosExpirados();
+    List<DatosPedidoReembolsoDTO> pedidosExpirados();
 }

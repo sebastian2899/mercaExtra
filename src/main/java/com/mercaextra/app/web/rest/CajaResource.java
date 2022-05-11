@@ -4,6 +4,7 @@ import com.mercaextra.app.repository.CajaRepository;
 import com.mercaextra.app.service.CajaService;
 import com.mercaextra.app.service.dto.CajaDTO;
 import com.mercaextra.app.web.rest.errors.BadRequestAlertException;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -12,8 +13,17 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -137,6 +147,15 @@ public class CajaResource {
     public List<CajaDTO> getAllCajas() {
         log.debug("REST request to get all Cajas");
         return cajaService.findAll();
+    }
+
+    @GetMapping("cajas-valor-dia")
+    public ResponseEntity<BigDecimal> valorVendidoDia() {
+        log.debug("REST request to get total daily value (Invoice)");
+
+        BigDecimal valorVendidoDia = cajaService.valorVendidoDia();
+
+        return new ResponseEntity<BigDecimal>(valorVendidoDia, HttpStatus.OK);
     }
 
     /**

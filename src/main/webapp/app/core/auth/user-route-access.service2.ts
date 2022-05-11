@@ -7,7 +7,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { StateStorageService } from './state-storage.service';
 
 @Injectable({ providedIn: 'root' })
-export class UserRouteAccessService implements CanActivate {
+export class UserRouteAccessService2 implements CanActivate {
   constructor(private router: Router, private accountService: AccountService, private stateStorageService: StateStorageService) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
@@ -20,7 +20,7 @@ export class UserRouteAccessService implements CanActivate {
           //   return true;
           // }
 
-          if (account.login === 'admin') {
+          if (account.login === 'admin' || account.login === 'user') {
             return true;
           }
 

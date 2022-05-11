@@ -2,7 +2,7 @@ package com.mercaextra.app.web.rest;
 
 import com.mercaextra.app.repository.ReembolsoRepository;
 import com.mercaextra.app.service.ReembolsoService;
-import com.mercaextra.app.service.dto.PedidoDTO;
+import com.mercaextra.app.service.dto.DatosPedidoReembolsoDTO;
 import com.mercaextra.app.service.dto.ReembolsoDTO;
 import com.mercaextra.app.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -140,7 +140,7 @@ public class ReembolsoResource {
     }
 
     @GetMapping("/reembolsos-pedidos")
-    public List<PedidoDTO> pedidosExpirados() {
+    public List<DatosPedidoReembolsoDTO> pedidosExpirados() {
         log.debug("REST request to get all expired orders");
         return reembolsoService.pedidosExpirados();
     }

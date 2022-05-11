@@ -14,6 +14,9 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface ReembolsoRepository extends JpaRepository<Reembolso, Long> {
-    @Query("SELECT p.fechaPedido,p.direccion,p.infoDomicilio FROM Pedido p WHERE p.userName=:userName AND p.estado = 'expirado'")
+    @Query(
+        "SELECT p.id,p.fechaPedido,p.direccion,f.valorFactura,f.id,d.nombre,d.id FROM Pedido p INNER JOIN Factura f ON p.idFactura = f.id" +
+        " INNER JOIN Domiciliario d ON p.idDomiciliario = d.id WHERE p.userName =:userName AND p.estado = 'expirado'"
+    )
     List<Object[]> pedidosReembolso(@Param("userName") String userName);
 }

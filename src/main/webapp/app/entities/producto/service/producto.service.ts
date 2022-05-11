@@ -13,6 +13,7 @@ export type EntityArrayResponseType = HttpResponse<IProducto[]>;
 @Injectable({ providedIn: 'root' })
 export class ProductoService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/productos');
+  protected resourceLogoutUrl = this.applicationConfigService.getEndpointFor('api/logout-productos');
   protected productosAgotadosUrl = this.applicationConfigService.getEndpointFor('api/productos-agotados');
   protected productosEscasosUrl = this.applicationConfigService.getEndpointFor('api/productos-enEscases');
   protected productosCategoriaUrl = this.applicationConfigService.getEndpointFor('api/productos-categoria');
@@ -76,6 +77,11 @@ export class ProductoService {
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<IProducto[]>(this.resourceUrl, { params: options, observe: 'response' });
+  }
+
+  queryLogout(req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http.get<IProducto[]>(this.resourceLogoutUrl, { params: options, observe: 'response' });
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {

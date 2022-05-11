@@ -6,12 +6,13 @@ import { ProductoComponent } from '../list/producto.component';
 import { ProductoDetailComponent } from '../detail/producto-detail.component';
 import { ProductoUpdateComponent } from '../update/producto-update.component';
 import { ProductoRoutingResolveService } from './producto-routing-resolve.service';
+import { UserRouteAccessService2 } from 'app/core/auth/user-route-access.service2';
 
 const productoRoute: Routes = [
   {
     path: '',
     component: ProductoComponent,
-    canActivate: [UserRouteAccessService],
+    canActivate: [UserRouteAccessService2],
   },
   {
     path: ':id/view',
@@ -19,7 +20,7 @@ const productoRoute: Routes = [
     resolve: {
       producto: ProductoRoutingResolveService,
     },
-    canActivate: [UserRouteAccessService],
+    // canActivate: [UserRouteAccessService],
   },
   {
     path: 'new',
