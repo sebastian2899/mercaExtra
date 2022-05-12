@@ -34,7 +34,7 @@ export class ProductHomeComponent implements OnInit {
   }
 
   loadAll(): void {
-    this.productoService.query().subscribe({
+    this.productoService.queryLogout().subscribe({
       next: (res: HttpResponse<IProducto[]>) => {
         this.productos = res.body ?? [];
       },

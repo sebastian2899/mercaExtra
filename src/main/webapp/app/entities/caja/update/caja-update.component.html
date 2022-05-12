@@ -1,10 +1,29 @@
+<h2 id="jhi-caja-heading" data-cy="CajaCreateUpdateHeading" class="titulos">
+  {{ titulo }}
+</h2>
+
+<div class="d-flex justify-content-start mb-4">
+  <div class="col-7">
+    <span class="font-size-small">Consideraciones de la creación de la caja diaria: </span>
+    <ol class="mt-4 font-size-small">
+      <li class="mt-2">Si no se han realizado ventas en el día, no se podrá crear una caja.</li>
+      <li class="mt-2">No se puede registrar un valor mayor al valor total del día.</li>
+      <li class="mt-2">Cuando el valor registrado del día es menor al valor vendido del día, el estado de la caja será (DEUDA)</li>
+      <li class="mt-2">Luego de crear una caja, esta no podrá ser editada.</li>
+    </ol>
+  </div>
+
+  <div class="col-4">
+    <span class="font-size-black2 alert-info"
+      >Se implementa la creacion de las cajas diarias, para que se tenga un monitoreo diario, mensual y anual de las ventas que se han
+      realizado en el aplicativo durante un periodo de tiempo
+    </span>
+  </div>
+</div>
+
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-caja-heading" data-cy="CajaCreateUpdateHeading" jhiTranslate="mercaExtraApp.caja.home.createOrEditLabel">
-        Create or edit a Caja
-      </h2>
-
       <div>
         <jhi-alert-error></jhi-alert-error>
 

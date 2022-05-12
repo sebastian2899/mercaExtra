@@ -367,6 +367,10 @@ export class FacturaUpdateComponent implements OnInit {
     }
   }
 
+  refresh(): void {
+    window.location.reload();
+  }
+
   save(): void {
     this.isSaving = true;
     const factura = this.createFromForm();

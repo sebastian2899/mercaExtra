@@ -1,6 +1,7 @@
 package com.mercaextra.app.web.rest;
 
 import com.mercaextra.app.repository.ProductoRepository;
+import com.mercaextra.app.security.AuthoritiesConstants;
 import com.mercaextra.app.service.ProductoService;
 import com.mercaextra.app.service.dto.ProductoDTO;
 import com.mercaextra.app.web.rest.errors.BadRequestAlertException;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -58,6 +60,7 @@ public class ProductoResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/productos")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<ProductoDTO> createProducto(@RequestBody ProductoDTO productoDTO) throws URISyntaxException {
         log.debug("REST request to save Producto : {}", productoDTO);
         if (productoDTO.getId() != null) {
@@ -81,6 +84,7 @@ public class ProductoResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/productos/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<ProductoDTO> updateProducto(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody ProductoDTO productoDTO
@@ -166,6 +170,12 @@ public class ProductoResource {
      */
     @GetMapping("/productos")
     public List<ProductoDTO> getAllProductos() {
+        log.debug("REST request to get all Productos");
+        return productoService.findAll();
+    }
+
+    @GetMapping("/logout-productos")
+    public List<ProductoDTO> getAllProductosLogout() {
         log.debug("REST request to get all Productos");
         return productoService.findAll();
     }

@@ -1,0 +1,120 @@
+<!-- <table>
+  <thead>
+    <th>Fecha</th>
+    <th>Direccion</th>
+    <th>Domiciliario</th>
+  </thead>
+  <tbody>
+
+   
+    <tr *ngFor="let pedido of pedidosExpirados">
+      <td>{{ pedido.fechaPedido | formatMediumDatetime }}</td>
+      <td>{{ pedido.direccion }}</td>
+      <td>{{ pedido.infoDomicilio }}</td>
+    </tr>
+  </tbody>
+</table> -->
+
+<div class="d-flex justify-content-center mt-5">
+  <div class="" *ngIf="pedidosExpirados === null || pedidosExpirados!.length === 0">
+    <span class="alert alert-warning">No hay pedidos expirados.</span>
+  </div>
+</div>
+
+<div class="d-flex justify-content-center mb-5">
+  <div class="col-8" *ngIf="pedidosExpirados && pedidosExpirados.length > 0">
+    <h3 class="titulos mb-3">Reembolsos</h3>
+    <span class="font-size-small mb-2"
+      >Estas son las facturas a las cuales puedes aplicar un reembolso, serán caso de estudio de los administradores. En caso de ser un
+      reembolso efectivo, la devolución de dinero tendrá 5-8 días hábiles luego de ser exitoso el reembolso. </span
+    ><br />
+    <span><i>Si no realizas un reembolso en los 30 días posteriores al pedido, este será eliminado del sistema.</i></span>
+  </div>
+</div>
+
+<div class="d-flex justify-content-center" *ngFor="let pedido of pedidosExpirados">
+  <div class="card" style="width: 18rem">
+    <div class="card-body">
+      <h5 class="card-title" style="color: rgb(0, 102, 255)">Pedido del: {{ pedido.fechaPedido }}</h5>
+      <h6 class="card-subtitle mb-2 font-size-small">Direccion: {{ pedido.pedidoDireccion }}</h6>
+      <p class="font-size-small">Valor Factura: {{ pedido.valorFactura | currency }}</p>
+      <p class="font-size-small">Domiciliario: {{ pedido.domiciliario }}</p>
+      <button class="card-link btn btn-info" (click)="aisgnarDatosReembolso(pedido)" (click)="validateRefund()">Reembolzar</button>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex justify-content-center mt-5" *ngIf="addDescription">
+  <div class="col-9">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h3 class="titulos" id="jhi-reembolso-heading" data-cy="ReembolsoCreateUpdateHeading">
+        Ingrese el motivo por el cual realizara un reembolso de este pedido
+      </h3>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <!-- <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.reembolso.idPedido" for="field_idPedido">Id Pedido</label>
+          <input type="number" class="form-control" name="idPedido" id="field_idPedido" data-cy="idPedido" formControlName="idPedido" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.reembolso.idDomiciliario" for="field_idDomiciliario">Id Domiciliario</label>
+          <input
+            type="number"
+            class="form-control"
+            name="idDomiciliario"
+            id="field_idDomiciliario"
+            data-cy="idDomiciliario"
+            formControlName="idDomiciliario"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.reembolso.idFactura" for="field_idFactura">Id Factura</label>
+          <input type="number" class="form-control" name="idFactura" id="field_idFactura" data-cy="idFactura" formControlName="idFactura" />
+        </div> -->
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.reembolso.descripcion" for="field_descripcion">Descripcion</label>
+          <textarea
+            type="text"
+            class="form-control"
+            name="descripcion"
+            id="field_descripcion"
+            data-cy="descripcion"
+            formControlName="descripcion"
+            required="true"
+          ></textarea>
+        </div>
+
+        <!-- <div class="row mb-3">
+          <label class="form-label" jhiTranslate="mercaExtraApp.reembolso.estado" for="field_estado">Estado</label>
+          <input type="text" class="form-control" name="estado" id="field_estado" data-cy="estado" formControlName="estado" />
+        </div> -->
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-info"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

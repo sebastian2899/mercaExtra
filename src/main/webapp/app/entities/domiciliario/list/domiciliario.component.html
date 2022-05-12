@@ -54,8 +54,10 @@
         diferenciar cuando no finalizas el pedido de cuando no es recibido por el usuario. Luego de analizado el caso de no haber recibido
         el pedido y el método de pago fue transacción bancaria, el usuario tendrá 5 días hábiles para recibir su reembolso.
         <br /><br /><br />
-        Encontraras la seccion de reembolso en: Cuenta - reembolsos, situada en la parte inferior izquierda del menu vertial del aplicativo.
-        Desde alli podras seguir el paso a paso para realizar un reembolso.
+        <<<<<<< HEAD Encontraras la seccion de reembolso en: Cuenta - reembolsos, situada en la parte inferior izquierda del menu vertial
+        del aplicativo. Desde alli podras seguir el paso a paso para realizar un reembolso. ======= Encontraras la seccion de reembolso en:
+        Cuenta - reembolsos, situada en la parte inferior del menu vertial del aplicativo. Desde alli podras seguir el paso a paso para
+        realizar un reembolso. --Equipo MercaExtra. >>>>>>> 9eeb882bbf068b4fd67829a5cbafb0bba73f4d0e
       </p>
       <span class="image-help"></span>
     </div>
@@ -96,7 +98,6 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="mercaExtraApp.domiciliario.nombre">Nombre</span></th>
           <th scope="col"><span jhiTranslate="mercaExtraApp.domiciliario.apellido">Apellido</span></th>
           <th scope="col"><span jhiTranslate="mercaExtraApp.domiciliario.salario">Salario</span></th>
@@ -109,9 +110,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let domiciliario of domiciliarios; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/domiciliario', domiciliario.id, 'view']">{{ domiciliario.id }}</a>
-          </td>
           <td>{{ domiciliario.nombre }}</td>
           <td>{{ domiciliario.apellido }}</td>
           <td jhiTranslate="{{ 'mercaExtraApp.TipoSalario.' + domiciliario.salario }}">{{ domiciliario.salario }}</td>

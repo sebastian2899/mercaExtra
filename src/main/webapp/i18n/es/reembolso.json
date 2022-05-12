@@ -1,0 +1,28 @@
+{
+  "mercaExtraApp": {
+    "reembolso": {
+      "home": {
+        "title": "Reembolsos",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Reembolso",
+        "createOrEditLabel": "Crear o editar Reembolso",
+        "notFound": "Ningún Reembolsos encontrado"
+      },
+      "created": "Un nuevo Reembolso ha sido creado con el identificador {{ param }}",
+      "updated": "Un Reembolso ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Reembolso ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Reembolso {{ id }}?"
+      },
+      "detail": {
+        "title": "Reembolso"
+      },
+      "id": "ID",
+      "idPedido": "Id Pedido",
+      "idDomiciliario": "Id Domiciliario",
+      "idFactura": "Id Factura",
+      "descripcion": "Descripcion",
+      "estado": "Estado"
+    }
+  }
+}

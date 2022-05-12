@@ -27,6 +27,7 @@
     <include file="config/liquibase/changelog/20220408221433_added_entity_Egreso.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220413210416_added_entity_ItemFacturaVenta.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220408221425_added_entity_Producto.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220509161332_added_entity_Reembolso.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->

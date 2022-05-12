@@ -10,6 +10,7 @@ import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 
 import { ICaja, Caja } from '../caja.model';
 import { CajaService } from '../service/caja.service';
+import { AlertService } from 'app/core/util/alert.service';
 
 @Component({
   selector: 'jhi-caja-update',
@@ -17,6 +18,7 @@ import { CajaService } from '../service/caja.service';
 })
 export class CajaUpdateComponent implements OnInit {
   isSaving = false;
+  titulo?: string | null;
 
   editForm = this.fb.group({
     id: [],
@@ -27,21 +29,49 @@ export class CajaUpdateComponent implements OnInit {
     estado: [],
   });
 
-  constructor(protected cajaService: CajaService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
+  constructor(
+    protected cajaService: CajaService,
+    protected activatedRoute: ActivatedRoute,
+    protected fb: FormBuilder,
+    protected alertService: AlertService
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ caja }) => {
       if (caja.id === undefined) {
         const today = dayjs().startOf('day');
         caja.fechaCreacion = today;
+        this.titulo = 'Crear Caja Diaria';
+      } else {
+        this.titulo = 'Actualizar Caja';
       }
 
       this.updateForm(caja);
     });
+
+    this.consultarValorVendidoDia();
   }
 
   previousState(): void {
     window.history.back();
+  }
+
+  consultarValorVendidoDia(): void {
+    this.cajaService.valorVendidoDia().subscribe({
+      next: (res: HttpResponse<number>) => {
+        const valor = res.body;
+        if (valor) {
+          const valueformat = valor.toFixed(0);
+          valor > 0 ? this.editForm.get(['valorTotalDia'])?.setValue(valueformat) : this.editForm.get(['valorTotalDia'])?.setValue(0);
+        }
+      },
+      error: () => {
+        this.alertService.addAlert({
+          type: 'danger',
+          message: 'Error al consultar el valor vendido del dia.',
+        });
+      },
+    });
   }
 
   save(): void {

@@ -11,6 +11,11 @@ import java.util.Objects;
  */
 public class DomiciliarioDTO implements Serializable {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     private String nombre;

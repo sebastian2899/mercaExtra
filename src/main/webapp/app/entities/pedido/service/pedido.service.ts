@@ -9,12 +9,14 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { IPedido, getPedidoIdentifier } from '../pedido.model';
 import { IFacturaPedido } from '../factura-pedido';
+import { IDatosPedidoReembolso } from 'app/entities/reembolso/DatosPedidoReembolso';
 
 export type EntityResponseType = HttpResponse<IPedido>;
 export type EntityArrayResponseType = HttpResponse<IPedido[]>;
 export type FacturaPedidoResponseType = HttpResponse<IFacturaPedido[]>;
 export type BooleanResponseType = HttpResponse<boolean>;
 export type NumberResponseType = HttpResponse<number>;
+export type DatosReembolsoResponseType = HttpResponse<IDatosPedidoReembolso[]>;
 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
@@ -24,6 +26,7 @@ export class PedidoService {
   protected pedidoCommingUrl = this.applicationConfigService.getEndpointFor('api/pedido-comming');
   protected pedidoFinalizadoUrl = this.applicationConfigService.getEndpointFor('api/pedido-finalizado');
   protected pedidosFechaUrl = this.applicationConfigService.getEndpointFor('api/pedidos-fecha');
+  protected resourceReembolsoPedidosUrl = this.applicationConfigService.getEndpointFor('api/reembolsos-pedidos');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -38,6 +41,10 @@ export class PedidoService {
     return this.http
       .get<IPedido[]>(`${this.pedidosFechaUrl}/${fecha.toString()}`, { observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
+  reembolsosPedidos(): Observable<DatosReembolsoResponseType> {
+    return this.http.get<IDatosPedidoReembolso[]>(this.resourceReembolsoPedidosUrl, { observe: 'response' });
   }
 
   facturasPedido(): Observable<FacturaPedidoResponseType> {

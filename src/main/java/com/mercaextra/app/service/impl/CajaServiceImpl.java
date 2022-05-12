@@ -5,6 +5,9 @@ import com.mercaextra.app.repository.CajaRepository;
 import com.mercaextra.app.service.CajaService;
 import com.mercaextra.app.service.dto.CajaDTO;
 import com.mercaextra.app.service.mapper.CajaMapper;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -73,5 +76,20 @@ public class CajaServiceImpl implements CajaService {
     public void delete(Long id) {
         log.debug("Request to delete Caja : {}", id);
         cajaRepository.deleteById(id);
+    }
+
+    // Metodo para traer el valor total de todo lo que se ha vendido en el dia (Facturas).
+    @Override
+    public BigDecimal valorVendidoDia() {
+        log.debug("Request to get total daily value");
+
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        // Se formatea la fecha para la consulta
+        String fechaFormat = format.format(date);
+
+        BigDecimal valorVendidoDia = cajaRepository.valorVendidoDia(fechaFormat);
+
+        return valorVendidoDia;
     }
 }
