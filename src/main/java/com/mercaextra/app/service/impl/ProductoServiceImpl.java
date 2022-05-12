@@ -207,6 +207,7 @@ public class ProductoServiceImpl implements ProductoService {
         for (Producto producto : productos) {
             BigDecimal porcentaje = (producto.getPrecio().multiply(BigDecimal.valueOf(cantidad))).divide(new BigDecimal(100));
 
+            // OPCIONAL(SE PUEDEN QUITAR LOS PUNTOS DECIMALES DE EL DESCUENTO O DECREMENTO APLICADO EN EL Math.pow(10, 1), REEMPLZAR EL 1 POR 0)
             switch (opcion) {
                 case "aumentar":
                     double precioProdut = producto.getPrecio().add(porcentaje).doubleValue();
