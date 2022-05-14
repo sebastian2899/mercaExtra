@@ -15,23 +15,17 @@
 
   <div class="col-4">
     <span class="font-size-black2 alert-info"
-      >Se implementa la creacion de las cajas diarias, para que se tenga un monitoreo diario, mensual y anual de las ventas que se han
+      >Se implementa la creación de las cajas diarias, para que se tenga un monitoreo diario, mensual y anual de las ventas que se han
       realizado en el aplicativo durante un periodo de tiempo
     </span>
   </div>
 </div>
 
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center mt-5">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <div>
         <jhi-alert-error></jhi-alert-error>
-
-        <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-        </div>
-
         <div class="row mb-3">
           <label class="form-label" jhiTranslate="mercaExtraApp.caja.fechaCreacion" for="field_fechaCreacion">Fecha Creacion</label>
           <div class="d-flex">
@@ -43,11 +37,13 @@
               name="fechaCreacion"
               formControlName="fechaCreacion"
               placeholder="YYYY-MM-DD HH:mm"
+              readonly
             />
           </div>
+          <div class="alert alert-info text-center">La de fecha de creación de la caja será la fecha exacta del momento de creación</div>
         </div>
 
-        <div class="row mb-3">
+        <div class="row mb-4">
           <label class="form-label" jhiTranslate="mercaExtraApp.caja.valorTotalDia" for="field_valorTotalDia">Valor Total Dia</label>
           <input
             type="number"
@@ -56,10 +52,11 @@
             id="field_valorTotalDia"
             data-cy="valorTotalDia"
             formControlName="valorTotalDia"
+            readonly
           />
         </div>
 
-        <div class="row mb-3">
+        <div class="row mb-4">
           <label class="form-label" jhiTranslate="mercaExtraApp.caja.valorRegistradoDia" for="field_valorRegistradoDia"
             >Valor Registrado Dia</label
           >
@@ -69,11 +66,17 @@
             name="valorRegistradoDia"
             id="field_valorRegistradoDia"
             data-cy="valorRegistradoDia"
+            oninput="this.value = Math.max(this.value, 0)"
+            min="1"
+            max="{{ value }}"
             formControlName="valorRegistradoDia"
+            required="true"
+            (keyup)="calcularDiferencia()"
           />
+          <div class="alert alert-info text-center">Valor en efectivo del total de las ventas registradas en el día.</div>
         </div>
 
-        <div class="row mb-3">
+        <div class="row mb-4">
           <label class="form-label" jhiTranslate="mercaExtraApp.caja.diferencia" for="field_diferencia">Diferencia</label>
           <input
             type="number"
@@ -82,10 +85,11 @@
             id="field_diferencia"
             data-cy="diferencia"
             formControlName="diferencia"
+            readonly
           />
         </div>
 
-        <div class="row mb-3">
+        <div class="row mb-5">
           <label class="form-label" jhiTranslate="mercaExtraApp.caja.estado" for="field_estado">Estado</label>
           <input type="text" class="form-control" name="estado" id="field_estado" data-cy="estado" formControlName="estado" />
         </div>
@@ -101,7 +105,7 @@
           id="save-entity"
           data-cy="entityCreateSaveButton"
           [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
+          class="btn btn-info"
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
         </button>

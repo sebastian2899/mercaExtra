@@ -8,6 +8,7 @@ import { finalize } from 'rxjs/operators';
 import { ICompra, Compra } from '../compra.model';
 import { CompraService } from '../service/compra.service';
 import { TipoFactura } from 'app/entities/enumerations/tipo-factura.model';
+import { ProductoService } from 'app/entities/producto/service/producto.service';
 
 @Component({
   selector: 'jhi-compra-update',
@@ -30,7 +31,12 @@ export class CompraUpdateComponent implements OnInit {
     estado: [],
   });
 
-  constructor(protected compraService: CompraService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
+  constructor(
+    protected compraService: CompraService,
+    protected activatedRoute: ActivatedRoute,
+    protected fb: FormBuilder,
+    protected productoService: ProductoService
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ compra }) => {

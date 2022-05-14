@@ -5,9 +5,10 @@ import { DomiciliarioDetailComponent } from './detail/domiciliario-detail.compon
 import { DomiciliarioUpdateComponent } from './update/domiciliario-update.component';
 import { DomiciliarioDeleteDialogComponent } from './delete/domiciliario-delete-dialog.component';
 import { DomiciliarioRoutingModule } from './route/domiciliario-routing.module';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
-  imports: [SharedModule, DomiciliarioRoutingModule],
+  imports: [SharedModule, DomiciliarioRoutingModule, MatIconModule],
   declarations: [DomiciliarioComponent, DomiciliarioDetailComponent, DomiciliarioUpdateComponent, DomiciliarioDeleteDialogComponent],
   entryComponents: [DomiciliarioDeleteDialogComponent],
 })

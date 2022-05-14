@@ -19,6 +19,7 @@ import { AlertService } from 'app/core/util/alert.service';
 export class CajaUpdateComponent implements OnInit {
   isSaving = false;
   titulo?: string | null;
+  value?: number | null;
 
   editForm = this.fb.group({
     id: [],
@@ -61,8 +62,8 @@ export class CajaUpdateComponent implements OnInit {
       next: (res: HttpResponse<number>) => {
         const valor = res.body;
         if (valor) {
-          const valueformat = valor.toFixed(0);
-          valor > 0 ? this.editForm.get(['valorTotalDia'])?.setValue(valueformat) : this.editForm.get(['valorTotalDia'])?.setValue(0);
+          this.value = Number(valor.toFixed(0));
+          valor > 0 ? this.editForm.get(['valorTotalDia'])?.setValue(this.value) : this.editForm.get(['valorTotalDia'])?.setValue(0);
         }
       },
       error: () => {
@@ -72,6 +73,16 @@ export class CajaUpdateComponent implements OnInit {
         });
       },
     });
+  }
+
+  calcularDiferencia(): void {
+    if (this.value) {
+      const recordedValue = this.editForm.get(['valorRegistradoDia'])!.value;
+
+      const dif = this.value - Number(recordedValue);
+      this.editForm.get(['diferencia'])?.setValue(dif);
+      dif === 0 ? this.editForm.get(['estado'])?.setValue('Saldada') : this.editForm.get(['estado'])?.setValue('Deuda');
+    }
   }
 
   save(): void {

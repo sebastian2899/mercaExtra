@@ -15,4 +15,11 @@ import org.springframework.stereotype.Repository;
 public interface CajaRepository extends JpaRepository<Caja, Long> {
     @Query("SELECT SUM(f.valorFactura) FROM Factura f WHERE DATE_FORMAT(f.fechaCreacion, '%d/%m/%Y')=:fecha")
     BigDecimal valorVendidoDia(@Param("fecha") String fecha);
+
+    @Query(
+        value = "SELECT CASE WHEN EXISTS (SELECT f.estado_factura FROM factura AS f WHERE DATE_FORMAT(f.fecha_creacion,'%d/%m/%Y') = :fecha)" +
+        " THEN 'true' ELSE 'false' END",
+        nativeQuery = true
+    )
+    String booleanResult(@Param("fecha") String fecha);
 }

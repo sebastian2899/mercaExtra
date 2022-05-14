@@ -36,5 +36,12 @@ public final class Constants {
     //PEDIDO
     public static final String CAMBIAR_ESTADO_PEDIDO_EXPIRADO = "UPDATE Pedido SET estado='Expirado' WHERE id=:id";
 
+    // DOMICILIARY
+    public static final String BASE_DOMICILIARY = "SELECT d FROM Domiciliario d WHERE d.id IS NOT NULL";
+    public static final String DOMICILIARY_PER_NAME = " AND UPPER(d.nombre) LIKE :nombre";
+    public static final String DOMICILIARY_PER_TYPE_SALARY = " AND d.salario = :tipoSalario";
+    public static final String DOMICILIARY_PER_SHEDULED = " AND d.horario LIKE :horario";
+    public static final String DOMICILIARY_PER_STATE = " AND d.estado = :estado";
+
     private Constants() {}
 }

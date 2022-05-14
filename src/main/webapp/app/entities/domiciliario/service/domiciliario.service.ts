@@ -13,6 +13,7 @@ export type EntityArrayResponseType = HttpResponse<IDomiciliario[]>;
 @Injectable({ providedIn: 'root' })
 export class DomiciliarioService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/domiciliarios');
+  protected domiciliariosFiltrosUrl = this.applicationConfigService.getEndpointFor('api/domiciliarios-filtro');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -24,6 +25,10 @@ export class DomiciliarioService {
     return this.http.put<IDomiciliario>(`${this.resourceUrl}/${getDomiciliarioIdentifier(domiciliario) as number}`, domiciliario, {
       observe: 'response',
     });
+  }
+
+  domiciliariosFiltro(domiciliario: IDomiciliario): Observable<EntityArrayResponseType> {
+    return this.http.post<IDomiciliario[]>(this.domiciliariosFiltrosUrl, domiciliario, { observe: 'response' });
   }
 
   partialUpdate(domiciliario: IDomiciliario): Observable<EntityResponseType> {

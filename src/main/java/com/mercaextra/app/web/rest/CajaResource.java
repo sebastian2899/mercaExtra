@@ -158,6 +158,13 @@ public class CajaResource {
         return new ResponseEntity<BigDecimal>(valorVendidoDia, HttpStatus.OK);
     }
 
+    @GetMapping("/cajas-remember-creation")
+    public ResponseEntity<Integer> RememberCreationCaja() {
+        log.debug("REST request to remember creation caja");
+        int resp = cajaService.RememberCreationCaja();
+        return ResponseEntity.ok().body(resp);
+    }
+
     /**
      * {@code GET  /cajas/:id} : get the "id" caja.
      *

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -11,8 +11,11 @@ import { CajaDeleteDialogComponent } from '../delete/caja-delete-dialog.componen
   templateUrl: './caja.component.html',
 })
 export class CajaComponent implements OnInit {
+  @ViewChild('remember', { static: true }) content: ElementRef | undefined;
   cajas?: ICaja[];
   isLoading = false;
+  respNumber?: number | null;
+  intervalId?: any;
 
   constructor(protected cajaService: CajaService, protected modalService: NgbModal) {}
 
@@ -32,6 +35,26 @@ export class CajaComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAll();
+    this.rememberCreationCaja();
+  }
+
+  rememberCreationCaja(): void {
+    this.intervalId = setInterval(() => {
+      this.cajaService.rememberCreationCaja().subscribe({
+        next: (res: HttpResponse<number>) => {
+          this.respNumber = res.body;
+          this.respNumber === 1 ? clearInterval(this.intervalId) : this.modalService.open(this.content);
+        },
+      });
+    }, 3600000);
+
+    // this.cajaService.rememberCreationCaja().subscribe({
+    //   next:
+    //   (res:HttpResponse<string>) =>{
+    //     this.mensaje = res.body;
+    //     this.mensaje === " " ? null : this.modalService.open(this.content);
+    //   }
+    // });
   }
 
   trackId(index: number, item: ICaja): number {

@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,6 +77,25 @@ public class CajaServiceImpl implements CajaService {
     public void delete(Long id) {
         log.debug("Request to delete Caja : {}", id);
         cajaRepository.deleteById(id);
+    }
+
+    @Override
+    // Tarea programada para recordar la creacino de una caja diaria en caso de que se haya registrado una o mas compras durante el dia
+    // @Scheduled(cron = "0 */1 * ? * *")
+    public int RememberCreationCaja() {
+        log.debug("Request to  remember create  caja ");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        String fechaFormat = format.format(date);
+
+        // VALIDAMOS QUE EXISTAN FACTURAS CREADAS EN EL DIA.
+        boolean resp = Boolean.parseBoolean(cajaRepository.booleanResult(fechaFormat));
+
+        int respNumber;
+
+        respNumber = (resp) ? 2 : 1;
+
+        return respNumber;
     }
 
     // Metodo para traer el valor total de todo lo que se ha vendido en el dia (Facturas).

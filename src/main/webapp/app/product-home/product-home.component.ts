@@ -6,6 +6,7 @@ import { ICategoriaProducto } from 'app/entities/categoria-producto/categoria-pr
 import { CategoriaProductoService } from 'app/entities/categoria-producto/service/categoria-producto.service';
 import { IProducto, Producto } from 'app/entities/producto/producto.model';
 import { ProductoService } from 'app/entities/producto/service/producto.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'jhi-product-home',
@@ -25,8 +26,11 @@ export class ProductHomeComponent implements OnInit {
     protected productoService: ProductoService,
     protected categoriaService: CategoriaProductoService,
     protected dataUtils: DataUtils,
-    private route: Router
-  ) {}
+    private route: Router,
+    private title: Title
+  ) {
+    this.title.setTitle('Produc-home');
+  }
 
   ngOnInit(): void {
     this.loadAll();

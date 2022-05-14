@@ -6,6 +6,7 @@ import { CompraComponent } from '../list/compra.component';
 import { CompraDetailComponent } from '../detail/compra-detail.component';
 import { CompraUpdateComponent } from '../update/compra-update.component';
 import { CompraRoutingResolveService } from './compra-routing-resolve.service';
+import { User2RouteAccessService } from 'app/core/auth/user2-route-access.service';
 
 const compraRoute: Routes = [
   {

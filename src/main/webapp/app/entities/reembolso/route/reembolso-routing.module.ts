@@ -6,6 +6,7 @@ import { ReembolsoComponent } from '../list/reembolso.component';
 import { ReembolsoDetailComponent } from '../detail/reembolso-detail.component';
 import { ReembolsoUpdateComponent } from '../update/reembolso-update.component';
 import { ReembolsoRoutingResolveService } from './reembolso-routing-resolve.service';
+import { User2RouteAccessService } from 'app/core/auth/user2-route-access.service';
 
 const reembolsoRoute: Routes = [
   {
@@ -27,7 +28,7 @@ const reembolsoRoute: Routes = [
     resolve: {
       reembolso: ReembolsoRoutingResolveService,
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [User2RouteAccessService],
   },
   {
     path: ':id/edit',
