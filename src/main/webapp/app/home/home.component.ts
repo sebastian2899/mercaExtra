@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('remember', { static: true }) content: ElementRef | undefined;
   account: Account | null = null;
   productos?: IProducto[] | null;
+  productosDescuento?: IProducto[] | null;
   intervalId?: any;
   respNumber?: number | null;
 
@@ -38,8 +39,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       .getAuthenticationState()
       .pipe(takeUntil(this.destroy$))
       .subscribe(account => (this.account = account));
-    this.consultarProductos();
     this.rememberCreationCaja();
+    this.findDissmidProduts();
+  }
+
+  isAuthenticated(): boolean {
+    return this.accountService.isAuthenticated();
   }
 
   rememberCreationCaja(): void {
@@ -55,13 +60,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     }, 3600000);
   }
 
-  consultarProductos(): void {
-    this.productoService.query().subscribe({
+  findDissmidProduts(): void {
+    this.productoService.getDiscountProduts().subscribe({
       next: (res: HttpResponse<IProducto[]>) => {
-        this.productos = res.body ?? [];
+        this.productosDescuento = res.body ?? [];
+        this.productosDescuento.forEach(element => {
+          const discount = (Number(element.precioDescuento) * Number(element.precio)) / 100;
+          element.precioConDescuento = Number(element.precio) - Number(discount.toFixed(0));
+        });
       },
       error: () => {
-        this.productos = [];
+        this.productosDescuento = [];
       },
     });
   }

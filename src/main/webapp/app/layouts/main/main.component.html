@@ -1,4 +1,4 @@
-<!-- <jhi-page-ribbon></jhi-page-ribbon> -->
+<!-- <jhi-page-ribbon></jhi-page-ribbon>
 <div [ngSwitch]="account !== null && account !== undefined">
   <div class="container-fluid" style="margin-top: 30px; width: 100%; position: fixed">
     <div class="row flex-nowrap">
@@ -140,12 +140,102 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <!-- aplicar container-fluid para hacer el container mas responsive-->
-<router-outlet name="navbar"></router-outlet>
-<div class="container" style="margin-left: 205px">
-  <div class="card jh-card">
-    <router-outlet style="margin-top: 40px"></router-outlet>
-    <jhi-footer style="background-color: white"></jhi-footer>
+
+<div>
+  <router-outlet name="navbar"></router-outlet>
+  <div class="area"></div>
+  <nav class="main-menu">
+    <ul class="mt-5">
+      <li class="mb-3">
+        <a href="#">
+          <i class="fa fa-home" aria-hidden="true"></i>
+          <span class="nav-text"> Inicio </span>
+        </a>
+      </li>
+      <li class="mb-3">
+        <a [routerLink]="['domiciliario']">
+          <i class="fa fa-info-circle" aria-hidden="true"></i>
+          <span class="nav-text"> Información Domicilios y Pedidos. </span>
+        </a>
+      </li>
+
+      <li class="mb-3">
+        <a [routerLink]="['producto']">
+          <i class="fa fa-shopping-basket fa-2x"></i>
+          <span class="nav-text"> Ver Productos </span>
+        </a>
+      </li>
+
+      <li class="has-subnav mb-3">
+        <a [routerLink]="['factura/new']">
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+          <span class="nav-text"> Hacer Mercado </span>
+        </a>
+      </li>
+      <li class="has-subnav mb-3">
+        <a [routerLink]="['pedido/new']">
+          <i class="fa fa-truck" aria-hidden="true"></i>
+          <span class="nav-text"> Mercados listos para pedir </span>
+        </a>
+      </li>
+      <li class="has-subnav mb-3">
+        <a [routerLink]="['factura']">
+          <i class="fa fa fa-money fa-2x"></i>
+          <span class="nav-text"> Mis Facturas </span>
+        </a>
+      </li>
+      <li class="mb-3">
+        <a [routerLink]="['pedido']">
+          <i class="fa fa-cutlery fa-2x"></i>
+          <span class="nav-text"> Mis pedidos </span>
+        </a>
+      </li>
+      <li class="mb-3">
+        <a [routerLink]="['reembolso/new']">
+          <i class="fa fa-reply fa-2x"></i>
+          <span class="nav-text"> Reenvolsos </span>
+        </a>
+      </li>
+      <!-- <li class="mb-3">
+         <a href="#">
+             <i class="fa fa-table fa-2x"></i>
+              <span class="nav-text">
+                  Tables
+              </span>
+          </a>
+      </li>
+      <li class="mb-3">
+         <a href="#">
+              <i class="fa fa-map-marker fa-2x"></i>
+              <span class="nav-text">
+                  Maps
+              </span>
+          </a>
+      </li>
+      <li class="mb-3">
+          <a href="#">
+             <i class="fa fa-info fa-2x"></i>
+              <span class="nav-text">
+                  Documentation
+              </span>
+          </a>
+      </li> -->
+    </ul>
+
+    <ul class="logout">
+      <li>
+        <a href="#">
+          <i class="fa fa-user" aria-hidden="true"></i>
+
+          <span class="nav-text"> Cerrar Sesion </span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div style="padding-top: 45px; margin-left: 120px; margin-right: 50px" class="card jh-card">
+    <router-outlet></router-outlet>
+    <jhi-footer style="background-color: white; position: inherit"></jhi-footer>
   </div>
 </div>

@@ -141,6 +141,12 @@ public class CompraResource {
         return compraService.findAll();
     }
 
+    @PostMapping("/compras/filtros/{fecha}")
+    public List<CompraDTO> comprasFiltro(@PathVariable(name = "fecha", required = false) String fecha, @RequestBody CompraDTO compraDTO) {
+        log.debug("REST request to get compras per filters");
+        return compraService.comprasFiltros(compraDTO, fecha);
+    }
+
     /**
      * {@code GET  /compras/:id} : get the "id" compra.
      *

@@ -199,6 +199,14 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<ProductoDTO> allProducts() {
+        log.debug("Request to get all products no matter amount");
+
+        return productoRepository.findAll().stream().map(productoMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Override
     public void aplicarPorcentajePrecio(String opcion, double cantidad) {
         log.debug("Request to change value of all products where option: ", opcion, " and value: ", cantidad);
 
@@ -243,5 +251,11 @@ public class ProductoServiceImpl implements ProductoService {
         List<Producto> productosSimilares = productoRepository.proctosSimilares(producto.getId(), producto.getCategoria());
 
         return productosSimilares.stream().map(productoMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Override
+    public List<ProductoDTO> discountProductHome() {
+        log.debug("Request to get 4 products whit aviable discount");
+        return productoRepository.discountProductHome().stream().map(productoMapper::toDto).toList();
     }
 }

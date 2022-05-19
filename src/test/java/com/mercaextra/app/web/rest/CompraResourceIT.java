@@ -13,6 +13,8 @@ import com.mercaextra.app.repository.CompraRepository;
 import com.mercaextra.app.service.dto.CompraDTO;
 import com.mercaextra.app.service.mapper.CompraMapper;
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -34,8 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class CompraResourceIT {
 
-    private static final BigDecimal DEFAULT_FECHA_CREACION = new BigDecimal(1);
-    private static final BigDecimal UPDATED_FECHA_CREACION = new BigDecimal(2);
+    private static final Instant DEFAULT_FECHA_CREACION = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_FECHA_CREACION = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final String DEFAULT_NUMERO_FACTURA = "AAAAAAAAAA";
     private static final String UPDATED_NUMERO_FACTURA = "BBBBBBBBBB";
@@ -140,7 +142,7 @@ class CompraResourceIT {
         List<Compra> compraList = compraRepository.findAll();
         assertThat(compraList).hasSize(databaseSizeBeforeCreate + 1);
         Compra testCompra = compraList.get(compraList.size() - 1);
-        assertThat(testCompra.getFechaCreacion()).isEqualByComparingTo(DEFAULT_FECHA_CREACION);
+        assertThat(testCompra.getFechaCreacion()).isEqualTo(DEFAULT_FECHA_CREACION);
         assertThat(testCompra.getNumeroFactura()).isEqualTo(DEFAULT_NUMERO_FACTURA);
         assertThat(testCompra.getTipoFactura()).isEqualTo(DEFAULT_TIPO_FACTURA);
         assertThat(testCompra.getInformacionProovedor()).isEqualTo(DEFAULT_INFORMACION_PROOVEDOR);
@@ -182,7 +184,7 @@ class CompraResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(compra.getId().intValue())))
-            .andExpect(jsonPath("$.[*].fechaCreacion").value(hasItem(sameNumber(DEFAULT_FECHA_CREACION))))
+            .andExpect(jsonPath("$.[*].fechaCreacion").value(hasItem(DEFAULT_FECHA_CREACION)))
             .andExpect(jsonPath("$.[*].numeroFactura").value(hasItem(DEFAULT_NUMERO_FACTURA)))
             .andExpect(jsonPath("$.[*].tipoFactura").value(hasItem(DEFAULT_TIPO_FACTURA.toString())))
             .andExpect(jsonPath("$.[*].informacionProovedor").value(hasItem(DEFAULT_INFORMACION_PROOVEDOR)))
@@ -205,7 +207,7 @@ class CompraResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(compra.getId().intValue()))
-            .andExpect(jsonPath("$.fechaCreacion").value(sameNumber(DEFAULT_FECHA_CREACION)))
+            .andExpect(jsonPath("$.fechaCreacion").value(DEFAULT_FECHA_CREACION))
             .andExpect(jsonPath("$.numeroFactura").value(DEFAULT_NUMERO_FACTURA))
             .andExpect(jsonPath("$.tipoFactura").value(DEFAULT_TIPO_FACTURA.toString()))
             .andExpect(jsonPath("$.informacionProovedor").value(DEFAULT_INFORMACION_PROOVEDOR))
@@ -259,7 +261,7 @@ class CompraResourceIT {
         List<Compra> compraList = compraRepository.findAll();
         assertThat(compraList).hasSize(databaseSizeBeforeUpdate);
         Compra testCompra = compraList.get(compraList.size() - 1);
-        assertThat(testCompra.getFechaCreacion()).isEqualByComparingTo(UPDATED_FECHA_CREACION);
+        assertThat(testCompra.getFechaCreacion()).isEqualTo(UPDATED_FECHA_CREACION);
         assertThat(testCompra.getNumeroFactura()).isEqualTo(UPDATED_NUMERO_FACTURA);
         assertThat(testCompra.getTipoFactura()).isEqualTo(UPDATED_TIPO_FACTURA);
         assertThat(testCompra.getInformacionProovedor()).isEqualTo(UPDATED_INFORMACION_PROOVEDOR);
@@ -367,7 +369,7 @@ class CompraResourceIT {
         List<Compra> compraList = compraRepository.findAll();
         assertThat(compraList).hasSize(databaseSizeBeforeUpdate);
         Compra testCompra = compraList.get(compraList.size() - 1);
-        assertThat(testCompra.getFechaCreacion()).isEqualByComparingTo(UPDATED_FECHA_CREACION);
+        assertThat(testCompra.getFechaCreacion()).isEqualTo(UPDATED_FECHA_CREACION);
         assertThat(testCompra.getNumeroFactura()).isEqualTo(UPDATED_NUMERO_FACTURA);
         assertThat(testCompra.getTipoFactura()).isEqualTo(DEFAULT_TIPO_FACTURA);
         assertThat(testCompra.getInformacionProovedor()).isEqualTo(UPDATED_INFORMACION_PROOVEDOR);
@@ -413,7 +415,7 @@ class CompraResourceIT {
         List<Compra> compraList = compraRepository.findAll();
         assertThat(compraList).hasSize(databaseSizeBeforeUpdate);
         Compra testCompra = compraList.get(compraList.size() - 1);
-        assertThat(testCompra.getFechaCreacion()).isEqualByComparingTo(UPDATED_FECHA_CREACION);
+        assertThat(testCompra.getFechaCreacion()).isEqualTo(UPDATED_FECHA_CREACION);
         assertThat(testCompra.getNumeroFactura()).isEqualTo(UPDATED_NUMERO_FACTURA);
         assertThat(testCompra.getTipoFactura()).isEqualTo(UPDATED_TIPO_FACTURA);
         assertThat(testCompra.getInformacionProovedor()).isEqualTo(UPDATED_INFORMACION_PROOVEDOR);

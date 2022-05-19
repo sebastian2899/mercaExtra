@@ -43,5 +43,14 @@ public final class Constants {
     public static final String DOMICILIARY_PER_SHEDULED = " AND d.horario LIKE :horario";
     public static final String DOMICILIARY_PER_STATE = " AND d.estado = :estado";
 
+    // COMPRA
+    public static final String INCREASE_AMOUNT_PRODUCTS = "UPDATE FROM Producto SET cantidad = cantidad+:cantidad WHERE id=:id";
+    public static final String BASE_COMPRA = "SELECT c FROM Compra c WHERE c.id IS NOT NULL";
+    public static final String COMPRA_TIPO_FACTURA = " AND c.tipoFactura = :tipoFactura";
+    public static final String COMPRA_ESTADO = " AND c.estado = :estado";
+    public static final String COMPRA_PROVEEDOR = " AND c.idProveedor =:idProveedor";
+    public static final String COMPRA_NUMERO_FACTURA = " AND c.numeroFactura =:numeroFactura";
+    public static final String COMPRA_FECHA = " AND DATE_FORMAT(c.fechaCreacion, '%Y-%m-%d') =:fechaCreacion";
+
     private Constants() {}
 }

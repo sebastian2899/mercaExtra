@@ -1,4 +1,4 @@
-<div class="row imagen-fondo" style="height: 750px">
+<div class="row">
   <!-- <div class="col-md-3">
     <span class="hipster img-fluid rounded"></span>
   </div>
@@ -124,47 +124,103 @@
     </div>
   </div>
 
-  <div class="row d-flex justify-content-around">
-    <div class="col-md-3 mt-4 ms-2">
-      <div class="hipster img-fluid rounded"></div>
-    </div>
-    <div class="col-md-8 mt-4">
-      <ul class="list-bg list p-3" style="border-radius: 17%">
-        <li><p class="btn-list font-size-black2" style="color: black">¿Que ofrecemos?</p></li>
-        <li>
-          <p class="btn-list font-size-black2">
-            -Con nosotros podras adquirir y recibir nuestros productos desde la comodidad de tu hogar!
-          </p>
-        </li>
-        <li>
-          <p class="btn-list font-size-black2">
-            -Tendras acceso a todos nuestros productos,categorias y paquetes pensados para la alimentacion dia a dia de tu hogar!
-          </p>
-        </li>
-        <li>
-          <p class="btn-list font-size-black2">-Tendras disponible una gestion de compras, para que elijas los productos que desas!</p>
-        </li>
-        <li>
-          <p class="btn-list font-size-black2">
-            -No te olvides de revisar los descuentos y promociones del dia! <button class="btn raise">Revisa aqui</button>
-          </p>
-        </li>
-      </ul>
+  <div class="row mt-5 mb-5">
+    <h2 class="titulos d-flex justify-content-center">Productos en oferta</h2>
+    <div class="row justify-content-center mt-5">
+      <div *ngFor="let prodct of productosDescuento" class="card mb-3 ms-4" style="max-width: 600px">
+        <div class="row g-0" style="padding: 15px">
+          <div class="col-md-4">
+            <img [src]="'data:' + prodct.imagenContentType + ';base64,' + prodct.imagen" class="img-fluid rounded-start" alt="..." />
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title titulos mb-3">{{ prodct.nombre }}</h5>
+              <p class="card-text font-size-small">{{ prodct.descripcion }}</p>
+              <p class="card-text mb-4 font-size-small" style="color: red">{{ prodct.precioConDescuento | currency }}</p>
+              <p class="card-text font-size-small">
+                <small class="text-muted">Antes: {{ prodct.precio | currency }}</small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
-<ng-template #remember>
-  <div class="modal-header">
-    <h4 class="titulos">Recordatorio Caja</h4>
+  <div [ngSwitch]="isAuthenticated()">
+    <div *ngSwitchCase="false" class="row d-flex justify-content-between mt-5 home-look-products">
+      <div class="col-md-5 mt-5">
+        <h4 class="font-size-new mb-4">¡Inicia sesion y visita nuestros productos y categorias!</h4>
+        <button class="ms-5 btn btn-warning" [routerLink]="['producto']">Ver Productos</button>
+      </div>
+      <div class="col-md-5">
+        <img src="content/images/mercaextralogo.jpg" style="width: 80%; height: 90%" alt="" />
+      </div>
+    </div>
+
+    <div *ngSwitchCase="true" class="row d-flex justify-content-between mt-5 home-look-products">
+      <div class="col-md-5 mt-5">
+        <h4 class="font-size-new mb-4">
+          ¡Bienvenido <span class="tituloSmall">{{ account!.login }} </span>revisa nuestros productos y realiza tu mercado desde la
+          comodidad de tu hogar
+        </h4>
+        <button class="ms-5 btn btn-warning" [routerLink]="['producto']">Ver Productos</button>
+      </div>
+      <div class="col-md-5">
+        <img src="content/images/mercaextralogo.jpg" style="width: 80%; height: 90%" alt="" />
+      </div>
+    </div>
+
+    <div class="mt-5 mb-5 row d-flex" style="border-width: 1px; border-color: rgb(151, 151, 151); border-style: solid; padding: 10px">
+      <div class="mt-5 d-flex justify-content-center col-md-3">
+        <h1 class="ms-5" style="font-weight: bold">¡Variedad y calidad de carnes frescas</h1>
+      </div>
+      <div class="d-flex justify-content-end col-md-9">
+        <img src="content/images/carnes.jpeg" alt="" style="width: 65%; height: 100%; border-radius: 1%" />
+      </div>
+    </div>
+
+    <div
+      class="mt-5 row d-flex justify-content-between"
+      style="border-width: 1px; border-style: solid; border-color: rgb(151, 151, 151); padding: 10px"
+    >
+      <div class="d-flex justify-content-start col-md-8">
+        <img src="content/images/verduras.jpg" alt="" style="width: 75%; border-radius: 1%" />
+      </div>
+      <div class="col-md-3">
+        <h1 style="font-weight: bold">¡También contamos con variedad en frutas y verduras!</h1>
+      </div>
+    </div>
+
+    <div
+      *ngSwitchCase="false"
+      class="row d-flex justify-content-between mt-5"
+      style="border-width: 1px; border-color: rgb(201, 201, 201); border-style: solid; padding: 50px"
+    >
+      <div class="col-md-5 justify-content-start">
+        <h3 class="titulos">¿Aun no tienes cuenta?</h3>
+        <span class="font-size-small">Regístrate con una dirección de correo que uses frecuentemente.</span>
+      </div>
+
+      <div class="col-md-5">
+        <h5 class="font-size-small">¡Regístrate y actualiza tus datos en las configuraciones de cuenta de usuario!</h5>
+        <button class="btn btn-warning">Registrate Aquí</button>
+      </div>
+    </div>
   </div>
-  <div class="modal-body">
-    <span class="font-size-small"
-      >No olvides registrar la caja del dia, en estos momentos se han registrado una o mas ventas, ingresa a
-      <a [routerLink]="['/cajas/new']">CREAR CAJA</a> y crea la caja.
-    </span>
-  </div>
-  <div class="modal-footer">
-    <h5 class="titulos">Equipo Merca Extra</h5>
-  </div>
-</ng-template>
+
+  <ng-template #remember>
+    <div class="modal-header">
+      <h4 class="titulos">Recordatorio Caja</h4>
+    </div>
+    <div class="modal-body">
+      <span class="font-size-small"
+        >No olvides registrar la caja del dia, en estos momentos se han registrado una o mas ventas, ingresa a
+        <a [routerLink]="['/cajas/new']">CREAR CAJA</a> y crea la caja.
+      </span>
+    </div>
+    <div class="modal-footer">
+      <h5 class="titulos">Equipo Merca Extra</h5>
+    </div>
+  </ng-template>
+</div>

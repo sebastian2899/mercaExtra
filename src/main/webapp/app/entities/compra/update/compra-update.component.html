@@ -1,5 +1,4 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
+<!-- <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-compra-heading" data-cy="CompraCreateUpdateHeading" jhiTranslate="mercaExtraApp.compra.home.createOrEditLabel">
         Create or edit a Compra
@@ -131,5 +130,198 @@
         </button>
       </div>
     </form>
+  </div> -->
+<h2 class="titulos mb-5">Adquirir Productos</h2>
+<div class="d-flex col-12">
+  <div class="row text-center col-md-9" style="margin-right: 41px">
+    <div class="col-lg-3" *ngFor="let producto of products">
+      <div class="card mb-4 me-3" style="width: 14rem; height: 28rem; padding: 10px">
+        <img [src]="'data:' + producto.imagenContentType + ';base64,' + producto.imagen" style="max-height: 160px" alt="producto image" />
+        <div class="card-body">
+          <h5 class="card-title">
+            <span class="tituloSmall">Nombre: </span><span class="font-size-small">{{ producto.nombre }}</span>
+          </h5>
+          <h5 class="card-title">
+            <span class="tituloSmall">Precio: </span><span class="font-size-small">{{ producto.precio }}</span>
+          </h5>
+          <h5 class="card-title">
+            <span class="tituloSmall">Cantidad: </span><span class="font-size-small">{{ producto.cantidad }}</span>
+          </h5>
+          <h5 class="card-title">
+            <span class="tituloSmall">Categoria: </span><span class="font-size-small"> {{ producto.categoria }}</span>
+          </h5>
+
+          <button class="menu-config2" (click)="addProduct(producto)"><mat-icon class="icon-config3">add</mat-icon></button>
+          <button
+            [disabled]="producto.cantidad === 0 || producto.cantidad === producto.cantidadOriginal"
+            (click)="diminishProduct(producto)"
+            class="menu-config2"
+          >
+            <mat-icon class="icon-config3">remove</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div
+      style="
+        top: 0;
+        bottom: 0;
+        overflow-y: scroll;
+        overflow-x: scroll;
+        margin-top: 90px;
+        width: 345px;
+        background-color: rgba(175, 192, 255, 0.559);
+        padding: 20px;
+      "
+      class="position-fixed"
+    >
+      <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label tituloSmall" jhiTranslate="mercaExtraApp.compra.informacionProovedor" for="field_informacionProovedor"
+              >Informacion Proovedor</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="informacionProovedor"
+              id="field_informacionProovedor"
+              data-cy="informacionProovedor"
+              formControlName="informacionProovedor"
+            />
+          </div>
+
+          <div class="col-md-6 mt-4">
+            <label class="form-label tituloSmall" for="field_idProveedor">Proveedor</label>
+            <select
+              type="text"
+              class="form-select"
+              name="idProveedor"
+              id="field_idProveedor"
+              data-cy="idProveedor"
+              formControlName="idProveedor"
+            >
+              <option [value]="proveedor.id" *ngFor="let proveedor of proveedores">{{ proveedor.nombre }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label tituloSmall" jhiTranslate="mercaExtraApp.compra.valorFactura" for="field_valorFactura"
+              >Valor Factura</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              name="valorFactura"
+              id="field_valorFactura"
+              data-cy="valorFactura"
+              formControlName="valorFactura"
+              readonly
+            />
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label tituloSmall" jhiTranslate="mercaExtraApp.compra.valorPagado" for="field_valorPagado"
+              >Valor Pagado</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              name="valorPagado"
+              id="field_valorPagado"
+              data-cy="valorPagado"
+              formControlName="valorPagado"
+              (keyup)="subtractValuesInvoice()"
+            />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label tituloSmall" jhiTranslate="mercaExtraApp.compra.valorDeuda" for="field_valorDeuda">Valor Deuda</label>
+            <input
+              type="number"
+              class="form-control"
+              name="valorDeuda"
+              id="field_valorDeuda"
+              data-cy="valorDeuda"
+              formControlName="valorDeuda"
+              readonly
+            />
+          </div>
+
+          <div class="col-md-6 mb-4">
+            <label class="form-label tituloSmall" jhiTranslate="mercaExtraApp.compra.tipoFactura" for="field_tipoFactura"
+              >Tipo Factura</label
+            >
+            <select class="form-select" name="tipoFactura" formControlName="tipoFactura" id="field_tipoFactura" data-cy="tipoFactura">
+              <option [ngValue]="null">{{ 'mercaExtraApp.TipoFactura.null' | translate }}</option>
+              <option *ngFor="let tipoFactura of tipoFacturaValues" [value]="tipoFactura">
+                {{ 'mercaExtraApp.TipoFactura.' + tipoFactura | translate }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label tituloSmall" jhiTranslate="mercaExtraApp.compra.numeroFactura" for="field_numeroFactura"
+              >Numero Factura</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="numeroFactura"
+              id="field_numeroFactura"
+              data-cy="numeroFactura"
+              formControlName="numeroFactura"
+            />
+          </div>
+
+          <div class="col-md-6 mt-4">
+            <label class="form-label tituloSmall" jhiTranslate="mercaExtraApp.compra.estado" for="field_estado">Estado</label>
+            <input readonly type="text" class="form-control" name="estado" id="field_estado" data-cy="estado" formControlName="estado" />
+          </div>
+        </div>
+
+        <div>
+          <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+            <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+          </button>
+
+          <button
+            type="submit"
+            id="save-entity"
+            data-cy="entityCreateSaveButton"
+            [disabled]="editForm.invalid || isSaving"
+            class="btn btn-info"
+            [disabled]="productosSeleccionados!.length === 0"
+          >
+            <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+          </button>
+        </div>
+      </form>
+
+      <div>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <h6>Productos</h6>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let producto of productosSeleccionados">
+              <td class="tituloSmall">{{ producto.nombreProducto }}</td>
+              <td>{{ producto.cantidad }}</td>
+              <td>{{ producto.precio | currency }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>

@@ -63,4 +63,8 @@ public interface ProductoService {
     void aplicarPorcentajePrecio(String opcion, double cantidad);
 
     List<ProductoDTO> productosSimilares(ProductoDTO producto);
+
+    List<ProductoDTO> allProducts();
+
+    List<ProductoDTO> discountProductHome();
 }

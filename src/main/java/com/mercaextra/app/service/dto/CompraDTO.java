@@ -3,6 +3,8 @@ package com.mercaextra.app.service.dto;
 import com.mercaextra.app.domain.enumeration.TipoFactura;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -12,7 +14,7 @@ public class CompraDTO implements Serializable {
 
     private Long id;
 
-    private BigDecimal fechaCreacion;
+    private Instant fechaCreacion;
 
     private String numeroFactura;
 
@@ -30,6 +32,8 @@ public class CompraDTO implements Serializable {
 
     private String estado;
 
+    private List<ItemFacturaCompraDTO> itemsFacturaCompra;
+
     public Long getId() {
         return id;
     }
@@ -38,11 +42,19 @@ public class CompraDTO implements Serializable {
         this.id = id;
     }
 
-    public BigDecimal getFechaCreacion() {
+    public List<ItemFacturaCompraDTO> getItemsFacturaCompra() {
+        return itemsFacturaCompra;
+    }
+
+    public void setItemsFacturaCompra(List<ItemFacturaCompraDTO> itemsFacturaCompra) {
+        this.itemsFacturaCompra = itemsFacturaCompra;
+    }
+
+    public Instant getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(BigDecimal fechaCreacion) {
+    public void setFechaCreacion(Instant fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 

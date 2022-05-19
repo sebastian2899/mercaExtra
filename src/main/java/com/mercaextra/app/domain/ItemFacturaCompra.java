@@ -30,8 +30,19 @@ public class ItemFacturaCompra implements Serializable {
     @Column(name = "precio", precision = 21, scale = 2)
     private BigDecimal precio;
 
+    @Transient
+    private String nombreProducto;
+
     public Long getId() {
         return id;
+    }
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
     }
 
     public void setId(Long id) {

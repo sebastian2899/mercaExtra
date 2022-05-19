@@ -45,4 +45,6 @@ public interface CompraService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    List<CompraDTO> comprasFiltros(CompraDTO comprafecha, String fecha);
 }
