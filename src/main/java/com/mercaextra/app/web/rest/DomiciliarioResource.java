@@ -141,6 +141,12 @@ public class DomiciliarioResource {
         return domiciliarioService.findAll();
     }
 
+    @PostMapping("/domiciliarios-filtro")
+    public List<DomiciliarioDTO> domiciliarioFiltros(@RequestBody DomiciliarioDTO domiciliarioDTO) {
+        log.debug("REST request to get domiciliaries per filters");
+        return domiciliarioService.domiciliariosFiltro(domiciliarioDTO);
+    }
+
     /**
      * {@code GET  /domiciliarios/:id} : get the "id" domiciliario.
      *

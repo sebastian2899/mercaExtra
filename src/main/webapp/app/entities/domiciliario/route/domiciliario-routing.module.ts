@@ -6,12 +6,13 @@ import { DomiciliarioComponent } from '../list/domiciliario.component';
 import { DomiciliarioDetailComponent } from '../detail/domiciliario-detail.component';
 import { DomiciliarioUpdateComponent } from '../update/domiciliario-update.component';
 import { DomiciliarioRoutingResolveService } from './domiciliario-routing-resolve.service';
+import { User2RouteAccessService } from 'app/core/auth/user2-route-access.service';
 
 const domiciliarioRoute: Routes = [
   {
     path: '',
     component: DomiciliarioComponent,
-    canActivate: [UserRouteAccessService],
+    canActivate: [User2RouteAccessService],
   },
   {
     path: ':id/view',

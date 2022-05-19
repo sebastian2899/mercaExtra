@@ -48,4 +48,6 @@ public interface CajaService {
     void delete(Long id);
 
     BigDecimal valorVendidoDia();
+
+    int RememberCreationCaja();
 }

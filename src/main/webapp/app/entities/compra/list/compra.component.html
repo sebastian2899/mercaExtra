@@ -1,25 +1,4 @@
 <div>
-  <h2 id="page-heading" data-cy="CompraHeading">
-    <span jhiTranslate="mercaExtraApp.compra.home.title">Compras</span>
-
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="mercaExtraApp.compra.home.refreshListLabel">Refresh List</span>
-      </button>
-
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-compra"
-        [routerLink]="['/compra/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="mercaExtraApp.compra.home.createLabel"> Create a new Compra </span>
-      </button>
-    </div>
-  </h2>
-
   <jhi-alert-error></jhi-alert-error>
 
   <jhi-alert></jhi-alert>
@@ -28,7 +7,7 @@
     <span jhiTranslate="mercaExtraApp.compra.home.notFound">No compras found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="compras && compras.length > 0">
+  <!-- <div class="table-responsive" id="entities" *ngIf="compras && compras.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
@@ -80,5 +59,141 @@
         </tr>
       </tbody>
     </table>
+  </div> -->
+  <div class="mt-4 d-flex justify-content-center">
+    <h2 class="titulos">Filtros</h2>
+  </div>
+
+  <div class="row d-flex justify-content-around mt-5 mb-5">
+    <div class="col-md-3 mb-3">
+      <label class="tituloSmall" for="tipoFactura">Tipo Factura</label>
+      <select name="tipoFactura" class="form-select" (click)="compraFilters()" [(ngModel)]="tipoFactura" id="tipoFactura">
+        <option [value]="null"></option>
+        <option *ngFor="let tipoFactura of tipoFacturas">{{ tipoFactura }}</option>
+      </select>
+    </div>
+    <div class="col-md-3 mb-3">
+      <label class="tituloSmall" for="estado">Estado</label>
+      <select name="estado" class="form-select" (click)="compraFilters()" [(ngModel)]="estado" id="estado">
+        <option [value]="null"></option>
+        <option *ngFor="let estado of estados">{{ estado }}</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label class="tituloSmall" for="proveedor">Proveedor</label>
+      <select name="proveedor" class="form-select" (click)="compraFilters()" [(ngModel)]="idProveedor" id="proveedor">
+        <option [value]="null"></option>
+        <option [value]="proveedor.id" *ngFor="let proveedor of proveedores">{{ proveedor.nombre }}</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label for="numeroFactura" class="tituloSmall">Numero Factura</label>
+      <input type="text" class="form-control" (keyup)="compraFilters()" [(ngModel)]="numeroFactura" />
+    </div>
+
+    <div class="col-md-3">
+      <label for="numeroFactura" class="tituloSmall">Fecha Creación</label>
+      <div class="d-flex">
+        <input type="datetime-local" [(ngModel)]="fecha" class="form-control" />
+        <button class="ms-2 btn btn-info" (click)="compraFilters()">filtrar</button>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="mb-3" id="page-heading" data-cy="CompraHeading">
+    <div class="d-flex justify-content-start">
+      <button class="btn btn-outline-info me-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="mercaExtraApp.compra.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-outline-info jh-create-entity create-compra"
+        [routerLink]="['/compra/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="mercaExtraApp.compra.home.createLabel"> Create a new Compra </span>
+      </button>
+    </div>
+  </h2>
+
+  <div class="row">
+    <div class="col-lg-3 mb-3" *ngFor="let compra of compras">
+      <div class="card" style="width: 18rem; height: 25rem; border-color: black">
+        <div class="card-body">
+          <h5 class="card-title">
+            <span class="tituloSmall">Factura Nº:</span> <span class="font-size-small">{{ compra.numeroFactura }}</span>
+          </h5>
+          <h5 class="card-title">
+            <span class="tituloSmall">Tipo Factura:</span> <span class="font-size-small">{{ compra.tipoFactura }}</span>
+          </h5>
+          <h5 class="card-title">
+            <span class="tituloSmall">Estado:</span> <span class="font-size-small">{{ compra.estado }}</span>
+          </h5>
+          <h5 class="card-title">
+            <span class="tituloSmall">Tipo Factura:</span> <span class="font-size-small">{{ compra.tipoFactura }}</span>
+          </h5>
+          <h5 class="card-title">
+            <span class="tituloSmall">Fecha compra:</span>
+            <span class="font-size-small">{{ compra.fechaCreacion | formatMediumDate }}</span>
+          </h5>
+          <div class="d-flex flex-column mt-5 mb-2">
+            <h6><span class="tituloSmall">Valor Factura: </span>{{ compra.valorFactura }}</h6>
+            <h6><span class="tituloSmall">Valor Pagado: </span>{{ compra.valorPagado }}</h6>
+            <h6><span class="tituloSmall">Valor Deuda: </span>{{ compra.valorDeuda }}</h6>
+          </div>
+          <div class="d-flex justify-content-end">
+            <div class="dropdown">
+              <button
+                class="btn btn-secondary dropdown-toggle"
+                type="button"
+                id="dropdownMenuButton1"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Opciones
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" (click)="findItemsCompra(compra.id!)">Ver Detalles</a></li>
+                <li><a class="dropdown-item" [routerLink]="['/compra', compra.id, 'edit']">Editar</a></li>
+                <li><a class="dropdown-item" [routerLink]="['/compra', compra.id, 'view']">Ver factura</a></li>
+                <li><a class="dropdown-item" (click)="delete(compra)">Eliminar</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+<ng-template #itemsFacturaCompra>
+  <div class="modal-header">
+    <h3 class="titulos">Productos adquiridos en la compra</h3>
+  </div>
+  <div class="modal-boddy">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col" class="tituloSmall">Producto</th>
+          <th scope="col" class="tituloSmall">Cantidad</th>
+          <th scope="col" class="tituloSmall">Precio Total</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider pd-3">
+        <tr *ngFor="let item of compra!.itemsFacturaCompra">
+          <th scope="row"></th>
+          <td>{{ item.nombreProducto }}</td>
+          <td>{{ item.cantidad }}</td>
+          <td>{{ item.precio }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button (click)="back()" class="btn btn-info">Volver</button>
+  </div>
+</ng-template>

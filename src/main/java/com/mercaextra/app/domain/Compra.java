@@ -3,7 +3,17 @@ package com.mercaextra.app.domain;
 import com.mercaextra.app.domain.enumeration.TipoFactura;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import javax.persistence.*;
+import java.time.Instant;
+import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -23,7 +33,7 @@ public class Compra implements Serializable {
     private Long id;
 
     @Column(name = "fecha_creacion", precision = 21, scale = 2)
-    private BigDecimal fechaCreacion;
+    private Instant fechaCreacion;
 
     @Column(name = "numero_factura")
     private String numeroFactura;
@@ -50,10 +60,21 @@ public class Compra implements Serializable {
     @Column(name = "estado")
     private String estado;
 
+    @Transient
+    private List<ItemFacturaCompra> itemsFacturaCompra;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
         return this.id;
+    }
+
+    public List<ItemFacturaCompra> getItemsFacturaCompra() {
+        return itemsFacturaCompra;
+    }
+
+    public void setItemsFacturaCompra(List<ItemFacturaCompra> itemsFacturaCompra) {
+        this.itemsFacturaCompra = itemsFacturaCompra;
     }
 
     public Compra id(Long id) {
@@ -65,16 +86,11 @@ public class Compra implements Serializable {
         this.id = id;
     }
 
-    public BigDecimal getFechaCreacion() {
-        return this.fechaCreacion;
+    public Instant getFechaCreacion() {
+        return fechaCreacion;
     }
 
-    public Compra fechaCreacion(BigDecimal fechaCreacion) {
-        this.setFechaCreacion(fechaCreacion);
-        return this;
-    }
-
-    public void setFechaCreacion(BigDecimal fechaCreacion) {
+    public void setFechaCreacion(Instant fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
@@ -216,5 +232,9 @@ public class Compra implements Serializable {
             ", valorDeuda=" + getValorDeuda() +
             ", estado='" + getEstado() + "'" +
             "}";
+    }
+
+    public Compra fechaCreacion(Instant defaultFechaCreacion) {
+        return this;
     }
 }

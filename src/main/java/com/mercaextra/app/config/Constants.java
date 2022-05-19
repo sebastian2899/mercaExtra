@@ -36,5 +36,21 @@ public final class Constants {
     //PEDIDO
     public static final String CAMBIAR_ESTADO_PEDIDO_EXPIRADO = "UPDATE Pedido SET estado='Expirado' WHERE id=:id";
 
+    // DOMICILIARY
+    public static final String BASE_DOMICILIARY = "SELECT d FROM Domiciliario d WHERE d.id IS NOT NULL";
+    public static final String DOMICILIARY_PER_NAME = " AND UPPER(d.nombre) LIKE :nombre";
+    public static final String DOMICILIARY_PER_TYPE_SALARY = " AND d.salario = :tipoSalario";
+    public static final String DOMICILIARY_PER_SHEDULED = " AND d.horario LIKE :horario";
+    public static final String DOMICILIARY_PER_STATE = " AND d.estado = :estado";
+
+    // COMPRA
+    public static final String INCREASE_AMOUNT_PRODUCTS = "UPDATE FROM Producto SET cantidad = cantidad+:cantidad WHERE id=:id";
+    public static final String BASE_COMPRA = "SELECT c FROM Compra c WHERE c.id IS NOT NULL";
+    public static final String COMPRA_TIPO_FACTURA = " AND c.tipoFactura = :tipoFactura";
+    public static final String COMPRA_ESTADO = " AND c.estado = :estado";
+    public static final String COMPRA_PROVEEDOR = " AND c.idProveedor =:idProveedor";
+    public static final String COMPRA_NUMERO_FACTURA = " AND c.numeroFactura =:numeroFactura";
+    public static final String COMPRA_FECHA = " AND DATE_FORMAT(c.fechaCreacion, '%Y-%m-%d') =:fechaCreacion";
+
     private Constants() {}
 }

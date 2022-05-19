@@ -5,9 +5,10 @@ import { CompraDetailComponent } from './detail/compra-detail.component';
 import { CompraUpdateComponent } from './update/compra-update.component';
 import { CompraDeleteDialogComponent } from './delete/compra-delete-dialog.component';
 import { CompraRoutingModule } from './route/compra-routing.module';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
-  imports: [SharedModule, CompraRoutingModule],
+  imports: [SharedModule, CompraRoutingModule, MatIconModule],
   declarations: [CompraComponent, CompraDetailComponent, CompraUpdateComponent, CompraDeleteDialogComponent],
   entryComponents: [CompraDeleteDialogComponent],
 })

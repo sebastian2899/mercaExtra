@@ -31,4 +31,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
         nativeQuery = true
     )
     List<Producto> proctosSimilares(@Param("id") Long id, @Param("categoria") String categoria);
+
+    @Query(value = "SELECT * FROM producto WHERE precio_descuento IS NOT NULL ORDER BY rand() LIMIT 4", nativeQuery = true)
+    List<Producto> discountProductHome();
 }

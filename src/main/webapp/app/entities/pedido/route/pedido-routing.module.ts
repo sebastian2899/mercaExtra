@@ -6,12 +6,13 @@ import { PedidoComponent } from '../list/pedido.component';
 import { PedidoDetailComponent } from '../detail/pedido-detail.component';
 import { PedidoUpdateComponent } from '../update/pedido-update.component';
 import { PedidoRoutingResolveService } from './pedido-routing-resolve.service';
+import { User2RouteAccessService } from 'app/core/auth/user2-route-access.service';
 
 const pedidoRoute: Routes = [
   {
     path: '',
     component: PedidoComponent,
-    canActivate: [UserRouteAccessService],
+    canActivate: [User2RouteAccessService],
   },
   {
     path: ':id/view',
@@ -19,7 +20,7 @@ const pedidoRoute: Routes = [
     resolve: {
       pedido: PedidoRoutingResolveService,
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [User2RouteAccessService],
   },
   {
     path: 'new',
@@ -27,7 +28,7 @@ const pedidoRoute: Routes = [
     resolve: {
       pedido: PedidoRoutingResolveService,
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [User2RouteAccessService],
   },
   {
     path: ':id/edit',

@@ -45,4 +45,6 @@ public interface DomiciliarioService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    List<DomiciliarioDTO> domiciliariosFiltro(DomiciliarioDTO domiciliarioDTO);
 }

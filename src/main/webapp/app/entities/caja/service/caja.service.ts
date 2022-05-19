@@ -17,6 +17,7 @@ export type NumberResponseType = HttpResponse<number>;
 export class CajaService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/cajas');
   protected valorVendidoDiaUrl = this.applicationConfigService.getEndpointFor('api/cajas-valor-dia');
+  protected rememberCreationCajaUrl = this.applicationConfigService.getEndpointFor('api/cajas-remember-creation');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -25,6 +26,10 @@ export class CajaService {
     return this.http
       .post<ICaja>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  rememberCreationCaja(): Observable<NumberResponseType> {
+    return this.http.get<number>(this.rememberCreationCajaUrl, { observe: 'response' });
   }
 
   update(caja: ICaja): Observable<EntityResponseType> {

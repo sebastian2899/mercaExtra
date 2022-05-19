@@ -174,10 +174,22 @@ public class ProductoResource {
         return productoService.findAll();
     }
 
+    @GetMapping("/productos/all")
+    public List<ProductoDTO> allProductosNoMatterAmount() {
+        log.debug("REST request to get all producto no matter amount");
+        return productoService.allProducts();
+    }
+
     @GetMapping("/logout-productos")
     public List<ProductoDTO> getAllProductosLogout() {
         log.debug("REST request to get all Productos");
         return productoService.findAll();
+    }
+
+    @GetMapping("/discount-products-aviable")
+    public List<ProductoDTO> productsDiscount() {
+        log.debug("REST request to get four aviable products whit discount");
+        return productoService.discountProductHome();
     }
 
     @PostMapping("/productos-filtros-categoria/{opcion}")
